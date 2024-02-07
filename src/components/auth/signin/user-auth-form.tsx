@@ -46,7 +46,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       console.error("Erreur lors de la connexion :", error.message);
       setIsLoading(false);
     } else {
-      router.push("forms");
+      router.push("dashboard");
       setIsLoading(false);
     }
   }
