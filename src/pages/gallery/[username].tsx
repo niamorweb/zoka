@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 import imageCompression from "browser-image-compression"; // Importez la bibliothèque de compression d'image
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 
 interface userInfos {
   bio: String | null;
@@ -17,8 +17,9 @@ interface userInfos {
   username: String;
 }
 
-const Gallery = ({ params }: { params: { username: string } }) => {
+const Gallery = () => {
   const router = useRouter();
+  const { username } = router.query;
   const [userPhotos, setUserPhotos] = useState<{ name: string; url: string }[]>(
     []
   );
@@ -26,16 +27,16 @@ const Gallery = ({ params }: { params: { username: string } }) => {
   const [userId, setUserId] = useState<String | null>(null);
 
   useEffect(() => {
-    if (!params.username) return;
+    if (!username) return;
     fetchUserInfos();
     fetchPhotos();
-  }, [params.username, userId]);
+  }, [username, userId]);
 
   const fetchUserInfos = async () => {
     const { data, error } = await supabase
       .from("users")
       .select("*")
-      .eq("username", params.username)
+      .eq("username", username)
       .single();
 
     console.log(data);
