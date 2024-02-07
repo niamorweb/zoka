@@ -1,12 +1,10 @@
 import { supabase } from "@/lib/supabase";
 import { Label } from "@radix-ui/react-label";
 import { Input } from "@/registry/new-york/ui/input";
-import { Button } from "@/registry/new-york/ui/button";
 import * as React from "react";
 import { uid } from "uid";
 import Image from "next/image";
-import { HeartOffIcon } from "lucide-react";
-import { TrashIcon } from "@radix-ui/react-icons";
+import { Button } from "@/components/ui/button";
 
 export function AppearanceForm() {
   const [image, setImage] = React.useState<File | null>(null);

@@ -3,7 +3,6 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 import * as React from "react";
 
-import { Button } from "@/registry/new-york/ui/button";
 import {
   Form,
   FormControl,
@@ -12,8 +11,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/registry/new-york/ui/form";
-import { Input } from "@/registry/new-york/ui/input";
+} from "@/registry/default/ui/form";
+// import { Input } from "@/registry/new-york/ui/input";
 import {
   Select,
   SelectContent,
@@ -21,11 +20,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/registry/new-york/ui/select";
-import { Textarea } from "@/registry/new-york/ui/textarea";
 import { toast } from "@/registry/new-york/ui/use-toast";
 import { supabase } from "@/lib/supabase";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/registry/default/ui/input";
+import { Textarea } from "@/registry/default/ui/textarea";
 
 const profileFormSchema = z.object({
   username: z
@@ -174,8 +175,7 @@ export function ProfileForm() {
                 />
               </FormControl>
               <FormDescription>
-                You can <span>@mention</span> other users and organizations to
-                link to them.
+                Write about what you want, your passion..
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -213,6 +213,7 @@ export function ProfileForm() {
             Add URL
           </Button>
         </div> */}
+
         <Button type="submit">Update profile</Button>
       </form>
     </Form>

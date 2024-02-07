@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import Header from "@/components/Layout/Header";
 import Footer from "@/components/Layout/Footer";
 import Testimonials from "@/components/home/Testimonials";
@@ -38,14 +38,7 @@ export default function Home() {
             <Link href="/login" className={cn(buttonVariants({ size: "lg" }))}>
               Get Started
             </Link>
-            <Link
-              href="/"
-              target="_blank"
-              rel="noreferrer"
-              className={cn(buttonVariants({ variant: "outline", size: "lg" }))}
-            >
-              GitHub
-            </Link>
+            <Button variant="destructive">GitHub</Button>
           </div>
         </div>
       </section>

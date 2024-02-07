@@ -1,18 +1,12 @@
-// import { Metadata } from "next";
 import Image from "next/image";
 
-import { Separator } from "@/registry/new-york/ui/separator";
+import { Separator } from "@/registry/default/ui/separator";
 import { SidebarNav } from "../nav/sidebar-nav";
 import { Toaster as DefaultToaster } from "@/registry/default/ui/toaster";
-import { Toaster as NewYorkToaster } from "@/registry/new-york/ui/toaster";
+import { Toaster as NewYorkToaster } from "@/registry/default/ui/toaster";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-
-// export const metadata: Metadata = {
-//   title: "Forms",
-//   description: "Advanced form example using react-hook-form and Zod.",
-// };
 
 const sidebarNavItems = [
   {
@@ -94,7 +88,7 @@ export default function Layout({ children }: SettingsLayoutProps) {
             <div className="space-y-0.5">
               <h2 className="text-2xl font-bold tracking-tight">ZOKA</h2>
               <p className="text-muted-foreground">
-                Manage your account settings and set e-mail preferences.
+                Manage your profile to show your best photos
               </p>
             </div>
             <Separator className="my-6" />

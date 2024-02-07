@@ -1,6 +1,6 @@
 import { Separator } from "@/registry/new-york/ui/separator";
 import { NotificationsForm } from "@/components/dashboard/notifications/notifications-form";
-import Layout from "@/components/Layout/Layout";
+import Layout from "@/components/dashboard/layout/layout";
 
 export default function SettingsNotificationsPage() {
   return (

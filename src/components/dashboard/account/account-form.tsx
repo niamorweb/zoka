@@ -1,18 +1,16 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarIcon, CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
-import { format } from "date-fns";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { cn } from "@/lib/utils";
-import { Button } from "@/registry/new-york/ui/button";
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "@/registry/new-york/ui/command";
+} from "@/registry/default/ui/command";
 import {
   Form,
   FormControl,
@@ -21,17 +19,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/registry/new-york/ui/form";
-import { Input } from "@/registry/new-york/ui/input";
+} from "@/registry/default/ui/form";
+import { Input } from "@/registry/default/ui/input";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/registry/new-york/ui/popover";
-import { toast } from "@/registry/new-york/ui/use-toast";
+} from "@/registry/default/ui/popover";
 import { supabase } from "@/lib/supabase";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { Button } from "@/components/ui/button";
 
 const languages = [
   { label: "English", value: "en" },
@@ -77,8 +74,7 @@ const defaultValues: Partial<AccountFormValues> = {
   // dob: new Date("2023-01-23"),
 };
 
-export async function AccountForm() {
-  const session = await supabase.auth.getSession();
+export function AccountForm() {
   const router = useRouter();
 
   const form = useForm<AccountFormValues>({
