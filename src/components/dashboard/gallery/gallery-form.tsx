@@ -34,24 +34,18 @@ export function AppearanceForm() {
   const onSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     if (!userId) {
-      console.error("L'ID de l'utilisateur n'est pas disponible.");
       return;
     }
-    console.log(image);
 
     const fileName = image?.name;
-    console.log(fileName);
 
     const re = /(?:\.([^.]+))?$/;
 
     if (fileName) {
       const match = re.exec(fileName);
-      console.log(match);
       const fileExtension: String | null = match && match[1];
 
       const uniq_id: string = uid();
-      console.log("uniq id = =  ", uniq_id);
-      console.log(`${userId}_${uniq_id}.${fileExtension}`);
 
       if (image) {
         const { data: uploadData, error } = await supabase.storage
@@ -59,9 +53,6 @@ export function AppearanceForm() {
           .upload(`${userId}_${Date.now()}_${uniq_id}.${fileExtension}`, image);
 
         if (error) {
-          console.error(
-            `Erreur lors du téléchargement de l'image: ${error.message}`
-          );
           return null;
         } else {
           fetchPhotos();
@@ -76,10 +67,6 @@ export function AppearanceForm() {
         .from("users_photos")
         .list(`${userId}`);
       if (error) {
-        console.error(
-          "Erreur lors de la récupération des photos :",
-          error.message
-        );
         return;
       }
 

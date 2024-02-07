@@ -79,33 +79,21 @@ const defaultValues: Partial<AccountFormValues> = {
 
 export async function AccountForm() {
   const session = await supabase.auth.getSession();
-  console.log(session);
+  const router = useRouter();
 
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(accountFormSchema),
     defaultValues,
   });
 
-  function onSubmit(data: AccountFormValues) {
-    console.log("ffff<s<");
-
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
-  }
+  function onSubmit(data: AccountFormValues) {}
 
   const logout = async () => {
     const { error } = await supabase.auth.signOut();
 
     if (error) {
-      console.error("Erreur lors de la déconnexion :", error.message);
     } else {
-      console.log("Utilisateur déconnecté avec succès.");
+      router.push("/signin");
     }
   };
 

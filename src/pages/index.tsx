@@ -15,31 +15,8 @@ import Video from "@/components/home/Video";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-  useEffect(() => {
-    async function logEnvVariable() {
-      try {
-        const response = await fetch("/api/logEnvVariable");
-        if (response.ok) {
-          const data = await response.json();
-          console.log(data.message);
-        } else {
-          console.error(
-            "Erreur lors de la journalisation de la variable d'environnement."
-          );
-        }
-      } catch (error) {
-        console.error(
-          "Erreur lors de la journalisation de la variable d'environnement:",
-          error
-        );
-      }
-    }
-
-    // Appelez la fonction pour journaliser la variable d'environnement
-    logEnvVariable();
-  });
   return (
-    <div className="min-h-screen px-5 lg:px-10">
+    <div className={`min-h-screen px-5 lg:px-10 ${inter.className}`}>
       <Header />
       <section className="space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-32">
         <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center">

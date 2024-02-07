@@ -34,7 +34,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
-    console.log(formData);
 
     setIsLoading(true);
     const { data, error } = await supabase.auth.signUp({
@@ -55,9 +54,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
       if (accessToken && accessToken !== "null") {
         setIsLoading(false);
-        router.push("dashboard");
+        router.push("forms");
       } else {
-        console.log("L'utilisateur n'est pas connecté.");
       }
       setIsLoading(false);
     }

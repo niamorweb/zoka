@@ -77,7 +77,6 @@ const Testimonials = () => {
 
   useEffect(() => {
     if (emblaApi) {
-      console.log(emblaApi.slideNodes()); // Access API
     }
   }, [emblaApi]);
 

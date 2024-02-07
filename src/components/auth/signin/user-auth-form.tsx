@@ -35,7 +35,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     setIsLoading(true);
-    console.log(formData);
 
     const { data, error } = await supabase.auth.signInWithPassword({
       email: formData.email,
@@ -43,26 +42,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     });
 
     if (error) {
-      console.error("Erreur lors de la connexion :", error.message);
       setIsLoading(false);
     } else {
-      router.push("dashboard");
+      router.push("forms");
       setIsLoading(false);
     }
   }
-
-  React.useEffect(() => {
-    const test = async () => {
-      const session = await supabase.auth.getSession();
-      const user = await supabase.auth.getUser();
-      const id = await supabase.auth.getUserIdentities();
-      console.log("session ", session);
-      console.log("user ", user);
-      console.log("id ", id);
-    };
-
-    test();
-  }, []);
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>

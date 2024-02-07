@@ -39,8 +39,6 @@ const Gallery = () => {
       .eq("username", username)
       .single();
 
-    console.log(data);
-
     setUserId(data.id);
     setUserInfos(data);
   };
@@ -50,13 +48,7 @@ const Gallery = () => {
       .from("users_photos")
       .list(`${userId}`);
 
-    console.log(photos);
-
     if (error) {
-      console.error(
-        "Erreur lors de la récupération des photos :",
-        error.message
-      );
       return;
     }
     const compressedPhotos = await Promise.all(
