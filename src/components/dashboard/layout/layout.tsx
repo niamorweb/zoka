@@ -7,6 +7,7 @@ import { Toaster as NewYorkToaster } from "@/registry/default/ui/toaster";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { MobileNav } from "../nav/mobile-nav";
 
 const sidebarNavItems = [
   {
@@ -67,33 +68,17 @@ export default function Layout({ children }: SettingsLayoutProps) {
     <>
       {isAuth && (
         <>
-          {" "}
-          <div className="md:hidden">
-            <Image
-              src="/forms-light.png"
-              width={1280}
-              height={791}
-              alt="Forms"
-              className="block dark:hidden"
-            />
-            <Image
-              src="/forms-dark.png"
-              width={1280}
-              height={791}
-              alt="Forms"
-              className="hidden dark:block"
-            />
-          </div>
-          <div className="hidden space-y-6 p-10 pb-16 md:block">
+          <div className="space-y-6 p-10 pb-16 md:block">
             <div className="space-y-0.5">
               <h2 className="text-2xl font-bold tracking-tight">ZOKA</h2>
               <p className="text-muted-foreground">
                 Manage your profile to show your best photos
               </p>
             </div>
+            <MobileNav items={sidebarNavItems} />
             <Separator className="my-6" />
             <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
-              <aside className="-mx-4 lg:w-1/5">
+              <aside className="hidden lg:flex -mx-4 lg:w-1/5">
                 <SidebarNav items={sidebarNavItems} />
               </aside>
               <div className="flex-1 lg:max-w-2xl">{children}</div>

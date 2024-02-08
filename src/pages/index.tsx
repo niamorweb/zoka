@@ -38,7 +38,7 @@ export default function Home() {
             <Link href="/login" className={cn(buttonVariants({ size: "lg" }))}>
               Get Started
             </Link>
-            <Button variant="destructive">GitHub</Button>
+            <Button variant="outline">GitHub</Button>
           </div>
         </div>
       </section>

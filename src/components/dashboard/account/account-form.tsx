@@ -207,7 +207,9 @@ export function AccountForm() {
             <Button type="submit">Update account</Button>
           </form>
         </Form>
-        <Button onClick={() => logout()}>Log out</Button>
+        <Button variant="outline" onClick={() => logout()}>
+          Log out
+        </Button>
       </>
     </>
   );

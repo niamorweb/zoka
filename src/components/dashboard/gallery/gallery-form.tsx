@@ -101,7 +101,7 @@ export function AppearanceForm() {
         <Button type="submit">Add this photo(s)</Button>
       </form>
 
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
         {userPhotos &&
           userPhotos.length > 0 &&
           userPhotos.map((photo, index) => (
