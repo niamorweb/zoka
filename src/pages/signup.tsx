@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/registry/new-york/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { UserAuthForm } from "@/components/auth/signup/user-auth-form";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -57,16 +57,16 @@ export default function AuthenticationPage() {
           >
             <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
           </svg>
-          Acme Inc
+          Zoka
         </div>
         <div className="relative z-20 mt-auto">
           <blockquote className="space-y-2">
             <p className="text-lg">
-              &ldquo;This library has saved me countless hours of work and
-              helped me deliver stunning designs to my clients faster than ever
-              before.&rdquo;
+              &ldquo;Sharing memories through images has never been easier. This
+              tool has revolutionized how I connect with friends and family,
+              making every moment unforgettable.&rdquo;
             </p>
-            <footer className="text-sm">Sofia Davis</footer>
+            <footer className="text-sm">Emma Smith</footer>
           </blockquote>
         </div>
       </div>

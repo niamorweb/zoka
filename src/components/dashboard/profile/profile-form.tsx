@@ -3,6 +3,19 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 import * as React from "react";
 
+import { supabase } from "@/lib/supabase";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Form,
   FormControl,
@@ -11,22 +24,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/registry/default/ui/form";
-// import { Input } from "@/registry/new-york/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/registry/new-york/ui/select";
-import { toast } from "@/registry/new-york/ui/use-toast";
-import { supabase } from "@/lib/supabase";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/registry/default/ui/input";
-import { Textarea } from "@/registry/default/ui/textarea";
+} from "@/components/ui/form";
 
 const profileFormSchema = z.object({
   username: z

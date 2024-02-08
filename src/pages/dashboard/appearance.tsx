@@ -1,4 +1,4 @@
-import { Separator } from "@/registry/new-york/ui/separator";
+import { Separator } from "@/components/ui/separator";
 import { AppearanceForm } from "@/components/dashboard/appearance/appearance-form";
 import Layout from "@/components/dashboard/layout/layout";
 

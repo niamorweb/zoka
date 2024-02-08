@@ -5,15 +5,11 @@ const menuData = [
   },
   {
     title: "Pricing",
-    href: "/pricing",
+    href: "/#pricing",
   },
   {
-    title: "Blog",
-    href: "/blog",
-  },
-  {
-    title: "Documentation",
-    href: "/docs",
+    title: "Testimonials",
+    href: "/#testimonials",
   },
 ];
 
