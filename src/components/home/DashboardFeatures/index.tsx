@@ -47,6 +47,7 @@ const DashboardFeature = () => {
           <div className="grid gap-8 h-[300px] w-2/5">
             {data.map((elem, index) => (
               <div
+                key={index}
                 onClick={() => setImgSelected(index)}
                 className={`grid gap-2 px-4 py-4 duration-100 cursor-pointer ${
                   imgSelected == index &&
@@ -62,6 +63,7 @@ const DashboardFeature = () => {
           </div>
           {data.map((elem, index) => (
             <Image
+              key={index}
               className={`w-3/5 shadow-md rounded-md border-neutral-400 ${
                 imgSelected == index ? "block" : "hidden"
               } `}

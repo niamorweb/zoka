@@ -8,6 +8,7 @@ import { UserAuthForm } from "@/components/auth/signin/user-auth-form";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import Head from "next/head";
 
 // export const metadata: Metadata = {
 //   title: "Authentication",
@@ -17,6 +18,19 @@ import { supabase } from "@/lib/supabase";
 export default function AuthenticationPage() {
   return (
     <>
+      <Head>
+        <title>Sign in - ZOKA</title>
+        <meta
+          name="description"
+          content="Sign in to access your account on ZOKA."
+        />
+        <meta
+          name="keywords"
+          content="login, account, access, authentication, zoka"
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <div className="container relative min-h-screen flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <Link
           href="/signup"
