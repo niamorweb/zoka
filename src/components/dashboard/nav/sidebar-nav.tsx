@@ -15,71 +15,7 @@ interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
-  const [userId, setUserId] = useState<String>();
-  const [userData, setUserData] = useState();
-
-  const router = useRouter();
-  useEffect(() => {
-    const checkUser = async () => {
-      const { data, error } = await supabase.auth.getUser();
-
-      data.user && setUserId(data.user.id);
-    };
-
-    checkUser();
-  }, [router]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!userId) {
-        return;
-      }
-      const { data, error } = await supabase
-        .from("users")
-        .select("*")
-        .eq("id", userId);
-
-      data && setUserData(data[0]);
-    };
-
-    fetchData();
-  }, [userId]);
-
   const pathname = usePathname();
-
-  const sidebarNavItems = [
-    {
-      title: "Profile",
-      href: "/dashboard",
-      category: "profile",
-    },
-    {
-      title: "Account",
-      href: "/dashboard/account",
-      category: "account",
-    },
-    {
-      title: "Gallery",
-      href: "/dashboard/gallery",
-      category: "profile",
-    },
-    {
-      title: "Appearance",
-      href: "/dashboard/appearance",
-      category: "profile",
-    },
-    {
-      title: "Notifications",
-      href: "/dashboard/notifications",
-      category: "account",
-    },
-    {
-      title: "View my page",
-      href: `/gallery/${userData && userData["username"]}`,
-      category: "profile",
-    },
-  ];
-
   return (
     <nav
       className={cn(
@@ -97,12 +33,13 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
         <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
           Dashboard
         </h2>
-        {sidebarNavItems
+        {items
           .filter((item) => item.category === "profile")
           .map((item) => (
             <Link
               key={item.href}
               href={item.href}
+              target={item.title === "View my page" ? "_blank" : undefined}
               className={cn(
                 buttonVariants({ variant: "ghost" }),
                 pathname === item.href
@@ -125,7 +62,7 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
         <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
           Account
         </h2>
-        {sidebarNavItems
+        {items
           .filter((item) => item.category === "account")
           .map((item) => (
             <Link

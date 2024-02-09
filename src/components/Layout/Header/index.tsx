@@ -6,51 +6,37 @@ import menuData from "./menuData";
 import { MainNav } from "@/components/Layout/Header/main-nav";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/router";
+import { supabase } from "@/lib/supabase";
 
 const Header = () => {
-  // Navbar toggle
-  const [navbarOpen, setNavbarOpen] = useState(false);
-  const navbarToggleHandler = () => {
-    setNavbarOpen(!navbarOpen);
-  };
+  const router = useRouter();
+  const [isAuth, setIsAuth] = useState(false);
 
-  // Sticky Navbar
-  const [sticky, setSticky] = useState(false);
-  const handleStickyNavbar = () => {
-    if (window.scrollY >= 80) {
-      setSticky(true);
-    } else {
-      setSticky(false);
-    }
-  };
   useEffect(() => {
-    window.addEventListener("scroll", handleStickyNavbar);
+    const checkIsAuth = async () => {
+      const { data, error } = await supabase.auth.getUser();
+
+      if (data.user) {
+        setIsAuth(true);
+      }
+    };
+
+    checkIsAuth();
   });
-
-  // submenu handler
-  const [openIndex, setOpenIndex] = useState<Number>(-1);
-  const handleSubmenu = (index: Number) => {
-    if (openIndex === index) {
-      setOpenIndex(-1);
-    } else {
-      setOpenIndex(index);
-    }
-  };
-
-  const usePathName = usePathname();
 
   return (
     <div className="flex h-20 items-center justify-between py-6">
       <MainNav items={menuData} />
       <nav>
         <Link
-          href="/signin"
+          href={isAuth ? "/dashboard" : "/signin"}
           className={cn(
             buttonVariants({ variant: "secondary", size: "sm" }),
             "px-4"
           )}
         >
-          Login
+          {isAuth ? "Dashboard" : "Login"}
         </Link>
       </nav>
     </div>

@@ -14,23 +14,6 @@ import { supabase } from "@/lib/supabase";
 // };
 
 export default function AuthenticationPage() {
-  const router = useRouter();
-  const [isAuth, setIsAuth] = useState(false);
-
-  useEffect(() => {
-    const checkIsAuth = async () => {
-      const { data, error } = await supabase.auth.getUser();
-
-      if (!data.user) {
-        setIsAuth(false);
-      } else {
-        router.push("/dashboard");
-      }
-    };
-
-    checkIsAuth();
-  });
-
   return (
     <div className="container relative min-h-screen flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       <Link

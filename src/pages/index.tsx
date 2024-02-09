@@ -10,11 +10,18 @@ import Testimonials from "@/components/home/Testimonials";
 import Pricing from "@/components/home/Pricing";
 import { useEffect } from "react";
 import Video from "@/components/home/Video";
-// import { env } from "process";
+import React, { useContext } from "react";
+import { DataContext } from "@/utlis/userContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
+  const { data } = useContext(DataContext);
+
+  useEffect(() => {
+    console.log("data from home ", data);
+  }, []);
+
   return (
     <div className={`min-h-screen px-5 lg:px-10 ${inter.className}`}>
       <Header />
@@ -38,7 +45,6 @@ export default function Home() {
             <Link href="/login" className={cn(buttonVariants({ size: "lg" }))}>
               Get Started
             </Link>
-            <Button variant="outline">GitHub</Button>
           </div>
         </div>
       </section>

@@ -5,33 +5,29 @@ import { uid } from "uid";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { DotsVerticalIcon, TrashIcon } from "@radix-ui/react-icons";
+import { CircleEllipsisIcon } from "lucide-react";
+import { DataContext } from "@/utlis/userContext";
 
-export function AppearanceForm() {
+export function GalleryForm() {
   const [image, setImage] = React.useState<File | null>(null);
-  const [userId, setUserId] = React.useState<string | null>(null);
-  const [userPhotos, setUserPhotos] = React.useState<
-    { name: string; url: string }[]
-  >([]);
-
-  React.useEffect(() => {
-    getUserId();
-  }, []);
-
-  React.useEffect(() => {
-    fetchPhotos();
-  }, [userId]);
-
-  const getUserId = async () => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    user && setUserId(user.id);
-  };
+  const { reloadData } = React.useContext(DataContext);
+  const { data } = React.useContext(DataContext);
 
   const onSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    if (!userId) {
+    if (!data.id) {
       return;
     }
 
@@ -47,44 +43,26 @@ export function AppearanceForm() {
 
       if (image) {
         const { data: uploadData, error } = await supabase.storage
-          .from(`users_photos/${userId}`)
-          .upload(`${userId}_${Date.now()}_${uniq_id}.${fileExtension}`, image);
+          .from(`users_photos/${data.id}`)
+          .upload(
+            `${data.id}_${Date.now()}_${uniq_id}.${fileExtension}`,
+            image
+          );
 
         if (error) {
           return null;
         } else {
-          fetchPhotos();
+          reloadData();
         }
       }
     }
   };
 
-  const fetchPhotos = async () => {
-    if (userId) {
-      const { data, error } = await supabase.storage
-        .from("users_photos")
-        .list(`${userId}`);
-      if (error) {
-        return;
-      }
-
-      const urlsPromises = data.map(async (file) => {
-        const url = await supabase.storage
-          .from("users_photos")
-          .getPublicUrl(`${userId}/${file.name}`);
-        return { name: file.name, url: url.data.publicUrl };
-      });
-
-      const urls = await Promise.all(urlsPromises);
-
-      setUserPhotos(urls);
-    }
-  };
-
   const deletePhoto = async (photoName: string) => {
-    const { error } = await supabase.storage
+    const { data: userData, error } = await supabase.storage
       .from("users_photos")
-      .remove([`${userId}/${photoName}`]); // Assurez-vous de spécifier le chemin complet de la photo
+      .remove([`${data.id}/${photoName}`]);
+    reloadData();
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,19 +80,44 @@ export function AppearanceForm() {
       </form>
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-        {userPhotos &&
-          userPhotos.length > 0 &&
-          userPhotos.map((photo, index) => (
-            <div key={index} className="flex flex-col gap-1 items-center">
+        {data &&
+          data.photos &&
+          data.photos.length > 0 &&
+          data.photos.map((photo: any, index: number) => (
+            <div key={index} className="flex flex-col gap-1 items-end">
               <Image
-                onClick={() => deletePhoto(photo.name)}
                 width={300}
                 height={300}
                 src={photo.url}
                 alt="image"
-                className="h-[200px] w-[200px] object-cover"
+                className="h-[200px] w-full object-cover"
               />
-              <Button variant="ghost">Delete</Button>
+              <AlertDialog>
+                <AlertDialogTrigger>
+                  <DotsVerticalIcon className="w-6 h-6" />
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Delete this photo ?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone.
+                      <Image
+                        src={photo.url}
+                        width={400}
+                        height={400}
+                        alt="Photo to delete"
+                        className="w-full object-cover"
+                      />
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={() => deletePhoto(photo.name)}>
+                      Delete
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
           ))}
       </div>

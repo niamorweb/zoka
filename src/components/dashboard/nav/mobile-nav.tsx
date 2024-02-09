@@ -16,71 +16,9 @@ interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 export function MobileNav({ className, items, ...props }: SidebarNavProps) {
-  const [userId, setUserId] = useState<String>();
-  const [userData, setUserData] = useState();
-  const [isMenuActive, setIsMenuActive] = useState<Boolean>(false);
-
-  const router = useRouter();
-  useEffect(() => {
-    const checkUser = async () => {
-      const { data, error } = await supabase.auth.getUser();
-
-      data.user && setUserId(data.user.id);
-    };
-
-    checkUser();
-  }, [router]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!userId) {
-        return;
-      }
-      const { data, error } = await supabase
-        .from("users")
-        .select("*")
-        .eq("id", userId);
-
-      data && setUserData(data[0]);
-    };
-
-    fetchData();
-  }, [userId]);
-
   const pathname = usePathname();
 
-  const sidebarNavItems = [
-    {
-      title: "Profile",
-      href: "/dashboard",
-      category: "profile",
-    },
-    {
-      title: "Account",
-      href: "/dashboard/account",
-      category: "account",
-    },
-    {
-      title: "Gallery",
-      href: "/dashboard/gallery",
-      category: "profile",
-    },
-    {
-      title: "Appearance",
-      href: "/dashboard/appearance",
-      category: "profile",
-    },
-    {
-      title: "Notifications",
-      href: "/dashboard/notifications",
-      category: "account",
-    },
-    {
-      title: "View my page",
-      href: `/gallery/${userData && userData["username"]}`,
-      category: "profile",
-    },
-  ];
+  const [isMenuActive, setIsMenuActive] = useState<Boolean>(false);
 
   return (
     <>
@@ -107,7 +45,7 @@ export function MobileNav({ className, items, ...props }: SidebarNavProps) {
             <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
               Dashboard
             </h2>
-            {sidebarNavItems
+            {items
               .filter((item) => item.category === "profile")
               .map((item) => (
                 <Link
@@ -135,7 +73,7 @@ export function MobileNav({ className, items, ...props }: SidebarNavProps) {
             <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
               Account
             </h2>
-            {sidebarNavItems
+            {items
               .filter((item) => item.category === "account")
               .map((item) => (
                 <Link

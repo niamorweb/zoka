@@ -1,5 +1,5 @@
 import { Separator } from "@/components/ui/separator";
-import { AppearanceForm } from "@/components/dashboard/gallery/gallery-form";
+import { GalleryForm } from "@/components/dashboard/gallery/gallery-form";
 import Layout from "@/components/dashboard/layout/layout";
 
 export default function DashboardGallery() {
@@ -13,7 +13,7 @@ export default function DashboardGallery() {
           </p>
         </div>
         <Separator />
-        <AppearanceForm />
+        <GalleryForm />
       </div>
     </Layout>
   );

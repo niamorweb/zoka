@@ -25,6 +25,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { DataContext } from "@/utlis/userContext";
 
 const profileFormSchema = z.object({
   username: z
@@ -36,7 +37,7 @@ const profileFormSchema = z.object({
     .max(14, {
       message: "Username must not be longer than 14 characters.",
     }),
-  name: z.string().min(2, {
+  full_name: z.string().min(2, {
     message: "Name must be at least 2 characters",
   }),
   bio: z.string().max(160).min(4),
@@ -61,35 +62,8 @@ const defaultValues: Partial<ProfileFormValues> = {
 };
 
 export function ProfileForm() {
-  const [userId, setUserId] = React.useState<String>();
-  const [userData, setUserData] = React.useState();
-
-  const router = useRouter();
-  useEffect(() => {
-    const checkUser = async () => {
-      const { data, error } = await supabase.auth.getUser();
-
-      data.user && setUserId(data.user.id);
-    };
-
-    checkUser();
-  }, [router]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!userId) {
-        return;
-      }
-      const { data, error } = await supabase
-        .from("users")
-        .select("*")
-        .eq("id", userId);
-
-      data && setUserData(data[0]);
-    };
-
-    fetchData();
-  }, [userId]);
+  const { reloadData } = React.useContext(DataContext);
+  const { data } = React.useContext(DataContext);
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
@@ -103,14 +77,20 @@ export function ProfileForm() {
   });
 
   async function onSubmit(formData: ProfileFormValues) {
-    const { data, error } = await supabase
+    console.log(formData);
+    console.log(data.id);
+
+    const { data: userData, error } = await supabase
       .from("users")
       .update({
         username: formData.username,
-        full_name: formData.name,
+        full_name: formData.full_name,
         bio: formData.bio,
       })
-      .eq("id", userId);
+      .eq("id", data.id);
+    if (error) console.log(error);
+
+    reloadData();
   }
 
   return (
@@ -126,7 +106,7 @@ export function ProfileForm() {
                 <Input
                   placeholder="username"
                   {...field}
-                  defaultValue={userData && userData["username"]}
+                  defaultValue={data && data["username"]}
                 />
               </FormControl>
               <FormDescription>
@@ -139,7 +119,7 @@ export function ProfileForm() {
         />
         <FormField
           control={form.control}
-          name="name"
+          name="full_name"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Full name</FormLabel>
@@ -147,7 +127,7 @@ export function ProfileForm() {
                 <Input
                   placeholder="My Name"
                   {...field}
-                  defaultValue={userData && userData["name"]}
+                  defaultValue={data && data["full_name"]}
                 />
               </FormControl>
               <FormDescription>
@@ -169,7 +149,7 @@ export function ProfileForm() {
                   placeholder="Tell us a little bit about yourself"
                   className="resize-none"
                   {...field}
-                  defaultValue={userData && userData["bio"]}
+                  defaultValue={data && data["bio"]}
                 />
               </FormControl>
               <FormDescription>
