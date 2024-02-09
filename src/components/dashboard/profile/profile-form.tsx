@@ -4,18 +4,9 @@ import { z } from "zod";
 import * as React from "react";
 
 import { supabase } from "@/lib/supabase";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Form,
   FormControl,
@@ -26,25 +17,20 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { DataContext } from "@/utlis/userContext";
+import { useToast } from "@/components/ui/use-toast";
+import { ToastAction } from "@/components/ui/toast";
+import { cn } from "@/lib/utils";
+import { CrossIcon, Crosshair, Trash } from "lucide-react";
 
 const profileFormSchema = z.object({
-  username: z
-    .string()
-    .toLowerCase()
-    .min(2, {
-      message: "Username must be at least 2 characters.",
-    })
-    .max(14, {
-      message: "Username must not be longer than 14 characters.",
-    }),
-  full_name: z.string().min(2, {
-    message: "Name must be at least 2 characters",
-  }),
-  bio: z.string().max(160).min(4),
+  username: z.string().toLowerCase(),
+  full_name: z.string(),
+  bio: z.string().max(300, "The bio cannot exceed 300 characters."),
   urls: z
     .array(
       z.object({
-        value: z.string().url({ message: "Please enter a valid URL." }),
+        url: z.string().url({ message: "Please enter a valid URL." }),
+        name: z.string(),
       })
     )
     .optional(),
@@ -52,18 +38,17 @@ const profileFormSchema = z.object({
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
-// This can come from your database or API.
-const defaultValues: Partial<ProfileFormValues> = {
-  bio: "",
-  urls: [
-    { value: "https://shadcn.com" },
-    { value: "http://twitter.com/shadcn" },
-  ],
-};
-
 export function ProfileForm() {
   const { reloadData } = React.useContext(DataContext);
   const { data } = React.useContext(DataContext);
+  const { toast } = useToast();
+
+  const defaultValues: Partial<ProfileFormValues> = {
+    username: data.username,
+    full_name: data.full_name,
+    bio: data.bio,
+    urls: data.links,
+  };
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
@@ -71,7 +56,7 @@ export function ProfileForm() {
     mode: "onChange",
   });
 
-  const { fields, append } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     name: "urls",
     control: form.control,
   });
@@ -86,11 +71,18 @@ export function ProfileForm() {
         username: formData.username,
         full_name: formData.full_name,
         bio: formData.bio,
+        links: formData.urls,
       })
       .eq("id", data.id);
     if (error) console.log(error);
-
-    reloadData();
+    else {
+      toast({
+        title: "Scheduled: Catch up ",
+        description: "Friday, February 10, 2023 at 5:57 PM",
+        action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction>,
+      });
+      reloadData();
+    }
   }
 
   return (
@@ -106,7 +98,7 @@ export function ProfileForm() {
                 <Input
                   placeholder="username"
                   {...field}
-                  defaultValue={data && data["username"]}
+                  defaultValue={defaultValues.username}
                 />
               </FormControl>
               <FormDescription>
@@ -127,7 +119,7 @@ export function ProfileForm() {
                 <Input
                   placeholder="My Name"
                   {...field}
-                  defaultValue={data && data["full_name"]}
+                  defaultValue={defaultValues.full_name}
                 />
               </FormControl>
               <FormDescription>
@@ -149,7 +141,7 @@ export function ProfileForm() {
                   placeholder="Tell us a little bit about yourself"
                   className="resize-none"
                   {...field}
-                  defaultValue={data && data["bio"]}
+                  defaultValue={defaultValues.bio}
                 />
               </FormControl>
               <FormDescription>
@@ -159,40 +151,74 @@ export function ProfileForm() {
             </FormItem>
           )}
         />
-        {/* <div>
+        <div>
           {fields.map((field, index) => (
-            <FormField
-              control={form.control}
-              key={field.id}
-              name={`urls.${index}.value`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className={cn(index !== 0 && "sr-only")}>
-                    URLs
-                  </FormLabel>
-                  <FormDescription className={cn(index !== 0 && "sr-only")}>
-                    Add links to your website, blog, or social media profiles.
-                  </FormDescription>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="flex items-end gap-3" key={field.id}>
+              <div className="w-3/5">
+                <FormField
+                  control={form.control}
+                  name={`urls.${index}.url`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className={cn(index !== 0 && "sr-only")}>
+                        URL
+                      </FormLabel>
+                      <FormDescription className={cn(index !== 0 && "sr-only")}>
+                        Add links to your page
+                      </FormDescription>
+                      <FormControl>
+                        <Input className="w-full" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="w-2/5">
+                <FormField
+                  control={form.control}
+                  name={`urls.${index}.name`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className={cn(index !== 0 && "sr-only")}>
+                        Name
+                      </FormLabel>
+                      <FormDescription className={cn(index !== 0 && "sr-only")}>
+                        Add a name for the URL.
+                      </FormDescription>
+                      <FormControl>
+                        <Input className="w-full" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <Button
+                variant="secondary"
+                className="flex items-center justify-center"
+              >
+                <Trash
+                  onClick={() => remove(index)}
+                  className="mb-2 mt-2 w-4 h-4"
+                />
+              </Button>
+            </div>
           ))}
           <Button
             type="button"
             variant="outline"
             size="sm"
             className="mt-2"
-            onClick={() => append({ value: "" })}
+            onClick={() => append({ url: "", name: "" })} // Ajoutez les deux valeurs avec des chaînes vides
           >
             Add URL
           </Button>
-        </div> */}
+        </div>
 
-        <Button type="submit">Update profile</Button>
+        <Button variant="outline" type="submit">
+          Update profile
+        </Button>
       </form>
     </Form>
   );

@@ -1,11 +1,11 @@
 const menuData = [
   {
-    title: "Features",
-    href: "/#features",
+    title: "Demo",
+    href: "/#demo",
   },
   {
-    title: "Pricing",
-    href: "/#pricing",
+    title: "Features",
+    href: "/#features",
   },
   {
     title: "Testimonials",

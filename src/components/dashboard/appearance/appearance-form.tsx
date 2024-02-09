@@ -12,9 +12,10 @@ import {
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
+import { DataContext } from "@/utlis/userContext";
 
 const appearanceFormSchema = z.object({
   theme: z.enum(["light", "dark"], {
@@ -24,41 +25,14 @@ const appearanceFormSchema = z.object({
 
 type AppearanceFormValues = z.infer<typeof appearanceFormSchema>;
 
-// This can come from your database or API.
-const defaultValues: Partial<AppearanceFormValues> = {
-  theme: "light",
-};
-
 export function AppearanceForm() {
   const [userId, setUserId] = useState<String>();
   const [userData, setUserData] = useState();
+  const { data } = React.useContext(DataContext);
 
-  const router = useRouter();
-  useEffect(() => {
-    const checkUser = async () => {
-      const { data, error } = await supabase.auth.getUser();
-
-      if (data.user) setUserId(data.user.id);
-    };
-
-    checkUser();
-  }, [router]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!userId) {
-        return;
-      }
-      const { data, error } = await supabase
-        .from("users")
-        .select("*")
-        .eq("id", userId);
-
-      if (data) setUserData(data[0]);
-    };
-
-    fetchData();
-  }, [userId]);
+  const defaultValues: Partial<AppearanceFormValues> = {
+    theme: data.theme || "light",
+  };
 
   const form = useForm<AppearanceFormValues>({
     resolver: zodResolver(appearanceFormSchema),
@@ -87,9 +61,7 @@ export function AppearanceForm() {
               <FormMessage />
               <RadioGroup
                 onValueChange={field.onChange}
-                defaultValue={
-                  (userData && userData["theme"]) || defaultValues.theme
-                }
+                defaultValue={defaultValues.theme}
                 className="grid max-w-md grid-cols-2 gap-8 pt-2"
               >
                 <FormItem>
@@ -149,7 +121,9 @@ export function AppearanceForm() {
           )}
         />
 
-        <Button type="submit">Update preferences</Button>
+        <Button variant="outline" type="submit">
+          Update preferences
+        </Button>
       </form>
     </Form>
   );

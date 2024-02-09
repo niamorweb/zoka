@@ -1,11 +1,12 @@
-"use client";
-
 import Image from "next/image";
 import SectionTitle from "../../Common/SectionTitle";
 
-const Video = () => {
+const DemoProfile = () => {
   return (
-    <section className="relative bg-gray-light dark:bg-bg-color-dark z-10 py-16 md:py-20 lg:py-28">
+    <section
+      id="demo"
+      className="relative bg-gray-light dark:bg-bg-color-dark z-10 py-16 md:py-20 lg:py-28"
+    >
       <div className="container">
         <SectionTitle
           title="Create your page in 2 minutes"
@@ -17,16 +18,16 @@ const Video = () => {
         <div className="-mx-4 flex flex-wrap">
           <div className="w-full px-4">
             <div
-              className="wow fadeInUp mx-auto max-w-[770px] overflow-hidden rounded-md"
+              className="wow fadeInUp mx-auto max-w-[1200px] overflow-hidden rounded-md"
               data-wow-delay=".15s"
             >
-              <div className="relative aspect-[77/35] items-center justify-center">
-                <Image
-                  src="/images/home/demo_img.webp"
-                  alt="video image"
-                  fill
-                />
-              </div>
+              <Image
+                className="rounded-lg"
+                width={1200}
+                height={1000}
+                src="/images/home/demo_profile_page.png"
+                alt="video image"
+              />
             </div>
           </div>
         </div>
@@ -35,4 +36,4 @@ const Video = () => {
   );
 };
 
-export default Video;
+export default DemoProfile;

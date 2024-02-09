@@ -10,6 +10,7 @@ import { ToastProvider } from "@/components/ui/toast";
 import Link from "next/link";
 import { DataContext } from "@/utlis/userContext";
 import * as React from "react";
+import { Button } from "@/components/ui/button";
 
 interface SettingsLayoutProps {
   children: React.ReactNode;
@@ -44,23 +45,30 @@ export default function Layout({ children }: SettingsLayoutProps) {
     //   href: "/dashboard/notifications",
     //   category: "account",
     // },
-    {
-      title: "View my page",
-      href: `/gallery/${data && data.username}`,
-      category: "profile",
-    },
+    // {
+    //   title: "View my page",
+    //   href: `/gallery/${data && data.username}`,
+    //   category: "profile",
+    // },
   ];
 
   return (
     <ToastProvider>
       <div className="space-y-6 p-10 pb-16 md:block">
-        <div className="space-y-0.5">
-          <Link href="/" className="text-2xl font-bold tracking-tight">
-            ZOKA
+        <div className="space-y-0.5 flex justify-between items-start">
+          <div className="flex flex-col gap-3">
+            <Link href="/" className="text-2xl font-bold tracking-tight">
+              ZOKA
+            </Link>
+            <p className="text-muted-foreground">
+              Manage your profile to show your best photos
+            </p>
+          </div>
+          <Link target="_blank" href={"/gallery/" + data.username}>
+            <Button className="flex items-center gap-3" variant="default">
+              View my page
+            </Button>
           </Link>
-          <p className="text-muted-foreground">
-            Manage your profile to show your best photos
-          </p>
         </div>
         <div className="lg:hidden">
           <MobileNav items={sidebarNavItems} />

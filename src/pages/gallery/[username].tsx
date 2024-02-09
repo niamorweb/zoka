@@ -4,14 +4,32 @@ import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 import imageCompression from "browser-image-compression"; // Importez la bibliothèque de compression d'image
 import { useRouter } from "next/router";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@radix-ui/react-label";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import { ChevronRight } from "lucide-react";
 
+interface link {
+  name: String;
+  url: String;
+}
 interface userInfos {
   bio: String | null;
   created_at: String;
   email: String | null;
   full_name: String | null;
   language: String | null;
-  links: Array<String> | null;
+  links: Array<link> | null;
   theme: String;
   user_id: String;
   username: String;
@@ -97,48 +115,76 @@ const Gallery = () => {
 
   return (
     <>
-      <div className="min-w-screen min-h-screen bg-black">
-        <main className="mx-auto max-w-[1960px] p-4">
-          <div className="columns-1 gap-4 sm:columns-2 xl:columns-3 2xl:columns-4">
-            <div className="after:content relative mb-5 flex h-[629px] flex-col items-center justify-end gap-4 overflow-hidden rounded-lg bg-white/10 px-6 pb-16 pt-64 text-center text-white shadow-highlight after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight lg:pt-0">
-              <h1 className="mb-4 mt-8 text-base font-bold uppercase tracking-widest">
-                {userInfos && userInfos.username}
-              </h1>
-              <p className="max-w-[40ch] text-white/75 sm:max-w-[32ch]">
-                {userInfos && userInfos.bio}
-              </p>
-              <a
-                className="pointer z-10 mt-6 rounded-lg border border-white bg-white px-3 py-2 text-sm font-semibold text-black transition hover:bg-white/10 hover:text-white md:mt-4"
-                href="https://vercel.com/new/clone?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-cloudinary&project-name=nextjs-image-gallery&repository-name=with-cloudinary&env=NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,CLOUDINARY_API_KEY,CLOUDINARY_API_SECRET,CLOUDINARY_FOLDER&envDescription=API%20Keys%20from%20Cloudinary%20needed%20to%20run%20this%20application"
-                target="_blank"
-                rel="noreferrer"
-              >
-                My other links
-              </a>
-            </div>
-            {userPhotos.map((image, index) => (
-              <div
-                onClick={() => openOriginalImage(image.name)}
-                key={index}
-                className="after:content group relative mb-5 block w-full cursor-zoom-in after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight"
-              >
-                <Image
-                  alt="Next.js Conf photo"
-                  className="transform rounded-lg brightness-90 transition will-change-auto group-hover:brightness-110"
-                  style={{ transform: "translate3d(0, 0, 0)" }}
-                  src={image.url}
-                  width={720}
-                  height={480}
-                  sizes="(max-width: 640px) 100vw,
+      {userInfos && (
+        <div className="min-w-screen min-h-screen bg-black">
+          <main className="mx-auto max-w-[1960px] p-4">
+            <div className="columns-1 gap-4 sm:columns-2 xl:columns-3 2xl:columns-4">
+              <div className="after:content relative mb-5 flex flex-col items-start justify-end gap-4 overflow-hidden rounded-lg bg-white/10 px-6 pb-16 pt-64 text-white shadow-highlight after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight lg:pt-0">
+                <h1 className=" mt-8 text-base font-bold uppercase tracking-widest">
+                  {userInfos.full_name}
+                </h1>
+                <p className="mb-4 text-white/75">{userInfos.bio}</p>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="secondary">MY LINKS</Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                      <DialogTitle>My links</DialogTitle>
+                      <DialogDescription>
+                        Here are all my links!
+                      </DialogDescription>
+                    </DialogHeader>
+                    <Separator />
+                    <div className="grid">
+                      {userInfos.links &&
+                        userInfos.links.map((link, index) => (
+                          <a
+                            key={index}
+                            href="https://www.youtube.com"
+                            target="_blank"
+                            className="flex justify-between items-center py-3 px-2 rounded-lg hover:outline-2 hover:outline outline-neutral-600 duration-100"
+                          >
+                            <div className="grid">
+                              <span className="text-black">{link.name}</span>
+                              <span className="text-neutral-500">
+                                {link.url}
+                              </span>
+                            </div>
+                            <ChevronRight className="text-neutral-500" />
+                          </a>
+                        ))}
+                    </div>
+                    <DialogFooter>
+                      <Button type="submit">Share page</Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              </div>
+              {userPhotos.map((image, index) => (
+                <div
+                  onClick={() => openOriginalImage(image.name)}
+                  key={index}
+                  className="after:content group relative mb-5 block w-full cursor-zoom-in after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight"
+                >
+                  <Image
+                    alt="Next.js Conf photo"
+                    className="transform rounded-lg brightness-90 transition will-change-auto group-hover:brightness-110"
+                    style={{ transform: "translate3d(0, 0, 0)" }}
+                    src={image.url}
+                    width={720}
+                    height={480}
+                    sizes="(max-width: 640px) 100vw,
                   (max-width: 1280px) 50vw,
                   (max-width: 1536px) 33vw,
                   25vw"
-                />
-              </div>
-            ))}
-          </div>
-        </main>
-      </div>
+                  />
+                </div>
+              ))}
+            </div>
+          </main>
+        </div>
+      )}
     </>
   );
 };

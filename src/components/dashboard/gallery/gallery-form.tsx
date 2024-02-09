@@ -76,7 +76,9 @@ export function GalleryForm() {
           <Label htmlFor="picture">Picture</Label>
           <Input onChange={handleImageChange} id="picture" type="file" />
         </div>
-        <Button type="submit">Add this photo(s)</Button>
+        <Button disabled={!image} variant="outline" type="submit">
+          Add this photo
+        </Button>
       </form>
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-2">

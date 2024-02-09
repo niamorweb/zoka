@@ -96,7 +96,7 @@ export function AccountForm() {
   return (
     <>
       <>
-        <Form {...form}>
+        {/* <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
               control={form.control}
@@ -206,7 +206,7 @@ export function AccountForm() {
 
             <Button type="submit">Update account</Button>
           </form>
-        </Form>
+        </Form> */}
         <Button variant="outline" onClick={() => logout()}>
           Log out
         </Button>
