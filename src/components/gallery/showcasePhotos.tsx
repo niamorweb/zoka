@@ -45,7 +45,7 @@ export default function ShowcasePhotos({
           .filter((_: any, index: number) => index === currentPhotoSelected)
           .map((photo: any, index: number) => (
             <Image
-              key={number}
+              key={index}
               className="max-h-[80vh] max-w-[80vw] object-contain"
               src={photo.url}
               alt=""
