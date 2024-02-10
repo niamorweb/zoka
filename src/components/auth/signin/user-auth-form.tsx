@@ -44,7 +44,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     if (error) {
       setIsLoading(false);
     } else {
-      router.push("forms");
+      router.push("dashboard");
       setIsLoading(false);
     }
   }

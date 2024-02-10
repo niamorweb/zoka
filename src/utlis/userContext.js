@@ -28,7 +28,6 @@ export function DataProvider({ children }) {
       .select("*")
       .eq("id", userId);
 
-    data && console.log(data[0]);
     data && setData(data[0]);
   };
 

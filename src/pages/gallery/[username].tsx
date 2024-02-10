@@ -1,4 +1,3 @@
-"use client";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { supabase } from "@/lib/supabase";
@@ -14,10 +13,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Label } from "@radix-ui/react-label";
-import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { ChevronRight } from "lucide-react";
+import ShowcasePhotos from "@/components/gallery/showcasePhotos";
+import { useLockBody } from "@/hooks/use-lock-body";
 
 interface link {
   name: String;
@@ -43,6 +42,8 @@ const Gallery = () => {
   );
   const [userInfos, setUserInfos] = useState<userInfos>();
   const [userId, setUserId] = useState<String | null>(null);
+  const [showcaseVisible, setShowcaseVisible] = useState<Boolean>(false);
+  const [currentPhotoSelected, setCurrentPhotoSelected] = useState<Number>(0);
 
   useEffect(() => {
     if (!username) return;
@@ -115,6 +116,15 @@ const Gallery = () => {
 
   return (
     <>
+      {showcaseVisible && (
+        <ShowcasePhotos
+          setShowcaseVisible={setShowcaseVisible}
+          setCurrentPhotoSelected={setCurrentPhotoSelected}
+          currentPhotoSelected={currentPhotoSelected}
+          userPhotos={userPhotos}
+        />
+      )}
+
       {userInfos && (
         <div className="min-w-screen min-h-screen bg-black">
           <main className="mx-auto max-w-[1960px] p-4">
@@ -163,7 +173,11 @@ const Gallery = () => {
               </div>
               {userPhotos.map((image, index) => (
                 <div
-                  onClick={() => openOriginalImage(image.name)}
+                  onClick={() => {
+                    setShowcaseVisible(true);
+                    setCurrentPhotoSelected(index);
+                  }}
+                  // onClick={() => openOriginalImage(image.name)}
                   key={index}
                   className="after:content group relative mb-5 block w-full cursor-zoom-in after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight"
                 >

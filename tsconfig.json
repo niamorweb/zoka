@@ -21,7 +21,8 @@
     "**/*.ts",
     "**/*.tsx",
     "src/utlis/userContext.js",
-    "src/utlis/AuthProvider.js"
+    "src/utlis/AuthProvider.js",
+    "src/utlis/compressImageUrl.js"
   ],
   "exclude": ["node_modules"]
 }

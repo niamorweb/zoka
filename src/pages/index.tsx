@@ -43,8 +43,11 @@ export default function Home() {
               Follow along on Twitter
             </Link>
             <h1 className="font-heading font-bold text-3xl sm:text-5xl md:text-6xl lg:text-7xl">
-              A <span className="text-[#0045FF]">digital platform</span> for
-              sharing your photos and links.{" "}
+              The platform for{" "}
+              <span className="text-[#0045FF]">
+                {" "}
+                sharing your photos and links.
+              </span>{" "}
             </h1>
             <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
               Craft your profile page and showcase your finest photos,
