@@ -38,7 +38,6 @@ export default function Home() {
             <Link
               href="/"
               className="rounded-2xl bg-muted px-4 py-1.5 text-sm font-medium"
-              target="_blank"
             >
               Follow along on Twitter
             </Link>
@@ -59,6 +58,15 @@ export default function Home() {
                 className={cn(buttonVariants({ size: "lg" }))}
               >
                 Get Started
+              </Link>
+              <Link
+                href="/gallery/demo"
+                target="_blank"
+                className={cn(
+                  buttonVariants({ size: "lg", variant: "outline" })
+                )}
+              >
+                See Demo
               </Link>
             </div>
           </div>

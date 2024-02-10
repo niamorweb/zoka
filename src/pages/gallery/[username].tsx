@@ -140,7 +140,7 @@ const Gallery = () => {
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
-                      <DialogTitle>My links</DialogTitle>
+                      <DialogTitle>LINKS</DialogTitle>
                       <DialogDescription>
                         Here are all my links!
                       </DialogDescription>
@@ -165,9 +165,9 @@ const Gallery = () => {
                           </a>
                         ))}
                     </div>
-                    <DialogFooter>
+                    {/* <DialogFooter>
                       <Button type="submit">Share page</Button>
-                    </DialogFooter>
+                    </DialogFooter> */}
                   </DialogContent>
                 </Dialog>
               </div>
