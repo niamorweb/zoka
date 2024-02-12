@@ -1,5 +1,6 @@
 import { useLockBody } from "@/hooks/use-lock-body";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Cross2Icon } from "@radix-ui/react-icons";
+import { ChevronLeft, ChevronRight, CrossIcon } from "lucide-react";
 import Image from "next/image";
 
 export default function ShowcasePhotos({
@@ -11,8 +12,6 @@ export default function ShowcasePhotos({
   useLockBody();
 
   const handleImageChange = (number: Number) => {
-    console.log(userPhotos.length);
-
     if (currentPhotoSelected <= 0 && number === -1) {
       return;
     }
@@ -22,20 +21,14 @@ export default function ShowcasePhotos({
     setCurrentPhotoSelected(currentPhotoSelected + number);
   };
 
-  const handleCloseLightBox = (event: React.MouseEvent<HTMLDivElement>) => {
-    console.log("tedddsr");
-    if (event.target === event.currentTarget) {
-      console.log("tesr");
-
-      setShowcaseVisible(false);
-    }
-  };
-
   return (
-    <section
-      onClick={(e: any) => handleCloseLightBox(e)}
-      className="w-screen h-screen fixed z-30 top-0 left-0 bg-black bg-opacity-15 backdrop-blur-lg  "
-    >
+    <section className="w-screen h-screen fixed z-30 top-0 left-0 bg-black bg-opacity-15 backdrop-blur-lg  ">
+      <button
+        className="absolute top-10 right-10 w-14 h-14 flex justify-center items-center"
+        onClick={() => setShowcaseVisible(false)}
+      >
+        <Cross2Icon className=" text-white w-8 h-8" />
+      </button>
       <div className="h-full flex md:gap-8 items-center justify-center">
         <ChevronLeft
           className="cursor-pointer text-white w-14 h-14"

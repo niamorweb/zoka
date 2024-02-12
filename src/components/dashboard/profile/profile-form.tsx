@@ -62,9 +62,6 @@ export function ProfileForm() {
   });
 
   async function onSubmit(formData: ProfileFormValues) {
-    console.log(formData);
-    console.log(data.id);
-
     const { data: userData, error } = await supabase
       .from("users")
       .update({

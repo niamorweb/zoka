@@ -17,6 +17,7 @@ import { Separator } from "@/components/ui/separator";
 import { ChevronRight } from "lucide-react";
 import ShowcasePhotos from "@/components/gallery/showcasePhotos";
 import { useLockBody } from "@/hooks/use-lock-body";
+import getBase64 from "@/lib/getBase64";
 
 interface link {
   name: String;
@@ -44,6 +45,7 @@ const Gallery = () => {
   const [userId, setUserId] = useState<String | null>(null);
   const [showcaseVisible, setShowcaseVisible] = useState<Boolean>(false);
   const [currentPhotoSelected, setCurrentPhotoSelected] = useState<Number>(0);
+  const [photosUrl, setPhotosUrl] = useState<Array<string>>([]);
 
   useEffect(() => {
     if (!username) return;
@@ -70,49 +72,54 @@ const Gallery = () => {
     if (error) {
       return;
     }
-    const compressedPhotos = await Promise.all(
-      photos.map(async (file) => {
-        const url: string = (await compressImageUrl(file.name)) as string;
-        return { name: file.name, url };
-      })
-    );
 
-    setUserPhotos(compressedPhotos);
-  };
-
-  const compressImageUrl = async (imageName: string) => {
-    const imageUrl = await supabase.storage
-      .from("users_photos")
-      .getPublicUrl(`${userId}/${imageName}`);
-
-    const response = await fetch(imageUrl.data.publicUrl);
-    const blob: any = await response.blob();
-
-    // Options de compression (vous pouvez ajuster selon vos besoins)
-    const options = {
-      maxSizeMB: 0.4, // Taille maximale de l'image compressée en MB
-      maxWidthOrHeight: 800, // Largeur ou hauteur maximale de l'image compressée
-      useWebWorker: true, // Utiliser un Web Worker pour le traitement asynchrone (facultatif)
-    };
-
-    // Compresser l'image
-    const compressedBlob: any = await imageCompression(blob, options);
-
-    // Convertir l'image compressée en format Base64
-    const reader = new FileReader();
-    reader.readAsDataURL(compressedBlob);
-    return new Promise((resolve, reject) => {
-      reader.onloadend = () => {
-        resolve(reader.result as string);
-      };
-      reader.onerror = reject;
+    const photoArrayUrl: Array<string> = [];
+    photos.map((photo) => {
+      photoArrayUrl.push(
+        `https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${userId}/${photo.name}`
+      );
     });
+    setPhotosUrl(photoArrayUrl);
+
+    // setPhotosUrl(photos);
+    // const compressedPhotos = await Promise.all(
+    //   photos.map(async (file) => {
+    //     const url: string = (await compressImageUrl(file.name)) as string;
+    //     return { name: file.name, url };
+    //   })
+    // );
+
+    // setUserPhotos(compressedPhotos);
   };
 
-  const openOriginalImage = (imageName: String) => {
-    const originalUrl: string = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/users_photos/${userId}/${imageName}`;
-    window.open(originalUrl, "_blank");
-  };
+  // const compressImageUrl = async (imageName: string) => {
+  //   const imageUrl = await supabase.storage
+  //     .from("users_photos")
+  //     .getPublicUrl(`${userId}/${imageName}`);
+
+  //   const response = await fetch(imageUrl.data.publicUrl);
+  //   const blob: any = await response.blob();
+
+  //   // Options de compression (vous pouvez ajuster selon vos besoins)
+  //   const options = {
+  //     maxSizeMB: 0.4, // Taille maximale de l'image compressée en MB
+  //     maxWidthOrHeight: 800, // Largeur ou hauteur maximale de l'image compressée
+  //     useWebWorker: true, // Utiliser un Web Worker pour le traitement asynchrone (facultatif)
+  //   };
+
+  //   // Compresser l'image
+  //   const compressedBlob: any = await imageCompression(blob, options);
+
+  //   // Convertir l'image compressée en format Base64
+  //   const reader = new FileReader();
+  //   reader.readAsDataURL(compressedBlob);
+  //   return new Promise((resolve, reject) => {
+  //     reader.onloadend = () => {
+  //       resolve(reader.result as string);
+  //     };
+  //     reader.onerror = reject;
+  //   });
+  // };
 
   return (
     <>
@@ -171,7 +178,7 @@ const Gallery = () => {
                   </DialogContent>
                 </Dialog>
               </div>
-              {userPhotos.map((image, index) => (
+              {photosUrl.map((photo, index) => (
                 <div
                   onClick={() => {
                     setShowcaseVisible(true);
@@ -182,10 +189,12 @@ const Gallery = () => {
                   className="after:content group relative mb-5 block w-full cursor-zoom-in after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight"
                 >
                   <Image
+                    placeholder="blur"
+                    blurDataURL={`/_next/image?url=${photo}&w=16&q=1`}
                     alt="Next.js Conf photo"
                     className="transform rounded-lg brightness-90 transition will-change-auto group-hover:brightness-110"
                     style={{ transform: "translate3d(0, 0, 0)" }}
-                    src={image.url}
+                    src={photo}
                     width={720}
                     height={480}
                     sizes="(max-width: 640px) 100vw,
