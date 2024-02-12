@@ -60,8 +60,10 @@ const Gallery = () => {
       .eq("username", username)
       .single();
 
-    setUserId(data.id);
-    setUserInfos(data);
+    if (data) {
+      setUserId(data.id);
+      setUserInfos(data);
+    }
   };
 
   const fetchPhotos = async () => {
