@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Inter } from "next/font/google";
 import Link from "next/link";
-
+import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
 import Header from "@/components/Layout/Header";
@@ -11,10 +11,13 @@ import Pricing from "@/components/home/Pricing";
 import DemoProfile from "@/components/home/DemoProfile";
 import DashboardFeature from "@/components/home/DashboardFeatures";
 import Head from "next/head";
+import { DataContext } from "@/utlis/userContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
+  const { data } = React.useContext(DataContext);
+
   return (
     <>
       <Head>
@@ -60,13 +63,13 @@ export default function Home() {
                 Get Started
               </Link>
               <Link
-                href="/gallery/demo"
+                href={data ? "/gallery/demo" : "signin"}
                 target="_blank"
                 className={cn(
                   buttonVariants({ size: "lg", variant: "outline" })
                 )}
               >
-                See Demo
+                See Demo ({!data && "You need to be login in first"} )
               </Link>
             </div>
           </div>
