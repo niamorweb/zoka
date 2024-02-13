@@ -18,6 +18,10 @@ const inter = Inter({ subsets: ["latin"] });
 export default function Home() {
   const { data } = React.useContext(DataContext);
 
+  React.useEffect(() => {
+    console.log(data);
+  });
+
   return (
     <>
       <Head>
@@ -69,7 +73,7 @@ export default function Home() {
                   buttonVariants({ size: "lg", variant: "outline" })
                 )}
               >
-                See Demo ({!data && "You need to be login in first"} )
+                See Demo {!data && "You need to be login in first"}
               </Link>
             </div>
           </div>

@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
+import { DataContext } from "@/utlis/userContext";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -22,6 +23,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     email: "",
     password: "",
   });
+  const { reloadData } = React.useContext(DataContext);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
@@ -44,6 +46,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     if (error) {
       setIsLoading(false);
     } else {
+      reloadData();
       router.push("dashboard");
       setIsLoading(false);
     }

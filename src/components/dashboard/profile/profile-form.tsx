@@ -43,6 +43,10 @@ export function ProfileForm() {
   const { data } = React.useContext(DataContext);
   const { toast } = useToast();
 
+  React.useEffect(() => {
+    console.log(data);
+  });
+
   const defaultValues: Partial<ProfileFormValues> = {
     username: data.username,
     full_name: data.full_name,

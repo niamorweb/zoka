@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
+import { DataContext } from "@/utlis/userContext";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -22,6 +23,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     email: "",
     password: "",
   });
+  const { reloadData } = React.useContext(DataContext);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
@@ -47,17 +49,19 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     });
     if (error) {
       setIsLoading(false);
+      console.error("Erreur lors de l'inscription:", error.message);
     } else {
-      const accessToken = localStorage.getItem(
-        "sb-izcvdmliijbnyeskngqj-auth-token"
-      );
-
-      if (accessToken && accessToken !== "null") {
+      // Vérifie si l'authentification a réussi
+      if (data && data.user && data.session && data.session.access_token) {
+        reloadData();
         setIsLoading(false);
         router.push("/dashboard");
       } else {
+        reloadData();
+        console.error(
+          "L'inscription a réussi, mais aucune session n'a été renvoyée."
+        );
       }
-      setIsLoading(false);
     }
   }
 
