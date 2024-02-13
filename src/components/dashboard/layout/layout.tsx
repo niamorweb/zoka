@@ -22,7 +22,7 @@ export default function Layout({ children }: SettingsLayoutProps) {
   const sidebarNavItems = [
     {
       title: "Profile",
-      href: "/dashboard/account",
+      href: "/dashboard",
       category: "profile",
     },
     {
