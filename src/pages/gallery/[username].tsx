@@ -38,14 +38,12 @@ interface userInfos {
 const Gallery = () => {
   const router = useRouter();
   const { username } = router.query;
-  const [userPhotos, setUserPhotos] = useState<{ name: string; url: string }[]>(
-    []
-  );
   const [userInfos, setUserInfos] = useState<userInfos>();
   const [userId, setUserId] = useState<String | null>(null);
   const [showcaseVisible, setShowcaseVisible] = useState<Boolean>(false);
   const [currentPhotoSelected, setCurrentPhotoSelected] = useState<Number>(0);
   const [photosUrl, setPhotosUrl] = useState<Array<string>>([]);
+  const [userTheme, setUserTheme] = useState<String>("dark");
 
   useEffect(() => {
     if (!username) return;
@@ -61,6 +59,8 @@ const Gallery = () => {
       .single();
 
     if (data) {
+      setUserTheme(data.theme);
+
       setUserId(data.id);
       setUserInfos(data);
     }
@@ -82,46 +82,7 @@ const Gallery = () => {
       );
     });
     setPhotosUrl(photoArrayUrl);
-
-    // setPhotosUrl(photos);
-    // const compressedPhotos = await Promise.all(
-    //   photos.map(async (file) => {
-    //     const url: string = (await compressImageUrl(file.name)) as string;
-    //     return { name: file.name, url };
-    //   })
-    // );
-
-    // setUserPhotos(compressedPhotos);
   };
-
-  // const compressImageUrl = async (imageName: string) => {
-  //   const imageUrl = await supabase.storage
-  //     .from("users_photos")
-  //     .getPublicUrl(`${userId}/${imageName}`);
-
-  //   const response = await fetch(imageUrl.data.publicUrl);
-  //   const blob: any = await response.blob();
-
-  //   // Options de compression (vous pouvez ajuster selon vos besoins)
-  //   const options = {
-  //     maxSizeMB: 0.4, // Taille maximale de l'image compressée en MB
-  //     maxWidthOrHeight: 800, // Largeur ou hauteur maximale de l'image compressée
-  //     useWebWorker: true, // Utiliser un Web Worker pour le traitement asynchrone (facultatif)
-  //   };
-
-  //   // Compresser l'image
-  //   const compressedBlob: any = await imageCompression(blob, options);
-
-  //   // Convertir l'image compressée en format Base64
-  //   const reader = new FileReader();
-  //   reader.readAsDataURL(compressedBlob);
-  //   return new Promise((resolve, reject) => {
-  //     reader.onloadend = () => {
-  //       resolve(reader.result as string);
-  //     };
-  //     reader.onerror = reject;
-  //   });
-  // };
 
   return (
     <>
@@ -130,22 +91,44 @@ const Gallery = () => {
           setShowcaseVisible={setShowcaseVisible}
           setCurrentPhotoSelected={setCurrentPhotoSelected}
           currentPhotoSelected={currentPhotoSelected}
-          userPhotos={userPhotos}
+          photosUrl={photosUrl}
         />
       )}
 
       {userInfos && (
-        <div className="min-w-screen min-h-screen bg-black">
+        <div
+          className={`min-w-screen min-h-screen ${
+            userTheme === "dark" ? "bg-black" : "bg-slate-50"
+          }`}
+        >
           <main className="mx-auto max-w-[1960px] p-4">
             <div className="columns-1 gap-4 sm:columns-2 xl:columns-3 2xl:columns-4">
-              <div className="after:content relative mb-5 flex flex-col items-start justify-end gap-4 overflow-hidden rounded-lg bg-white/10 px-6 pb-16 pt-64 text-white shadow-highlight after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight lg:pt-0">
+              <div
+                className={`after:content relative mb-5 flex flex-col items-start justify-end gap-4 overflow-hidden rounded-lg ${
+                  userTheme === "dark"
+                    ? "bg-white/10 text-white"
+                    : "bg-neutral-200 text-neutral-900"
+                }  px-6 pb-16 pt-64  shadow-highlight after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight lg:pt-0`}
+              >
                 <h1 className=" mt-8 text-base font-bold uppercase tracking-widest">
                   {userInfos.full_name}
                 </h1>
-                <p className="mb-4 text-white/75">{userInfos.bio}</p>
+                <p
+                  className={`mb-4  ${
+                    userTheme === "dark"
+                      ? "text-white"
+                      : "text- text-neutral-900"
+                  }`}
+                >
+                  {userInfos.bio}
+                </p>
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button variant="secondary">MY LINKS</Button>
+                    <Button
+                      variant={userTheme === "dark" ? "secondary" : "default"}
+                    >
+                      MY LINKS
+                    </Button>
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>

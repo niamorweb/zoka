@@ -1,16 +1,13 @@
 import Image from "next/image";
 
 import { SidebarNav } from "../nav/sidebar-nav";
-import { supabase } from "@/lib/supabase";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import { MobileNav } from "../nav/mobile-nav";
 import { Separator } from "@/components/ui/separator";
-import { ToastProvider } from "@/components/ui/toast";
 import Link from "next/link";
 import { DataContext } from "@/utlis/userContext";
 import * as React from "react";
 import { Button } from "@/components/ui/button";
+import { Toaster } from "@/components/ui/toaster";
 
 interface SettingsLayoutProps {
   children: React.ReactNode;
@@ -53,7 +50,8 @@ export default function Layout({ children }: SettingsLayoutProps) {
   ];
 
   return (
-    <ToastProvider>
+    <>
+      {" "}
       <div className="space-y-6 p-10 pb-16 md:block">
         <div className="space-y-0.5 flex justify-between items-start">
           <div className="flex flex-col gap-3">
@@ -81,6 +79,7 @@ export default function Layout({ children }: SettingsLayoutProps) {
           <div className="flex-1 lg:max-w-2xl">{children}</div>
         </div>
       </div>
-    </ToastProvider>
+      <Toaster />
+    </>
   );
 }

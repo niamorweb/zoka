@@ -5,7 +5,7 @@ import Image from "next/image";
 
 export default function ShowcasePhotos({
   currentPhotoSelected,
-  userPhotos,
+  photosUrl,
   setCurrentPhotoSelected,
   setShowcaseVisible,
 }: any) {
@@ -34,13 +34,13 @@ export default function ShowcasePhotos({
           className="cursor-pointer text-white w-14 h-14"
           onClick={() => handleImageChange(-1)}
         />
-        {userPhotos
+        {photosUrl
           .filter((_: any, index: number) => index === currentPhotoSelected)
           .map((photo: any, index: number) => (
             <Image
               key={index}
               className="max-h-[80vh] max-w-[80vw] object-contain"
-              src={photo.url}
+              src={photo}
               alt=""
               width={1000}
               height={1000}

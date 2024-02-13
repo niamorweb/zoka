@@ -47,7 +47,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       setIsLoading(false);
     } else {
       reloadData();
-      router.push("dashboard");
+      router.push("dashboard/account");
       setIsLoading(false);
     }
   }

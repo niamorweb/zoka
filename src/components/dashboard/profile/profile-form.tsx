@@ -43,10 +43,6 @@ export function ProfileForm() {
   const { data } = React.useContext(DataContext);
   const { toast } = useToast();
 
-  React.useEffect(() => {
-    console.log(data);
-  });
-
   const defaultValues: Partial<ProfileFormValues> = {
     username: data.username,
     full_name: data.full_name,
@@ -75,12 +71,22 @@ export function ProfileForm() {
         links: formData.urls,
       })
       .eq("id", data.id);
-    if (error) console.log(error);
-    else {
+    if (error) {
+      if (error.code === "23505") {
+        toast({
+          variant: "destructive",
+          title: "Username already used",
+          description: "Please change your username",
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "An error has occurred",
+        });
+      }
+    } else {
       toast({
-        title: "Scheduled: Catch up ",
-        description: "Friday, February 10, 2023 at 5:57 PM",
-        action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction>,
+        description: "Profile updated !",
       });
       reloadData();
     }
@@ -104,7 +110,7 @@ export function ProfileForm() {
               </FormControl>
               <FormDescription>
                 You username will be used for your page&apos;s url (Ex:
-                https://zoka/profile/username)
+                https://zoka/gallery/username)
               </FormDescription>
               <FormMessage />
             </FormItem>

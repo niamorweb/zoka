@@ -16,6 +16,7 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { DataContext } from "@/utlis/userContext";
+import { toast } from "@/components/ui/use-toast";
 
 const appearanceFormSchema = z.object({
   theme: z.enum(["light", "dark"], {
@@ -40,12 +41,25 @@ export function AppearanceForm() {
   });
 
   async function onSubmit(formData: AppearanceFormValues) {
-    const { data, error } = await supabase
+    const { data: userData, error } = await supabase
       .from("users")
       .update({
         theme: formData.theme,
       })
-      .eq("id", userId);
+      .eq("id", data.id);
+
+    if (error) {
+      console.log(error);
+
+      toast({
+        variant: "destructive",
+        title: "An error has occurred",
+      });
+    } else {
+      toast({
+        description: "Appearance updated !",
+      });
+    }
   }
 
   return (
