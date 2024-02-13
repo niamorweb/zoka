@@ -13,10 +13,10 @@ const AuthProvider = ({ children }) => {
 
       const { data, error } = await supabase.auth.getUser();
 
-      if (!data.user && router.pathname.startsWith("/dashboard")) {
+      if (!data.user && router.pathname.startsWith("/dashboard/account")) {
         router.push("/signin");
       } else if (data.user && router.pathname === ("/signin" || "signup")) {
-        router.push("/dashboard");
+        router.push("/dashboard/account");
       }
     };
 

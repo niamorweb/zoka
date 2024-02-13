@@ -55,7 +55,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       if (data && data.user && data.session && data.session.access_token) {
         reloadData();
         setIsLoading(false);
-        router.push("/dashboard");
+        router.push("/dashboard/account");
       } else {
         reloadData();
         console.error(
