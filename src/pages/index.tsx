@@ -11,17 +11,10 @@ import Pricing from "@/components/home/Pricing";
 import DemoProfile from "@/components/home/DemoProfile";
 import DashboardFeature from "@/components/home/DashboardFeatures";
 import Head from "next/head";
-import { DataContext } from "@/utlis/userContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-  const { data } = React.useContext(DataContext);
-
-  React.useEffect(() => {
-    console.log(data);
-  });
-
   return (
     <>
       <Head>
@@ -67,13 +60,13 @@ export default function Home() {
                 Get Started
               </Link>
               <Link
-                href={data ? "/gallery/demo" : "signin"}
+                href="/gallery/demo"
                 target="_blank"
                 className={cn(
                   buttonVariants({ size: "lg", variant: "outline" })
                 )}
               >
-                See Demo {!data && "You need to be login in first"}
+                See Demo
               </Link>
             </div>
           </div>
