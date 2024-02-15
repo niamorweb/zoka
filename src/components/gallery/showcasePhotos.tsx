@@ -15,10 +15,10 @@ export default function ShowcasePhotos({
     if (currentPhotoSelected <= 0 && number === -1) {
       return;
     }
-    if (currentPhotoSelected >= 5 && number === 1) {
+    if (photosUrl.length - 1 <= currentPhotoSelected && number === 1) {
       return;
     }
-    setCurrentPhotoSelected(currentPhotoSelected + number);
+    console.log("currentPhotoSelectednew ", currentPhotoSelected);
   };
 
   return (
