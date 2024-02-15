@@ -80,6 +80,7 @@ export default function ShowcasePhotos({
         <div className="absolute bottom-4 flex items-center gap-3 overflow-auto">
           {photosUrl.map((photo: string, index: number) => (
             <Image
+              key={index}
               onClick={() => handleImageChangeViaThumbmail(index)}
               src={photo + "?width=100&height=100"}
               className={`flex-shrink flex-grow w-[50px] h-[50px] object-cover ${
