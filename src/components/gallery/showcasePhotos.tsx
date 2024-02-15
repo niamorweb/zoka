@@ -18,7 +18,7 @@ export default function ShowcasePhotos({
     if (photosUrl.length - 1 <= currentPhotoSelected && number === 1) {
       return;
     }
-    console.log("currentPhotoSelectednew ", currentPhotoSelected);
+    setCurrentPhotoSelected(currentPhotoSelected + number);
   };
 
   return (
