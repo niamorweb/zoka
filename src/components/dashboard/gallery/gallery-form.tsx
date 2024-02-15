@@ -19,6 +19,8 @@ import {
 import { DotsVerticalIcon, TrashIcon } from "@radix-ui/react-icons";
 import { CircleEllipsisIcon } from "lucide-react";
 import { DataContext } from "@/utlis/userContext";
+import imageCompression from "browser-image-compression";
+import { toast } from "@/components/ui/use-toast";
 
 export function GalleryForm() {
   const [image, setImage] = React.useState<File | null>(null);
@@ -28,6 +30,18 @@ export function GalleryForm() {
   const onSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     if (!data.id) {
+      return;
+    }
+
+    const { data: photos, error } = await supabase.storage
+      .from("users_photos")
+      .list(`${data.id}`);
+
+    if (photos && photos.length >= 15) {
+      toast({
+        variant: "destructive",
+        title: "The maximum image limit has been reached (15 images).",
+      });
       return;
     }
 
@@ -42,17 +56,43 @@ export function GalleryForm() {
       const uniq_id: string = uid();
 
       if (image) {
-        const { data: uploadData, error } = await supabase.storage
-          .from(`users_photos/${data.id}`)
-          .upload(
-            `${data.id}_${Date.now()}_${uniq_id}.${fileExtension}`,
-            image
-          );
+        console.log(image.size);
 
-        if (error) {
-          return null;
+        if (image.size > 2 * 1024 * 1024) {
+          try {
+            const options = {
+              maxSizeMB: 2,
+              useWebWorker: true,
+            };
+            const compressedFile = await imageCompression(image, options);
+            const { data: uploadData, error } = await supabase.storage
+              .from(`users_photos/${data.id}`)
+              .upload(
+                `${data.id}_${Date.now()}_${uniq_id}.${fileExtension}`,
+                compressedFile // Utilisation du fichier compressé
+              );
+
+            if (error) {
+              return null;
+            } else {
+              reloadData();
+            }
+          } catch (error) {
+            console.error("Erreur de compression d'image : ", error);
+          }
         } else {
-          reloadData();
+          const { data: uploadData, error } = await supabase.storage
+            .from(`users_photos/${data.id}`)
+            .upload(
+              `${data.id}_${Date.now()}_${uniq_id}.${fileExtension}`,
+              image
+            );
+
+          if (error) {
+            return null;
+          } else {
+            reloadData();
+          }
         }
       }
     }

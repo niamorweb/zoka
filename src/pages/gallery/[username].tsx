@@ -18,6 +18,7 @@ import { ChevronRight } from "lucide-react";
 import ShowcasePhotos from "@/components/gallery/showcasePhotos";
 import { useLockBody } from "@/hooks/use-lock-body";
 import getBase64 from "@/lib/getBase64";
+import Link from "next/link";
 
 interface link {
   name: String;
@@ -104,7 +105,7 @@ const Gallery = () => {
           <main className="mx-auto max-w-[1960px] p-4">
             <div className="columns-1 gap-4 sm:columns-2 xl:columns-3 2xl:columns-4">
               <div
-                className={`after:content relative mb-5 flex flex-col items-start justify-end gap-4 overflow-hidden rounded-lg ${
+                className={`after:content col relative mb-5 flex flex-col items-start justify-end gap-4 overflow-hidden rounded-lg ${
                   userTheme === "dark"
                     ? "bg-white/10 text-white"
                     : "bg-neutral-200 text-neutral-900"
@@ -179,9 +180,10 @@ const Gallery = () => {
                     alt="Next.js Conf photo"
                     className="transform rounded-lg brightness-90 transition will-change-auto group-hover:brightness-110"
                     style={{ transform: "translate3d(0, 0, 0)" }}
-                    src={photo}
+                    src={photo + "?width=500&height=600"}
                     width={720}
                     height={480}
+                    quality={50}
                     sizes="(max-width: 640px) 100vw,
                   (max-width: 1280px) 50vw,
                   (max-width: 1536px) 33vw,
@@ -193,6 +195,13 @@ const Gallery = () => {
           </main>
         </div>
       )}
+      <Separator className="my-14" orientation="horizontal" />
+      <p className="text-center mb-10">
+        Built by Zoka -
+        <Link target="_blank" className="underline underline-offset-2" href="/">
+          Create your own page here
+        </Link>
+      </p>
     </>
   );
 };
