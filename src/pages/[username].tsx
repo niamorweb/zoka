@@ -3,7 +3,6 @@ import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/router";
 import { Button } from "@/components/ui/button";
 import { LogOut, Trash, User } from "lucide-react";
-import ShowcasePhotos from "@/components/gallery/ShowcasePhotos";
 import { DataContext } from "@/utlis/userContext";
 import { toast } from "@/components/ui/use-toast";
 import Nav from "@/components/gallery/Nav";
@@ -41,8 +40,8 @@ const Gallery = () => {
   const { username } = router.query;
   const [userInfos, setUserInfos] = useState<userInfos>();
   const [userId, setUserId] = useState<String | null>(null);
-  const [showcaseVisible, setShowcaseVisible] = useState<Boolean>(false);
-  const [currentPhotoSelected, setCurrentPhotoSelected] = useState<Number>(0);
+  // const [showcaseVisible, setShowcaseVisible] = useState<Boolean>(false);
+  // const [currentPhotoSelected, setCurrentPhotoSelected] = useState<Number>(0);
   const [photosUrl, setPhotosUrl] = useState<Array<string>>([]);
   const [userTheme, setUserTheme] = useState<String>("dark");
   const [inputUsername, setInputUsername] = useState<string>("");
@@ -200,15 +199,6 @@ const Gallery = () => {
             inputTheme={inputTheme}
           />
         </>
-      )}
-
-      {showcaseVisible && (
-        <ShowcasePhotos
-          setShowcaseVisible={setShowcaseVisible}
-          setCurrentPhotoSelected={setCurrentPhotoSelected}
-          currentPhotoSelected={currentPhotoSelected}
-          photosUrl={photosUrl}
-        />
       )}
 
       {userInfos && (
