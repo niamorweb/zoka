@@ -229,8 +229,8 @@ const Gallery = () => {
                   username={username}
                   data={data}
                   deletePhoto={deletePhoto}
-                  setShowcaseVisible={setShowcaseVisible}
-                  setCurrentPhotoSelected={setCurrentPhotoSelected}
+                  // setShowcaseVisible={setShowcaseVisible}
+                  // setCurrentPhotoSelected={setCurrentPhotoSelected}
                 />
               ))}
             </div>

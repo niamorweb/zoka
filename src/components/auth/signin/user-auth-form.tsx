@@ -47,7 +47,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       setIsLoading(false);
     } else {
       reloadData();
-      router.push(`/${data.username}`);
+      router.push(`/`);
       setIsLoading(false);
     }
   }

@@ -11,10 +11,13 @@ import Pricing from "@/components/home/Pricing";
 import DemoProfile from "@/components/home/DemoProfile";
 import DashboardFeature from "@/components/home/DashboardFeatures";
 import Head from "next/head";
+import { DataContext } from "@/utlis/userContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
+  const { data } = React.useContext(DataContext);
+
   return (
     <>
       <Head>
@@ -54,7 +57,7 @@ export default function Home() {
             </p>
             <div className="space-x-4">
               <Link
-                href="/s/signin"
+                href={data ? `/${data.username}` : "/s/signin"}
                 className={cn(buttonVariants({ size: "lg" }))}
               >
                 Get Started
