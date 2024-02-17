@@ -23,7 +23,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     email: "",
     password: "",
   });
-  const { reloadData } = React.useContext(DataContext);
+  const { reloadData, data } = React.useContext(DataContext);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
@@ -38,7 +38,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     event.preventDefault();
 
     setIsLoading(true);
-    const { data, error } = await supabase.auth.signUp({
+    const { data: userData, error } = await supabase.auth.signUp({
       email: formData.email,
       password: formData.password,
       options: {
@@ -52,10 +52,15 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       console.error("Erreur lors de l'inscription:", error.message);
     } else {
       // Vérifie si l'authentification a réussi
-      if (data && data.user && data.session && data.session.access_token) {
+      if (
+        userData &&
+        userData.user &&
+        userData.session &&
+        userData.session.access_token
+      ) {
         reloadData();
         setIsLoading(false);
-        router.push("/dashboard/account");
+        router.push(`/${data.username}`);
       } else {
         reloadData();
         console.error(

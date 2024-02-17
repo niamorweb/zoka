@@ -60,7 +60,7 @@ export default function Home() {
                 Get Started
               </Link>
               <Link
-                href="/gallery/demo"
+                href="/demo"
                 target="_blank"
                 className={cn(
                   buttonVariants({ size: "lg", variant: "outline" })

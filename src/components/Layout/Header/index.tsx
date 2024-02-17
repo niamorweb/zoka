@@ -1,17 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import menuData from "./menuData";
 import { MainNav } from "@/components/Layout/Header/main-nav";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/router";
 import { supabase } from "@/lib/supabase";
+import { DataContext } from "@/utlis/userContext";
 
 const Header = () => {
   const router = useRouter();
   const [isAuth, setIsAuth] = useState(false);
+  const { data } = useContext(DataContext);
 
   useEffect(() => {
     const checkIsAuth = async () => {
@@ -30,7 +32,7 @@ const Header = () => {
       <MainNav items={menuData} />
       <nav>
         <Link
-          href={isAuth ? "/dashboard/account" : "/s/signin"}
+          href={isAuth ? `/${data.username}` : "/s/signin"}
           className={cn(
             buttonVariants({ variant: "secondary", size: "sm" }),
             "px-4"

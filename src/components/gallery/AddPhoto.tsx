@@ -7,11 +7,9 @@ import imageCompression from "browser-image-compression";
 import { toast } from "@/components/ui/use-toast";
 
 export function AddPhoto() {
-  const fileInputRef = React.useRef(null);
-
   const { reloadData } = React.useContext(DataContext);
   const { data } = React.useContext(DataContext);
-  const hiddenFileInput = React.useRef(null);
+  const hiddenFileInput = React.useRef<HTMLInputElement>(null);
 
   const handleChange = (event: any) => {
     if (event.target.files && event.target.files[0]) {
