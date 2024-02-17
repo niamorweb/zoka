@@ -177,7 +177,7 @@ const Gallery = () => {
               <DialogHeader>
                 <DialogTitle>My account</DialogTitle>
                 <DialogDescription>
-                  Make changes to your profile here. Click save when you're
+                  Make changes to your profile here. Click save when you&apos;re
                   done.
                 </DialogDescription>
               </DialogHeader>
@@ -233,6 +233,7 @@ const Gallery = () => {
               />
               {photosUrl.map((photo, index) => (
                 <ImageDisplay
+                  key={index}
                   photo={photo}
                   index={index}
                   username={username}
