@@ -24,7 +24,7 @@ export default function Links({ inputLinks, setInputLinks, updateInfos }: any) {
     setInputLinks([...inputLinks, { url: "", name: "" }]);
   };
 
-  const handleRemoveUrl = (index) => {
+  const handleRemoveUrl = (index: any) => {
     const newUrls = [...inputLinks];
     newUrls.splice(index, 1);
     setInputLinks(newUrls);
@@ -45,7 +45,7 @@ export default function Links({ inputLinks, setInputLinks, updateInfos }: any) {
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-3 mt-4">
-          {inputLinks.map((url, index) => (
+          {inputLinks.map((url: any, index: any) => (
             <div className="flex items-end gap-3" key={index}>
               <div className="w-3/5">
                 <div>

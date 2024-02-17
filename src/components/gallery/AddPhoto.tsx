@@ -13,7 +13,7 @@ export function AddPhoto() {
   const { data } = React.useContext(DataContext);
   const hiddenFileInput = React.useRef(null);
 
-  const handleChange = (event) => {
+  const handleChange = (event: any) => {
     if (event.target.files && event.target.files[0]) {
       console.log(event.target.files[0]);
 
@@ -21,9 +21,8 @@ export function AddPhoto() {
     }
   };
 
-  const handleClick = (event) => {
-    console.log("click !!");
-    hiddenFileInput.current.click();
+  const handleClick = () => {
+    hiddenFileInput.current && hiddenFileInput.current.click();
   };
 
   const uploadPhoto = async (image: File) => {
