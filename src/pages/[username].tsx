@@ -201,13 +201,13 @@ const Gallery = () => {
         </>
       )}
 
-      {userInfos && (
-        <div
-          className={`min-w-screen min-h-screen ${
-            userTheme === "dark" ? "bg-black" : "bg-white"
-          }`}
-        >
-          <main className="mx-auto max-w-[1960px] p-4">
+      <div className={`min-w-screen min-h-screen`}>
+        {userInfos && (
+          <main
+            className={`mx-auto w-full h-full max-w-[1960px] p-4 ${
+              userTheme === "dark" ? "bg-black" : "bg-white"
+            }`}
+          >
             <div className="columns-1 gap-4 sm:columns-2 xl:columns-3 2xl:columns-4">
               <ProfileSection
                 data={data}
@@ -235,8 +235,8 @@ const Gallery = () => {
               ))}
             </div>
           </main>
-        </div>
-      )}
+        )}
+      </div>
       {data.username !== username && <Footer userTheme={userTheme} />}
     </>
   );
