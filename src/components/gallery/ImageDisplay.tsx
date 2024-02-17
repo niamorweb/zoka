@@ -37,7 +37,7 @@ export default function ImageDisplay({
   const [activePhoto, setActivePhoto] = useState<string>("");
 
   return (
-    <div>
+    <div key={index}>
       {data.username === username ? (
         <div
           key={index}
