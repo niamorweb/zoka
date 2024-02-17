@@ -30,7 +30,7 @@ const Header = () => {
       <MainNav items={menuData} />
       <nav>
         <Link
-          href={isAuth ? "/dashboard/account" : "/signin"}
+          href={isAuth ? "/dashboard/account" : "/s/signin"}
           className={cn(
             buttonVariants({ variant: "secondary", size: "sm" }),
             "px-4"

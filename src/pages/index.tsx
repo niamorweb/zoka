@@ -54,7 +54,7 @@ export default function Home() {
             </p>
             <div className="space-x-4">
               <Link
-                href="/signin"
+                href="/s/signin"
                 className={cn(buttonVariants({ size: "lg" }))}
               >
                 Get Started

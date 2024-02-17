@@ -89,7 +89,7 @@ export function AccountForm() {
 
     if (error) {
     } else {
-      router.push("/signin");
+      router.push("/s/signin");
     }
   };
 
