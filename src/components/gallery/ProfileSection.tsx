@@ -35,7 +35,7 @@ export default function ProfileSection({
     >
       {data.username === username ? (
         <Input
-          value={"@" + inputUsername}
+          value={inputUsername}
           onChange={(e) => setInputUsername(e.target.value)}
           className=" mt-8 bg-transparent text-xs font-bold lowercase tracking-widest"
         />

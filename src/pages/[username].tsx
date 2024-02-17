@@ -82,8 +82,6 @@ const Gallery = () => {
       .from("users_photos")
       .list(`${userId}`);
 
-    console.log("photos ; ", photos);
-
     if (error) {
       return;
     }
@@ -98,8 +96,6 @@ const Gallery = () => {
   };
 
   async function updateInfos() {
-    console.log(inputTheme);
-
     const { data: userData, error } = await supabase
       .from("users")
       .update({
@@ -145,8 +141,6 @@ const Gallery = () => {
         .from("users_photos")
         .remove([`${data.id}/${fileName}`]);
       reloadData();
-    } else {
-      console.log("Aucun fichier trouvé dans le lien.");
     }
   };
 

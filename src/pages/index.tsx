@@ -34,7 +34,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className={`min-h-screen px-5 lg:px-10 ${inter.className}`}>
+      <div className={`min-h-screen relative px-5 lg:px-10 ${inter.className}`}>
         <Header />
         <section className="space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-32">
           <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center">

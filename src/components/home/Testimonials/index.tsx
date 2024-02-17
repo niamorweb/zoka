@@ -17,7 +17,7 @@ const testimonialData = [
   {
     id: 1,
     name: "Sophie Martin",
-    designation: "Photographer @CaptureVisions",
+    designation: "Photographer",
     content:
       "Creating my hub on Zoka was a game-changer. The platform is incredibly user-friendly, and it allows me to showcase my photography in a stylish and organized way.",
     image: "/images/testimonials/auth-01.png",
@@ -26,7 +26,7 @@ const testimonialData = [
   {
     id: 2,
     name: "Alex Turner",
-    designation: "Blogger @TechInsights",
+    designation: "Blogger",
     content:
       "Zoka has revolutionized the way I share links and photos with my audience. The clean and distraction-free design is perfect for anyone looking to build a unique and elegant online presence.",
     image: "/images/testimonials/auth-02.png",
@@ -35,7 +35,7 @@ const testimonialData = [
   {
     id: 3,
     name: "Elena Rodriguez",
-    designation: "Artist @CreativeCanvas",
+    designation: "Artist",
     content:
       "I'm impressed by the simplicity and elegance of Zoka. As an artist, it allows me to curate my work and share it with the world effortlessly. A fantastic platform for creative expression.",
     image: "/images/testimonials/auth-03.png",
@@ -44,7 +44,7 @@ const testimonialData = [
   {
     id: 4,
     name: "David Peterson",
-    designation: "Entrepreneur @InnovateHub",
+    designation: "Entrepreneur",
     content:
       "Zoka exceeded my expectations. It's not just a photo-sharing platform; it's a versatile tool that combines visual appeal with practical link sharing. A must-try for anyone building an online presence.",
     image: "/images/testimonials/author-01.png",
@@ -53,7 +53,7 @@ const testimonialData = [
   {
     id: 5,
     name: "Emily Baker",
-    designation: "Traveler @WanderlustJourney",
+    designation: "Traveler ",
     content:
       "As a frequent traveler, Zoka has become my go-to for sharing my adventures. The mobile responsiveness is outstanding, ensuring my hub looks great on any device. Highly recommended!",
     image: "/images/testimonials/author-02.png",
