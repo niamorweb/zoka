@@ -107,6 +107,9 @@ const Gallery = () => {
         links: inputLinks,
       })
       .eq("id", data.id);
+    console.log("error : ", error);
+    console.log("userData : ", userData);
+
     if (error) {
       if (error.code === "23505") {
         toast({
@@ -198,7 +201,7 @@ const Gallery = () => {
       <div className={`min-w-screen min-h-screen`}>
         {userInfos && (
           <main
-            className={`mx-auto w-full h-full max-w-[1960px] p-4 ${
+            className={`mx-auto w-full min-h-screen max-w-[1960px] p-4 ${
               userTheme === "dark" ? "bg-black" : "bg-white"
             }`}
           >
@@ -215,18 +218,20 @@ const Gallery = () => {
                 inputDescription={inputDescription}
                 setInputName={setInputName}
               />
-              {photosUrl.map((photo, index) => (
-                <ImageDisplay
-                  key={index}
-                  photo={photo}
-                  index={index}
-                  username={username}
-                  data={data}
-                  deletePhoto={deletePhoto}
-                  // setShowcaseVisible={setShowcaseVisible}
-                  // setCurrentPhotoSelected={setCurrentPhotoSelected}
-                />
-              ))}
+              {photosUrl &&
+                photosUrl.length > 0 &&
+                photosUrl.map((photo, index) => (
+                  <ImageDisplay
+                    key={index}
+                    photo={photo}
+                    index={index}
+                    username={username}
+                    data={data}
+                    deletePhoto={deletePhoto}
+                    // setShowcaseVisible={setShowcaseVisible}
+                    // setCurrentPhotoSelected={setCurrentPhotoSelected}
+                  />
+                ))}
             </div>
           </main>
         )}

@@ -45,51 +45,52 @@ export default function Links({ inputLinks, setInputLinks, updateInfos }: any) {
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-3 mt-4">
-          {inputLinks.map((url: any, index: any) => (
-            <div className="flex items-end gap-3" key={index}>
-              <div className="w-3/5">
-                <div>
-                  <Label className={index !== 0 ? "sr-only" : ""}>URL</Label>
-                  <p className={index !== 0 ? "sr-only" : ""}>
-                    Add links to your page
-                  </p>
+          {inputLinks &&
+            inputLinks.map((url: any, index: any) => (
+              <div className="flex items-end gap-3" key={index}>
+                <div className="w-3/5">
                   <div>
-                    <Input
-                      className="w-full"
-                      name="url"
-                      value={url.url}
-                      onChange={(e) => handleChange(index, e)}
-                    />
+                    <Label className={index !== 0 ? "sr-only" : ""}>URL</Label>
+                    <p className={index !== 0 ? "sr-only" : ""}>
+                      Add links to your page
+                    </p>
+                    <div>
+                      <Input
+                        className="w-full"
+                        name="url"
+                        value={url.url}
+                        onChange={(e) => handleChange(index, e)}
+                      />
+                    </div>
+                    {/* Peut-être ajouter un message de validation ou d'erreur ici */}
                   </div>
-                  {/* Peut-être ajouter un message de validation ou d'erreur ici */}
                 </div>
-              </div>
-              <div className="w-2/5">
-                <div>
-                  <Label className={index !== 0 ? "sr-only" : ""}>Name</Label>
-                  <p className={index !== 0 ? "sr-only" : ""}>
-                    Add a name for the URL.
-                  </p>
+                <div className="w-2/5">
                   <div>
-                    <Input
-                      className="w-full"
-                      name="name"
-                      value={url.name}
-                      onChange={(e) => handleChange(index, e)}
-                    />
+                    <Label className={index !== 0 ? "sr-only" : ""}>Name</Label>
+                    <p className={index !== 0 ? "sr-only" : ""}>
+                      Add a name for the URL.
+                    </p>
+                    <div>
+                      <Input
+                        className="w-full"
+                        name="name"
+                        value={url.name}
+                        onChange={(e) => handleChange(index, e)}
+                      />
+                    </div>
+                    {/* Peut-être ajouter un message de validation ou d'erreur ici */}
                   </div>
-                  {/* Peut-être ajouter un message de validation ou d'erreur ici */}
                 </div>
+                <button
+                  type="button"
+                  className="flex items-center justify-center bg-transparent border-none"
+                  onClick={() => handleRemoveUrl(index)}
+                >
+                  Remove
+                </button>
               </div>
-              <button
-                type="button"
-                className="flex items-center justify-center bg-transparent border-none"
-                onClick={() => handleRemoveUrl(index)}
-              >
-                Remove
-              </button>
-            </div>
-          ))}
+            ))}
           <button
             type="button"
             className="mt-2 w-fit bg-transparent border border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-800 py-1 px-3 rounded inline-flex items-center"

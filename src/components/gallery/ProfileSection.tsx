@@ -75,40 +75,42 @@ export default function ProfileSection({
         </p>
       )}
 
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button variant={userTheme === "dark" ? "secondary" : "default"}>
-            MY LINKS
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>LINKS</DialogTitle>
-            <DialogDescription>Here are all my links!</DialogDescription>
-          </DialogHeader>
-          <Separator />
-          <div className="grid">
-            {userInfos.links &&
-              userInfos.links.map((link: any, index: any) => (
-                <a
-                  key={index}
-                  href="https://www.youtube.com"
-                  target="_blank"
-                  className="flex justify-between items-center py-3 px-2 rounded-lg hover:outline-2 hover:outline outline-neutral-600 duration-100"
-                >
-                  <div className="grid">
-                    <span className="text-black">{link.name}</span>
-                    <span className="text-neutral-500">{link.url}</span>
-                  </div>
-                  <ChevronRight className="text-neutral-500" />
-                </a>
-              ))}
-          </div>
-          {/* <DialogFooter>
+      {data.links && (
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant={userTheme === "dark" ? "secondary" : "default"}>
+              MY LINKS
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>LINKS</DialogTitle>
+              <DialogDescription>Here are all my links!</DialogDescription>
+            </DialogHeader>
+            <Separator />
+            <div className="grid">
+              {userInfos.links &&
+                userInfos.links.map((link: any, index: any) => (
+                  <a
+                    key={index}
+                    href="https://www.youtube.com"
+                    target="_blank"
+                    className="flex justify-between items-center py-3 px-2 rounded-lg hover:outline-2 hover:outline outline-neutral-600 duration-100"
+                  >
+                    <div className="grid">
+                      <span className="text-black">{link.name}</span>
+                      <span className="text-neutral-500">{link.url}</span>
+                    </div>
+                    <ChevronRight className="text-neutral-500" />
+                  </a>
+                ))}
+            </div>
+            {/* <DialogFooter>
                       <Button type="submit">Share page</Button>
                     </DialogFooter> */}
-        </DialogContent>
-      </Dialog>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 }
