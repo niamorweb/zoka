@@ -110,7 +110,7 @@ export function ProfileForm() {
               </FormControl>
               <FormDescription>
                 You username will be used for your page&apos;s url (Ex:
-                https://zoka/gallery/username)
+                https://kuta/gallery/username)
               </FormDescription>
               <FormMessage />
             </FormItem>

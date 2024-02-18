@@ -22,7 +22,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>ZOKA - Share your photos</title>
+        <title>KUTA - Share your photos</title>
         <meta
           name="description"
           content="A website for sharing your photos and links with the world."

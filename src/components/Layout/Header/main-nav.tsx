@@ -10,7 +10,7 @@ export function MainNav({ items, children }: any) {
   return (
     <div className="flex gap-6 md:gap-16">
       <Link href="/" className="hidden items-center space-x-2 md:flex">
-        <span className="hidden text-3xl font-bold sm:inline-block">ZOKA</span>
+        <span className="hidden text-3xl font-bold sm:inline-block">KUTA</span>
       </Link>
       {/* {items?.length ? (
         <nav className="hidden gap-6 md:flex">
@@ -31,7 +31,7 @@ export function MainNav({ items, children }: any) {
         className="flex items-center space-x-2 md:hidden"
         onClick={() => setShowMobileMenu(!showMobileMenu)}
       >
-        <span className="font-bold">Zoka</span>
+        <span className="font-bold">KUTA</span>
       </button> */}
       {showMobileMenu && items && (
         <MobileNav items={items}>{children}</MobileNav>

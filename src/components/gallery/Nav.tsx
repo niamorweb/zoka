@@ -19,7 +19,7 @@ export default function Nav({
   inputTheme,
 }: any) {
   const handleCopyPage = () => {
-    navigator.clipboard.writeText("zoka-rouge.vercel.app/" + data.username);
+    navigator.clipboard.writeText("kuta.vercel.app/" + data.username);
     toast({
       title: "Link copied !",
     });

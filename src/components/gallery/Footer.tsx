@@ -12,7 +12,7 @@ export default function footer({ userTheme }: any) {
     >
       <Separator className="my-14" orientation="horizontal" />
       <p className="text-center mb-10">
-        Built by Zoka -
+        Built by niamorweb -
         <Link target="_blank" className="underline underline-offset-2" href="/">
           Create your own page here
         </Link>

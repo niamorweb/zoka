@@ -12,7 +12,7 @@ const Features = () => {
         <div className="container">
           <SectionTitle
             title="Main Features"
-            paragraph="There are many reasons for why you should choose Zoka for increase your online presence"
+            paragraph="There are many reasons for why you should choose Kuta for increase your online presence"
             center
           />
 

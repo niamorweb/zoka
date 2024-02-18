@@ -19,14 +19,14 @@ export default function AuthenticationPage() {
   return (
     <>
       <Head>
-        <title>Sign in - ZOKA</title>
+        <title>Sign in - KUTA</title>
         <meta
           name="description"
-          content="Sign in to access your account on ZOKA."
+          content="Sign in to access your account on KUTA."
         />
         <meta
           name="keywords"
-          content="login, account, access, authentication, zoka"
+          content="login, account, access, authentication, KUTA"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href="/favicon.ico" />
@@ -49,7 +49,7 @@ export default function AuthenticationPage() {
             height={1024}
             alt=""
           />
-          <span className="z-20 text-xl font-medium">Zoka</span>
+          <span className="z-20 text-xl font-medium">Kuta</span>
         </div>
         <div className="lg:p-8">
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
