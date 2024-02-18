@@ -107,8 +107,6 @@ const Gallery = () => {
         links: inputLinks,
       })
       .eq("id", data.id);
-    console.log("error : ", error);
-    console.log("userData : ", userData);
 
     if (error) {
       if (error.code === "23505") {
@@ -127,6 +125,9 @@ const Gallery = () => {
       toast({
         description: "Profile updated !",
       });
+      if (inputUsername !== username) {
+        router.push(`/${inputUsername}`);
+      }
       reloadData();
     }
   }
