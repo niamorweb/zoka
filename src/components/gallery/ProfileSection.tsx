@@ -31,7 +31,7 @@ export default function ProfileSection({
         userTheme === "dark"
           ? "bg-white/10 text-white"
           : "bg-neutral-100 text-neutral-900"
-      }  px-6 pb-16 pt-64  shadow-highlight after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight lg:pt-0`}
+      }  px-6 pb-16 pt-16  shadow-highlight after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight lg:pt-0`}
     >
       {data.username === username ? (
         <Input
