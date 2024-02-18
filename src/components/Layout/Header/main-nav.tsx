@@ -12,7 +12,7 @@ export function MainNav({ items, children }: any) {
       <Link href="/" className="hidden items-center space-x-2 md:flex">
         <span className="hidden text-3xl font-bold sm:inline-block">ZOKA</span>
       </Link>
-      {items?.length ? (
+      {/* {items?.length ? (
         <nav className="hidden gap-6 md:flex">
           {items?.map((item: any, index: number) => (
             <Link
@@ -32,7 +32,7 @@ export function MainNav({ items, children }: any) {
         onClick={() => setShowMobileMenu(!showMobileMenu)}
       >
         <span className="font-bold">Zoka</span>
-      </button>
+      </button> */}
       {showMobileMenu && items && (
         <MobileNav items={items}>{children}</MobileNav>
       )}

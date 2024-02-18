@@ -8,17 +8,29 @@ import { AddPhoto } from "./AddPhoto";
 import { BoxIcon } from "lucide-react";
 import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
+import { toast } from "../ui/use-toast";
 
 export default function Nav({
+  data,
   updateInfos,
   inputLinks,
   setInputLinks,
   handleChangeTheme,
   inputTheme,
 }: any) {
+  const handleCopyPage = () => {
+    navigator.clipboard.writeText("zoka-rouge.vercel.app/" + data.username);
+    toast({
+      title: "Link copied !",
+    });
+  };
+
   return (
     <nav className="fixed z-40 left-1/2 bg-slate-800 bg-opacity-25 backdrop-blur-xl text-white rounded-xl -translate-x-1/2 bottom-10 flex items-center gap-4 p-2">
-      <button className="bg-blue-500 hidden md:flex mr-4 px-5 py-2 rounded-lg font-medium">
+      <button
+        onClick={() => handleCopyPage()}
+        className="bg-blue-500 hidden md:flex mr-4 px-5 py-2 rounded-lg font-medium"
+      >
         Share my page
       </button>
       <Links

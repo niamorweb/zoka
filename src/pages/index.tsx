@@ -12,6 +12,7 @@ import DemoProfile from "@/components/home/DemoProfile";
 import DashboardFeature from "@/components/home/DashboardFeatures";
 import Head from "next/head";
 import { DataContext } from "@/utlis/userContext";
+import DonationsSection from "@/components/home/DonationsSection";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,6 +35,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <div className="fixed h-screen w-full bg-gradient-to-br from-indigo-50 via-white to-cyan-100" />
       <div className={`min-h-screen relative px-5 lg:px-10 ${inter.className}`}>
         <Header />
         <section className="space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-32">
@@ -45,11 +47,7 @@ export default function Home() {
               Follow along on Twitter
             </Link>
             <h1 className="font-heading font-bold text-3xl sm:text-5xl md:text-6xl lg:text-7xl">
-              The platform for{" "}
-              <span className="text-[#0045FF]">
-                {" "}
-                sharing your photos and links.
-              </span>{" "}
+              The platform for sharing your photos and links.
             </h1>
             <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
               Craft your profile page and showcase your finest photos,
@@ -76,9 +74,10 @@ export default function Home() {
         </section>
         <DemoProfile />
         <DashboardFeature />
+        <DonationsSection />
 
         {/* <Pricing /> */}
-        <Testimonials />
+        {/* <Testimonials /> */}
 
         <Footer />
       </div>

@@ -18,6 +18,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Toaster } from "@/components/ui/toaster";
 
 interface link {
   name: String;
@@ -155,6 +156,7 @@ const Gallery = () => {
 
   return (
     <>
+      <Toaster />
       {data.username === username && (
         <>
           <Dialog>
@@ -175,17 +177,15 @@ const Gallery = () => {
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
-                <Button variant="outline">
-                  <LogOut
-                    onClick={() => logout()}
-                    className="mr-2 h-4 w-4 cursor-pointer"
-                  />
+                <Button onClick={() => logout()} variant="outline">
+                  <LogOut className="mr-2 h-4 w-4 cursor-pointer" />
                   <span>Log out</span>
                 </Button>
               </div>
             </DialogContent>
           </Dialog>
           <Nav
+            data={data}
             updateInfos={updateInfos}
             inputLinks={inputLinks}
             setInputLinks={setInputLinks}

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import SectionTitle from "../../Common/SectionTitle";
 import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface dataFeatures {
   title: string;
@@ -37,20 +38,21 @@ const DashboardFeature = () => {
       id="features"
       className="relative bg-gray-light dark:bg-bg-color-dark z-10 py-16 md:py-20 lg:py-28"
     >
-      <div className="container">
-        <SectionTitle
-          title="Create your page in 2 minutes"
-          paragraph="Customize your hub in a few simple steps. A user-friendly experience to share your photos and links in a unique and elegant way"
-          center
-          mb="80px"
-        />
+      <Card className="container bg-opacity-40 py-10">
+        <CardContent className="flex flex-col items-center justify-center">
+          <SectionTitle
+            title="Manage your page"
+            paragraph="Manage your page easily, add your photos, edit your personnal informations and the page appearance"
+            center
+            mb="80px"
+          />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full">
-          {data.map((elem, index) => (
-            <div
-              key={index}
-              onClick={() => setImgSelected(index)}
-              className={`flex flex-col h-full gap-2 px-4 py-4 duration-150 outline-2 rounded-md outline outline-neutral-200 hover:rotate-1 hover:outline-neutral-400 "
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full">
+            {data.map((elem, index) => (
+              <div
+                key={index}
+                onClick={() => setImgSelected(index)}
+                className={`flex flex-col h-full gap-2 px-4 py-4 duration-150 outline-2 rounded-md outline outline-neutral-200 hover:outline-neutral-400 "
                ${
                  index === 0
                    ? "md:col-span-2 md:row-span-2 lg:col-span-2 lg:row-span-2"
@@ -58,25 +60,26 @@ const DashboardFeature = () => {
                    ? "md:col-span-2 md:row-span-4 lg:col-span-2 lg:row-span-4"
                    : "md:col-span-1 md:row-span-2 lg:col-span-2 lg:row-span-2"
                }`}
-            >
-              <h3 className="font-bold">{elem.title}</h3>
-              <p className="text-sm text-muted-foreground">
-                {elem.description}
-              </p>
+              >
+                <h3 className="font-bold">{elem.title}</h3>
+                <p className="text-sm text-muted-foreground">
+                  {elem.description}
+                </p>
 
-              {elem.img && (
-                <Image
-                  src={elem.img}
-                  className="w-full mt-4"
-                  width={400}
-                  height={300}
-                  alt=""
-                />
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
+                {elem.img && (
+                  <Image
+                    src={elem.img}
+                    className="w-full mt-4"
+                    width={400}
+                    height={300}
+                    alt=""
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
     </section>
   );
 };
