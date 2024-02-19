@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import { DataContext } from "@/utlis/userContext";
+import { toast } from "@/components/ui/use-toast";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -49,7 +50,17 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     });
     if (error) {
       setIsLoading(false);
-      console.error("Erreur lors de l'inscription:", error.message);
+      if (error.message === "User already registered") {
+        toast({
+          title: "Email already used !",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "An error has occured !",
+          variant: "destructive",
+        });
+      }
     } else {
       // Vérifie si l'authentification a réussi
       if (
@@ -94,7 +105,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
             <div className="grid gap-2">
               <Label className="/sr-only" htmlFor="email">
-                Password
+                Password ( 6 characters minimum)
               </Label>
               <Input
                 id="password"

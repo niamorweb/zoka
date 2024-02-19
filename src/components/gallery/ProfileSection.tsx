@@ -75,7 +75,7 @@ export default function ProfileSection({
         </p>
       )}
 
-      {data.links && (
+      {userInfos.links && (
         <Dialog>
           <DialogTrigger asChild>
             <Button variant={userTheme === "dark" ? "secondary" : "default"}>

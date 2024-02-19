@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { Button } from "@/components/ui/button";
 import { LogOut, Trash, User } from "lucide-react";
 import { DataContext } from "@/utlis/userContext";
-import { toast } from "@/components/ui/use-toast";
+// import { toast } from "@/components/ui/use-toast";
 import Nav from "@/components/gallery/Nav";
 import ProfileSection from "@/components/gallery/ProfileSection";
 import Footer from "@/components/gallery/Footer";
@@ -36,106 +36,42 @@ interface userInfos {
   username: String;
 }
 
-const Gallery = () => {
+const fetchPhotos = async (userId: string) => {
+  const { data: photos, error } = await supabase.storage
+    .from("users_photos")
+    .list(`${userId}`);
+
+  if (error) {
+    return [];
+  }
+
+  const photoArrayUrl: Array<string> = [];
+  photos.forEach((photo) => {
+    photoArrayUrl.push(
+      `https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${userId}/${photo.name}`
+    );
+  });
+  return photoArrayUrl;
+};
+
+const Gallery = ({ userInfos, photosUrl }: any) => {
   const router = useRouter();
-  const { username } = router.query;
-  const [userInfos, setUserInfos] = useState<userInfos>();
-  const [userId, setUserId] = useState<String | null>(null);
-  // const [showcaseVisible, setShowcaseVisible] = useState<Boolean>(false);
-  // const [currentPhotoSelected, setCurrentPhotoSelected] = useState<Number>(0);
-  const [photosUrl, setPhotosUrl] = useState<Array<string>>([]);
+  const { data, reloadData } = useContext(DataContext);
   const [userTheme, setUserTheme] = useState<String>("dark");
   const [inputUsername, setInputUsername] = useState<string>("");
   const [inputName, setInputName] = useState<string>("");
   const [inputDescription, setInputDescription] = useState<string>("");
   const [inputTheme, setInputTheme] = useState<string>("dark");
-  const { data, reloadData } = useContext(DataContext);
   const [inputLinks, setInputLinks] = useState([{ url: "", name: "" }]);
 
   useEffect(() => {
-    if (!username) return;
-    fetchUserInfos();
-    fetchPhotos();
-  }, [username, userId, data]);
-
-  const fetchUserInfos = async () => {
-    const { data, error } = await supabase
-      .from("users")
-      .select("*")
-      .eq("username", username)
-      .single();
-
-    if (data) {
-      setUserTheme(data.theme);
-      setInputName(data.full_name);
-      setInputDescription(data.bio);
-      setInputUsername(data.username);
-      setInputTheme(data.theme);
-      setInputLinks(data.links);
-
-      setUserId(data.id);
-      setUserInfos(data);
-    }
-  };
-
-  const fetchPhotos = async () => {
-    const { data: photos, error } = await supabase.storage
-      .from("users_photos")
-      .list(`${userId}`);
-
-    if (error) {
-      return;
-    }
-
-    const photoArrayUrl: Array<string> = [];
-    photos.map((photo) => {
-      photoArrayUrl.push(
-        `https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${userId}/${photo.name}`
-      );
-    });
-    setPhotosUrl(photoArrayUrl);
-  };
-
-  async function updateInfos() {
-    const { data: userData, error } = await supabase
-      .from("users")
-      .update({
-        username: inputUsername,
-        full_name: inputName,
-        bio: inputDescription,
-        theme: inputTheme,
-        links: inputLinks,
-      })
-      .eq("id", data.id);
-
-    if (error) {
-      if (error.code === "23505") {
-        toast({
-          variant: "destructive",
-          title: "Username already used",
-          description: "Please change your username",
-        });
-      } else {
-        toast({
-          variant: "destructive",
-          title: "An error has occurred",
-        });
-      }
-    } else {
-      toast({
-        description: "Profile updated !",
-      });
-      if (inputUsername !== username) {
-        router.push(`/${inputUsername}`);
-      }
-      reloadData();
-    }
-  }
-
-  const handleChangeTheme = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newTheme = e ? "dark" : "light";
-    setInputTheme(newTheme);
-  };
+    setUserTheme(userInfos.theme);
+    setInputName(userInfos.full_name);
+    setInputDescription(userInfos.bio);
+    setInputUsername(userInfos.username);
+    setInputTheme(userInfos.theme);
+    setInputLinks(userInfos.links);
+  }, [userInfos]);
 
   const deletePhoto = async (photoName: string) => {
     const regex = /\/([^/]+\.jpg)$/i;
@@ -161,7 +97,7 @@ const Gallery = () => {
   return (
     <>
       <Toaster />
-      {data.username === username && (
+      {data.username === userInfos.username && (
         <>
           <Dialog>
             <DialogTrigger asChild>
@@ -190,10 +126,8 @@ const Gallery = () => {
           </Dialog>
           <Nav
             data={data}
-            updateInfos={updateInfos}
             inputLinks={inputLinks}
             setInputLinks={setInputLinks}
-            handleChangeTheme={handleChangeTheme}
             inputTheme={inputTheme}
           />
         </>
@@ -213,7 +147,7 @@ const Gallery = () => {
                 inputUsername={inputUsername}
                 setInputUsername={setInputUsername}
                 userInfos={userInfos}
-                username={username}
+                username={userInfos.username}
                 inputName={inputName}
                 setInputDescription={setInputDescription}
                 inputDescription={inputDescription}
@@ -221,25 +155,41 @@ const Gallery = () => {
               />
               {photosUrl &&
                 photosUrl.length > 0 &&
-                photosUrl.map((photo, index) => (
+                photosUrl.map((photo: string, index: number) => (
                   <ImageDisplay
                     key={index}
                     photo={photo}
                     index={index}
-                    username={username}
+                    username={userInfos.username}
                     data={data}
                     deletePhoto={deletePhoto}
-                    // setShowcaseVisible={setShowcaseVisible}
-                    // setCurrentPhotoSelected={setCurrentPhotoSelected}
                   />
                 ))}
             </div>
           </main>
         )}
       </div>
-      {data.username !== username && <Footer userTheme={userTheme} />}
+      {data.username !== userInfos.username && <Footer userTheme={userTheme} />}
     </>
   );
+};
+
+Gallery.getInitialProps = async ({ query }: any) => {
+  const { username } = query;
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("username", username)
+    .single();
+
+  if (error) {
+    console.error("Error fetching user data:", error.message);
+    return { userInfos: null, photosUrl: [] };
+  }
+
+  const photosUrl = data ? await fetchPhotos(data.id) : [];
+
+  return { userInfos: data, photosUrl };
 };
 
 export default Gallery;

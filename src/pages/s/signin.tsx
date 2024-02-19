@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import Head from "next/head";
+import { Toaster } from "@/components/ui/toaster";
 
 // export const metadata: Metadata = {
 //   title: "Authentication",
@@ -31,6 +32,8 @@ export default function AuthenticationPage() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Toaster />
+
       <div className="container relative min-h-screen flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <Link
           href="/s/signup"
