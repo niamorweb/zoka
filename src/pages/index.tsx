@@ -1,4 +1,3 @@
-// import Image from "next/image";
 import { Inter } from "next/font/google";
 import Link from "next/link";
 import * as React from "react";
@@ -6,8 +5,6 @@ import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
 import Header from "@/components/Layout/Header";
 import Footer from "@/components/Layout/Footer";
-// import Testimonials from "@/components/home/Testimonials";
-// import Pricing from "@/components/home/Pricing";
 import DemoProfile from "@/components/home/DemoProfile";
 import DashboardFeature from "@/components/home/DashboardFeatures";
 import Head from "next/head";
