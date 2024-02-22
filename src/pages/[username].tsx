@@ -19,6 +19,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Toaster } from "@/components/ui/toaster";
+import { toast } from "@/components/ui/use-toast";
 
 interface link {
   name: String;
@@ -37,21 +38,32 @@ interface userInfos {
 }
 
 const fetchPhotos = async (userId: string) => {
-  const { data: photos, error } = await supabase.storage
+  const { data: galleryPhotos, error: galleryError } = await supabase.storage
     .from("users_photos")
-    .list(`${userId}`);
+    .list(`${userId}/gallery`);
 
-  if (error) {
+  const { data: avatarPhotos, error: avatarError } = await supabase.storage
+    .from("users_photos")
+    .list(`${userId}/avatar`);
+
+  const { data: backgroundPhotos, error: backgroundError } =
+    await supabase.storage.from("users_photos").list(`${userId}/background`);
+
+  if (galleryError) {
     return [];
   }
 
   const photoArrayUrl: Array<string> = [];
-  photos.forEach((photo) => {
+  galleryPhotos.map((photo, index) => {
     photoArrayUrl.push(
-      `https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${userId}/${photo.name}`
+      `https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${userId}/gallery/${photo.name}`
     );
   });
-  return photoArrayUrl;
+  return {
+    gallery: photoArrayUrl || [],
+    avatar: avatarPhotos || [],
+    background: backgroundPhotos || [],
+  };
 };
 
 const Gallery = ({ userInfos, photosUrl }: any) => {
@@ -78,6 +90,7 @@ const Gallery = ({ userInfos, photosUrl }: any) => {
     const match = photoName.match(regex);
     if (match) {
       const fileName = match[1];
+
       const { data: userData, error } = await supabase.storage
         .from("users_photos")
         .remove([`${data.id}/${fileName}`]);
@@ -93,6 +106,42 @@ const Gallery = ({ userInfos, photosUrl }: any) => {
       router.push("/s/signin");
     }
   };
+
+  async function updateInfos() {
+    const { data: userData, error } = await supabase
+      .from("users")
+      .update({
+        username: inputUsername,
+        full_name: inputName,
+        bio: inputDescription,
+        theme: inputTheme,
+        links: inputLinks,
+      })
+      .eq("id", data.id);
+
+    if (error) {
+      if (error.code === "23505") {
+        toast({
+          variant: "destructive",
+          title: "Username already used",
+          description: "Please change your username",
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "An error has occurred",
+        });
+      }
+    } else {
+      toast({
+        description: "Profile updated !",
+      });
+      if (inputUsername !== data.username) {
+        router.push(`/${inputUsername}`);
+      }
+      reloadData();
+    }
+  }
 
   return (
     <>
@@ -129,6 +178,7 @@ const Gallery = ({ userInfos, photosUrl }: any) => {
             inputLinks={inputLinks}
             setInputLinks={setInputLinks}
             inputTheme={inputTheme}
+            updateInfos={updateInfos}
           />
         </>
       )}
@@ -136,26 +186,27 @@ const Gallery = ({ userInfos, photosUrl }: any) => {
       <div className={`min-w-screen min-h-screen`}>
         {userInfos && (
           <main
-            className={`mx-auto w-full min-h-screen max-w-[1960px] p-4 ${
-              userTheme === "dark" ? "bg-black" : "bg-white"
-            }`}
+            className={`mx-auto grid gap-5 w-full min-h-screen max-w-[1960px] p-4 `}
           >
+            <ProfileSection
+              avatar={userInfos.avatar}
+              background={userInfos.background_img}
+              data={data}
+              userTheme={userTheme}
+              inputUsername={inputUsername}
+              setInputUsername={setInputUsername}
+              userInfos={userInfos}
+              username={userInfos.username}
+              inputName={inputName}
+              setInputDescription={setInputDescription}
+              inputDescription={inputDescription}
+              setInputName={setInputName}
+              photosUrl={photosUrl}
+            />
             <div className="columns-1 gap-4 sm:columns-2 xl:columns-3 2xl:columns-4">
-              <ProfileSection
-                data={data}
-                userTheme={userTheme}
-                inputUsername={inputUsername}
-                setInputUsername={setInputUsername}
-                userInfos={userInfos}
-                username={userInfos.username}
-                inputName={inputName}
-                setInputDescription={setInputDescription}
-                inputDescription={inputDescription}
-                setInputName={setInputName}
-              />
-              {photosUrl &&
-                photosUrl.length > 0 &&
-                photosUrl.map((photo: string, index: number) => (
+              {photosUrl.gallery &&
+                photosUrl.gallery.length > 0 &&
+                photosUrl.gallery.map((photo: string, index: number) => (
                   <ImageDisplay
                     key={index}
                     photo={photo}

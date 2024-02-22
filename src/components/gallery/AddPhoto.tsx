@@ -5,17 +5,19 @@ import { CircleEllipsisIcon, ImageIcon } from "lucide-react";
 import { DataContext } from "@/utlis/userContext";
 import imageCompression from "browser-image-compression";
 import { toast } from "@/components/ui/use-toast";
+import { v4 as uuidv4 } from "uuid";
+import { useRouter } from "next/router";
 
 export function AddPhoto() {
   const { reloadData } = React.useContext(DataContext);
   const { data } = React.useContext(DataContext);
   const hiddenFileInput = React.useRef<HTMLInputElement>(null);
+  const router = useRouter();
 
-  const handleChange = (event: any) => {
-    if (event.target.files && event.target.files[0]) {
-      console.log(event.target.files[0]);
-
-      uploadPhoto(event.target.files[0]);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const files = Array.from(event.target.files);
+      files.forEach((file) => uploadPhoto(file));
     }
   };
 
@@ -24,16 +26,13 @@ export function AddPhoto() {
   };
 
   const uploadPhoto = async (image: File) => {
-    console.log("upload !!");
     if (!data.id) {
       return;
     }
 
     const { data: photos, error } = await supabase.storage
       .from("users_photos")
-      .list(`${data.id}`);
-
-    console.log("data ,", photos);
+      .list(`${data.id}/gallery`);
 
     if (photos && photos.length >= 15) {
       toast({
@@ -45,10 +44,7 @@ export function AddPhoto() {
 
     const fileName = image?.name;
 
-    console.error("Erreur de compression d'image : ", image);
     const re = /(?:\.([^.]+))?$/;
-
-    console.error("Erreur de compression d'image : ", fileName);
 
     if (fileName) {
       const match = re.exec(fileName);
@@ -57,8 +53,6 @@ export function AddPhoto() {
       const uniq_id: string = uid();
 
       if (image) {
-        console.log(image.size);
-
         if (image.size > 2 * 1024 * 1024) {
           try {
             const options = {
@@ -67,9 +61,9 @@ export function AddPhoto() {
             };
             const compressedFile = await imageCompression(image, options);
             const { data: uploadData, error } = await supabase.storage
-              .from(`users_photos/${data.id}`)
+              .from(`users_photos/${data.id}/gallery`)
               .upload(
-                `${data.id}_${Date.now()}_${uniq_id}.${fileExtension}`,
+                `${uuidv4()}.${fileExtension}`,
                 compressedFile // Utilisation du fichier compressé
               );
 
@@ -77,24 +71,22 @@ export function AddPhoto() {
               return null;
             } else {
               reloadData();
+              router.reload();
             }
-          } catch (error) {
-            console.error("Erreur de compression d'image : ", error);
-          }
+          } catch (error) {}
         } else {
           const { data: uploadData, error } = await supabase.storage
-            .from(`users_photos/${data.id}`)
+            .from(`users_photos/${data.id}/gallery`)
             .upload(
               `${data.id}_${Date.now()}_${uniq_id}.${fileExtension}`,
               image
             );
 
           if (error) {
-            console.log(error);
-
             return null;
           } else {
             reloadData();
+            router.reload();
           }
         }
       }
@@ -108,6 +100,7 @@ export function AddPhoto() {
         onChange={handleChange}
         accept="image/*"
         style={{ display: "none" }}
+        multiple
       />
 
       <ImageIcon onClick={handleClick} className="w-6 h-6" />

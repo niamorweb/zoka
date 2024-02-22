@@ -56,8 +56,6 @@ export function GalleryForm() {
       const uniq_id: string = uid();
 
       if (image) {
-        console.log(image.size);
-
         if (image.size > 2 * 1024 * 1024) {
           try {
             const options = {

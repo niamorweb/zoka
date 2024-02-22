@@ -50,8 +50,6 @@ export function AppearanceForm() {
       .eq("id", data.id);
 
     if (error) {
-      console.log(error);
-
       toast({
         variant: "destructive",
         title: "An error has occurred",

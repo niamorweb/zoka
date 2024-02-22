@@ -17,6 +17,14 @@ const nextConfig = {
         protocol: "https",
         hostname: "izcvdmliijbnyeskngqj.supabase.co",
       },
+      {
+        protocol: "https",
+        hostname: "images.pexels.com",
+      },
+      {
+        protocol: "http",
+        hostname: "www.google.com",
+      },
     ],
   },
 };

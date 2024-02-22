@@ -9,6 +9,7 @@ import { BoxIcon } from "lucide-react";
 import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
 import { toast } from "../ui/use-toast";
+import Link from "next/link";
 
 export default function Nav({
   data,
@@ -66,6 +67,13 @@ export default function Nav({
       >
         Update
       </button>
+      <Link
+        href={`/t/${data.username}`}
+        target="_blank"
+        className="bg-white text-black px-5 py-2 rounded-lg font-medium"
+      >
+        Preview
+      </Link>
     </nav>
   );
 }
