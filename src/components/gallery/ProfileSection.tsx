@@ -34,9 +34,9 @@ export default function ProfileSection({
 }: any) {
   return (
     <div
-      className={`h-[95vh] max-h-[900px] bg-opacity-40 text-white bg-black overflow-hidden flex flex-col gap-2 rounded-lg relative px-4 lg:px-10 pt-24 pb-10 lg:pt-32 lg:pb-16 shadow-highlight after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight`}
+      className={` max-h-[900px] bg-opacity-40 text-white bg-black overflow-hidden flex flex-col gap-2 relative px-4 lg:px-10 pt-12 pb-10 lg:pt-24 lg:pb-16 shadow-highlight after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight`}
     >
-      {data.username === username && <AddBackground />}
+      <AddBackground />
       {photosUrl && photosUrl.background && photosUrl.background[0] ? (
         <Image
           className="absolute h-full w-full top-0 left-0 right-0 bottom-0 object-cover -z-10"
@@ -52,56 +52,31 @@ export default function ProfileSection({
       <div className="flex flex-col gap-3">
         <AddAvatar userInfos={userInfos} avatar={photosUrl.avatar[0]} />
 
-        {
-          data.username === username ? (
-            <Input
-              value={inputUsername}
-              onChange={(e) => setInputUsername(e.target.value)}
-              className="max-w-[300px] mt-8 bg-transparent text-xs font-bold lowercase tracking-widest"
-            />
-          ) : null
-          // <h4 className="max-w-[300px]  mt-8 text-xs font-bold lowercase tracking-widest">
-          //   @{userInfos.full_name}
-          // </h4>
-        }
+        <Input
+          value={inputUsername}
+          onChange={(e) => setInputUsername(e.target.value)}
+          className="max-w-[300px] mt-2 bg-transparent text-xs font-bold lowercase tracking-widest"
+        />
 
-        {data.username === username ? (
-          <Input
-            value={inputName}
-            onChange={(e) => setInputName(e.target.value)}
-            className="max-w-[300px] text-base bg-transparent font-bold uppercase tracking-widest"
-          />
-        ) : (
-          <h1 className="max-w-[300px] text-lg lg:text-2xl font-extrabold tracking-widest">
-            {userInfos.full_name}
-          </h1>
-        )}
+        <Input
+          value={inputName}
+          onChange={(e) => setInputName(e.target.value)}
+          className="max-w-[300px] text-base bg-transparent font-bold uppercase tracking-widest"
+        />
 
-        {data.username === username ? (
-          <Textarea
-            onChange={(e) => setInputDescription(e.target.value)}
-            value={inputDescription}
-            className={`max-w-[500px] mb-4 bg-transparent w-full overflow-hidden h-44 `}
-          />
-        ) : (
-          <p
-            className={`max-w-[500px] mb-4  ${
-              userTheme === "dark" ? "text-white" : "text- text-neutral-900"
-            }`}
-          >
-            {userInfos.bio}
-          </p>
-        )}
+        <Textarea
+          onChange={(e) => setInputDescription(e.target.value)}
+          value={inputDescription}
+          className={`max-w-[500px] mb-2 bg-transparent w-full overflow-hidden h-32 `}
+        />
 
         {userInfos.links && (
           <div className="flex gap-4 items-center mt-4">
             {userInfos.links &&
               userInfos.links.map((link: any, index: any) => (
-                <a
+                <div
                   key={index}
-                  href="https://www.youtube.com"
-                  target="_blank"
-                  className="inline-flex h-10 items-center rounded-full bg-black bg-opacity-20 px-4 backdrop-blur-md transition duration-700 ease-in-out hover:bg-white hover:text-black hover:duration-300"
+                  className="inline-flex uppercase font-medium h-10 items-center rounded-full bg-black bg-opacity-20 px-4 backdrop-blur-md transition duration-700 ease-in-out hover:bg-white hover:text-black hover:duration-300"
                 >
                   <Image
                     className="mr-2"
@@ -112,8 +87,8 @@ export default function ProfileSection({
                   />
 
                   <span className="">{link.name}</span>
-                  <ChevronRight className="w-4 h-4" />
-                </a>
+                  <ChevronRight className="w-5 h-5" />
+                </div>
               ))}
           </div>
         )}

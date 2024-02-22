@@ -30,6 +30,10 @@ export function AddPhoto() {
       return;
     }
 
+    toast({
+      title: "Uploading",
+    });
+
     const { data: photos, error } = await supabase.storage
       .from("users_photos")
       .list(`${data.id}/gallery`);
@@ -62,15 +66,13 @@ export function AddPhoto() {
             const compressedFile = await imageCompression(image, options);
             const { data: uploadData, error } = await supabase.storage
               .from(`users_photos/${data.id}/gallery`)
-              .upload(
-                `${uuidv4()}.${fileExtension}`,
-                compressedFile // Utilisation du fichier compressé
-              );
+              .upload(`${uuidv4()}.${fileExtension}`, compressedFile);
 
             if (error) {
               return null;
             } else {
               reloadData();
+
               router.reload();
             }
           } catch (error) {}
