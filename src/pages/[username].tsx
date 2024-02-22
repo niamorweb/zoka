@@ -74,6 +74,19 @@ const fetchPhotos = async (userId: string) => {
 
 const Gallery = ({ userInfos, photosUrl }: any) => {
   const { data, reloadData } = useContext(DataContext);
+  const [bgTranslation, setBgTranslation] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setBgTranslation(window.pageYOffset / 2);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
     <div className={work_sans.className}>
@@ -83,11 +96,13 @@ const Gallery = ({ userInfos, photosUrl }: any) => {
             className={`mx-auto grid gap-5 w-full min-h-screen max-w-[1960px] `}
           >
             <div
-              className={` max-h-[900px] bg-opacity-40 text-white bg-black overflow-hidden flex flex-col gap-2 relative px-4 lg:px-24 pt-16 pb-10 lg:pt-24 lg:pb-32 shadow-highlight after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight`}
+              className={` max-h-[900px] text-white overflow-hidden flex flex-col gap-2 relative px-4 lg:px-24 pt-16 pb-10 lg:pt-24 lg:pb-32 shadow-highlight after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight`}
             >
+              <div className="absolute -z-10 left-0 top-0 h-full w-full bg-black/30 lg:bg-transparent lg:bg-gradient-to-r lg:from-[#00000094] lg:to-[#0000000d]"></div>
               {photosUrl && photosUrl.background && photosUrl.background[0] ? (
                 <Image
-                  className="absolute h-full w-full top-0 left-0 right-0 bottom-0 object-cover -z-10"
+                  style={{ transform: `translateY(${bgTranslation}px)` }}
+                  className="absolute h-full w-full top-0 left-0 right-0 bottom-0 object-cover -z-20"
                   src={`https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${userInfos.id}/background/${photosUrl.background[0].name}`}
                   width={1600}
                   height={1000}
