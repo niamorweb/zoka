@@ -43,7 +43,7 @@ export function Faq() {
           />
           <Accordion type="single" collapsible className="w-full">
             {faqData.map((item, index) => (
-              <AccordionItem value={`item-${index + 1}`}>
+              <AccordionItem key={index} value={`item-${index + 1}`}>
                 <AccordionTrigger>{item.question}</AccordionTrigger>
                 <AccordionContent>{item.answer} </AccordionContent>
               </AccordionItem>
