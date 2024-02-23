@@ -51,8 +51,6 @@ const Gallery = () => {
   });
 
   useEffect(() => {
-    console.log(username);
-
     fetchPhotos();
     setUserTheme(data.theme);
     setInputName(data.full_name);
@@ -89,8 +87,6 @@ const Gallery = () => {
       avatar: avatarPhotos || null,
       background: backgroundPhotos || null,
     };
-
-    console.log("photoData  : ", photoData);
 
     setPhotosUrl(photoData);
   };

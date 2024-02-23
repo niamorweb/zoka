@@ -21,8 +21,6 @@ export function AddAvatar({ avatar }: any) {
   };
 
   const handleClick = () => {
-    console.log("fr");
-
     hiddenFileInput.current && hiddenFileInput.current.click();
   };
 
