@@ -21,6 +21,8 @@ export function AddAvatar({ avatar }: any) {
   };
 
   const handleClick = () => {
+    console.log("fr");
+
     hiddenFileInput.current && hiddenFileInput.current.click();
   };
 
@@ -87,9 +89,7 @@ export function AddAvatar({ avatar }: any) {
       />
       {avatar && avatar.name ? (
         <Image
-          onClick={() => {
-            handleClick;
-          }}
+          onClick={() => handleClick()}
           className="w-24 lg:w-44 cursor-pointer  duration-150  h-24 lg:h-44 mb-4 object-cover rounded-full border-black border-2 hover:border-4"
           src={`https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${data.id}/avatar/${avatar.name}`}
           width={200}
@@ -97,7 +97,10 @@ export function AddAvatar({ avatar }: any) {
           alt=""
         />
       ) : (
-        <div className="w-24 lg:w-44 cursor-pointer  duration-150  h-24 lg:h-44 mb-4 object-cover rounded-full bg-neutral-200 border-black border-2 hover:border-4"></div>
+        <div
+          onClick={() => handleClick()}
+          className="w-24 lg:w-44 cursor-pointer  duration-150  h-24 lg:h-44 mb-4 object-cover rounded-full bg-neutral-200 border-black border-2 hover:border-4"
+        ></div>
       )}
     </>
   );

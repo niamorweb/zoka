@@ -20,14 +20,32 @@ export default function Links({ inputLinks, setInputLinks, updateInfos }: any) {
     setInputLinks(newUrls);
   };
 
+  const isValidUrl = (url: string) => {
+    const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
+    return urlRegex.test(url);
+  };
+
   const handleAddUrl = () => {
-    setInputLinks([...inputLinks, { url: "", name: "" }]);
+    const newUrl = { url: "", name: "" };
+    if (Array.isArray(inputLinks) && inputLinks.length > 0) {
+      setInputLinks([...inputLinks, newUrl]);
+    } else {
+      setInputLinks([newUrl]);
+    }
   };
 
   const handleRemoveUrl = (index: any) => {
     const newUrls = [...inputLinks];
     newUrls.splice(index, 1);
     setInputLinks(newUrls);
+  };
+
+  const isFormValid = () => {
+    if (inputLinks) {
+      return inputLinks.every((link: any) => {
+        return isValidUrl(link.url) && link.name.trim() !== "";
+      });
+    }
   };
 
   return (
@@ -62,7 +80,9 @@ export default function Links({ inputLinks, setInputLinks, updateInfos }: any) {
                         onChange={(e) => handleChange(index, e)}
                       />
                     </div>
-                    {/* Peut-être ajouter un message de validation ou d'erreur ici */}
+                    {!isValidUrl(url.url) && (
+                      <p className="text-red-500">Invalid URL</p>
+                    )}
                   </div>
                 </div>
                 <div className="w-2/5">
@@ -79,7 +99,9 @@ export default function Links({ inputLinks, setInputLinks, updateInfos }: any) {
                         onChange={(e) => handleChange(index, e)}
                       />
                     </div>
-                    {/* Peut-être ajouter un message de validation ou d'erreur ici */}
+                    {url.name.trim() === "" && (
+                      <p className="text-red-500">Name cannot be empty</p>
+                    )}
                   </div>
                 </div>
                 <button
@@ -93,6 +115,7 @@ export default function Links({ inputLinks, setInputLinks, updateInfos }: any) {
             ))}
           <button
             type="button"
+            disabled={!isFormValid()}
             className="mt-2 w-fit bg-transparent border border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-800 py-1 px-3 rounded inline-flex items-center"
             onClick={handleAddUrl}
           >
@@ -101,7 +124,11 @@ export default function Links({ inputLinks, setInputLinks, updateInfos }: any) {
         </div>
 
         <DialogFooter>
-          <Button type="submit" onClick={() => updateInfos()}>
+          <Button
+            type="submit"
+            onClick={() => updateInfos()}
+            disabled={!isFormValid()}
+          >
             Save changes
           </Button>
         </DialogFooter>
