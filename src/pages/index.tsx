@@ -1,3 +1,4 @@
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import { Inter, Work_Sans } from "next/font/google";
 import Link from "next/link";
 import * as React from "react";
@@ -15,7 +16,26 @@ import { Faq } from "@/components/home/Faq/Faq";
 const inter = Inter({ subsets: ["latin"] });
 const work_sans = Work_Sans({ subsets: ["latin"] });
 
-export default function Home() {
+function Section({ children }: any) {
+  const ref = React.useRef(null);
+  const isInView = useInView(ref, { once: true });
+
+  return (
+    <section ref={ref}>
+      <div
+        style={{
+          transform: isInView ? "none" : "translateX(-200px)",
+          opacity: isInView ? 1 : 0,
+          transition: "all 0.9s cubic-bezier(0.17, 0.55, 0.55, 1) 0.5s",
+        }}
+      >
+        {children}
+      </div>
+    </section>
+  );
+}
+
+export default function Home({}: any) {
   const { data } = React.useContext(DataContext);
 
   return (
@@ -34,6 +54,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
       <div className="fixed h-screen w-full bg-gradient-to-br from-indigo-50 via-white to-cyan-100" />
       <div
         className={`min-h-screen relative px-5 lg:px-10 ${work_sans.className}`}
@@ -73,10 +94,19 @@ export default function Home() {
             </div>
           </div>
         </section>
-        <DemoProfile />
-        <DashboardFeature />
-        <DonationsSection />
-        <Faq />
+        <Section>
+          <DemoProfile />
+        </Section>
+
+        <Section>
+          <DashboardFeature />
+        </Section>
+        <Section>
+          <DonationsSection />
+        </Section>
+        <Section>
+          <Faq />
+        </Section>
 
         {/* <Pricing /> */}
         {/* <Testimonials /> */}
