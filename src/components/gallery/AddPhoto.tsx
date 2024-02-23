@@ -72,8 +72,6 @@ export function AddPhoto() {
               return null;
             } else {
               reloadData();
-
-              router.reload();
             }
           } catch (error) {}
         } else {
@@ -88,7 +86,6 @@ export function AddPhoto() {
             return null;
           } else {
             reloadData();
-            router.reload();
           }
         }
       }

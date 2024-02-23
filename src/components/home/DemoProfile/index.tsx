@@ -24,7 +24,7 @@ const DemoProfile = () => {
                 data-wow-delay=".15s"
               >
                 <Image
-                  className="rounded-lg"
+                  className="rounded-lg "
                   width={1200}
                   height={1000}
                   src="/images/home/demo_profile_page.png"

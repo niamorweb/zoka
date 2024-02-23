@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { Separator } from "../ui/separator";
 
-export default function footer({ userTheme }: any) {
+export default function footer() {
   return (
-    <div className="text-black">
-      <Separator className="my-7 lg:my-14" orientation="horizontal" />
-      <p className="text-center mb-10">
+    <div className="bg-slate-50 py-14 lg:py-24 gap-6 text-black">
+      <p className="text-center">
         Built by niamorweb -
         <Link target="_blank" className="underline underline-offset-2" href="/">
           Create your own page here

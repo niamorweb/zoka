@@ -26,49 +26,16 @@ interface link {
   name: String;
   url: String;
 }
-interface userInfos {
-  bio: String | null;
-  created_at: String;
-  email: String | null;
-  full_name: String | null;
-  language: String | null;
-  links: Array<link> | null;
-  theme: String;
-  user_id: String;
-  username: String;
+
+interface photosUrl {
+  gallery: Array<String> | null;
+  avatar: Array<any> | null;
+  background: Array<any> | null;
 }
 
-const fetchPhotos = async (userId: string) => {
-  const { data: galleryPhotos, error: galleryError } = await supabase.storage
-    .from("users_photos")
-    .list(`${userId}/gallery`);
-
-  const { data: avatarPhotos, error: avatarError } = await supabase.storage
-    .from("users_photos")
-    .list(`${userId}/avatar`);
-
-  const { data: backgroundPhotos, error: backgroundError } =
-    await supabase.storage.from("users_photos").list(`${userId}/background`);
-
-  if (galleryError) {
-    return [];
-  }
-
-  const photoArrayUrl: Array<string> = [];
-  galleryPhotos.map((photo, index) => {
-    photoArrayUrl.push(
-      `https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${userId}/gallery/${photo.name}`
-    );
-  });
-  return {
-    gallery: photoArrayUrl || [],
-    avatar: avatarPhotos || [],
-    background: backgroundPhotos || [],
-  };
-};
-
-const Gallery = ({ userInfos, photosUrl, username }: any) => {
+const Gallery = () => {
   const router = useRouter();
+  const { username } = router.query;
   const { data, reloadData } = useContext(DataContext);
   const [userTheme, setUserTheme] = useState<String>("dark");
   const [inputUsername, setInputUsername] = useState<string>("");
@@ -76,15 +43,57 @@ const Gallery = ({ userInfos, photosUrl, username }: any) => {
   const [inputDescription, setInputDescription] = useState<string>("");
   const [inputTheme, setInputTheme] = useState<string>("dark");
   const [inputLinks, setInputLinks] = useState([{ url: "", name: "" }]);
+  const [userInfos, setUserInfos] = useState([]);
+  const [photosUrl, setPhotosUrl] = useState<photosUrl>({
+    gallery: null,
+    avatar: null,
+    background: null,
+  });
 
   useEffect(() => {
-    setUserTheme(userInfos.theme);
-    setInputName(userInfos.full_name);
-    setInputDescription(userInfos.bio);
-    setInputUsername(userInfos.username);
-    setInputTheme(userInfos.theme);
-    setInputLinks(userInfos.links);
-  }, [userInfos]);
+    console.log(username);
+
+    fetchPhotos();
+    setUserTheme(data.theme);
+    setInputName(data.full_name);
+    setInputDescription(data.bio);
+    setInputUsername(data.username);
+    setInputTheme(data.theme);
+    setInputLinks(data.links);
+  }, [data]);
+
+  const fetchPhotos = async () => {
+    const { data: galleryPhotos, error: galleryError } = await supabase.storage
+      .from("users_photos")
+      .list(`${data.id}/gallery`);
+
+    const { data: avatarPhotos, error: avatarError } = await supabase.storage
+      .from("users_photos")
+      .list(`${data.id}/avatar`);
+
+    const { data: backgroundPhotos, error: backgroundError } =
+      await supabase.storage.from("users_photos").list(`${data.id}/background`);
+
+    if (galleryError) {
+      return [];
+    }
+
+    const photoArrayUrl: Array<String> = [];
+    galleryPhotos.map((photo, index) => {
+      photoArrayUrl.push(
+        `https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${data.id}/gallery/${photo.name}`
+      );
+    });
+    const photoData = {
+      gallery: photoArrayUrl || null,
+      avatar: avatarPhotos || null,
+      background: backgroundPhotos || null,
+    };
+
+    console.log("photoData  : ", photoData);
+
+    setPhotosUrl(photoData);
+  };
 
   const deletePhoto = async (photoName: string) => {
     const regex = /\/([^/]+\.jpg)$/i;
@@ -96,7 +105,6 @@ const Gallery = ({ userInfos, photosUrl, username }: any) => {
         .from("users_photos")
         .remove([`${data.id}/gallery/${fileName}`]);
       reloadData();
-      router.reload();
     }
   };
 
@@ -139,7 +147,7 @@ const Gallery = ({ userInfos, photosUrl, username }: any) => {
         description: "Profile updated !",
       });
       if (inputUsername !== data.username) {
-        router.push(`/${inputUsername}`);
+        router.push(`/edit/${inputUsername}`);
       }
       reloadData();
     }
@@ -147,7 +155,7 @@ const Gallery = ({ userInfos, photosUrl, username }: any) => {
 
   return (
     <>
-      {data.username === userInfos.username ? (
+      {data.username === data.username ? (
         <>
           <Toaster />
           <>
@@ -163,10 +171,7 @@ const Gallery = ({ userInfos, photosUrl, username }: any) => {
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                   <DialogTitle>My account</DialogTitle>
-                  <DialogDescription>
-                    Make changes to your profile here. Click save when
-                    you&apos;re done.
-                  </DialogDescription>
+                  <DialogDescription></DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
                   <Button onClick={() => logout()} variant="outline">
@@ -180,25 +185,20 @@ const Gallery = ({ userInfos, photosUrl, username }: any) => {
               data={data}
               inputLinks={inputLinks}
               setInputLinks={setInputLinks}
-              inputTheme={inputTheme}
               updateInfos={updateInfos}
             />
           </>
 
           <div className={`min-w-screen min-h-screen`}>
-            {userInfos && (
+            {data && (
               <main
                 className={`mx-auto grid gap-5 w-full min-h-screen max-w-[1960px]`}
               >
                 <ProfileSection
-                  avatar={userInfos.avatar}
-                  background={userInfos.background_img}
                   data={data}
-                  userTheme={userTheme}
                   inputUsername={inputUsername}
                   setInputUsername={setInputUsername}
                   userInfos={userInfos}
-                  username={userInfos.username}
                   inputName={inputName}
                   setInputDescription={setInputDescription}
                   inputDescription={inputDescription}
@@ -206,15 +206,14 @@ const Gallery = ({ userInfos, photosUrl, username }: any) => {
                   photosUrl={photosUrl}
                 />
                 <div className="columns-1 p-4  gap-4 sm:columns-2 xl:columns-3 2xl:columns-4">
-                  {photosUrl.gallery &&
+                  {photosUrl &&
+                    photosUrl.gallery &&
                     photosUrl.gallery.length > 0 &&
-                    photosUrl.gallery.map((photo: string, index: number) => (
+                    photosUrl.gallery.map((photo: String, index: number) => (
                       <ImageDisplay
                         key={index}
                         photo={photo}
                         index={index}
-                        username={userInfos.username}
-                        data={data}
                         deletePhoto={deletePhoto}
                       />
                     ))}
@@ -222,7 +221,7 @@ const Gallery = ({ userInfos, photosUrl, username }: any) => {
               </main>
             )}
           </div>
-          <Footer userTheme={userTheme} />
+          <Footer />
         </>
       ) : (
         <div className="h-screen flex flex-col gap-3 items-center justify-center">
@@ -234,24 +233,6 @@ const Gallery = ({ userInfos, photosUrl, username }: any) => {
       )}
     </>
   );
-};
-
-Gallery.getInitialProps = async ({ query }: any) => {
-  const { username } = query;
-  const { data, error } = await supabase
-    .from("users")
-    .select("*")
-    .eq("username", username)
-    .single();
-
-  if (error) {
-    console.error("Error fetching user data:", error.message);
-    return { userInfos: null, photosUrl: [] };
-  }
-
-  const photosUrl = data ? await fetchPhotos(data.id) : [];
-
-  return { userInfos: data, photosUrl, username: username };
 };
 
 export default Gallery;

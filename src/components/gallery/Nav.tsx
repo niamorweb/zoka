@@ -16,8 +16,6 @@ export default function Nav({
   updateInfos,
   inputLinks,
   setInputLinks,
-  handleChangeTheme,
-  inputTheme,
 }: any) {
   const handleCopyPage = () => {
     navigator.clipboard.writeText("kuta.vercel.app/" + data.username);
@@ -42,7 +40,7 @@ export default function Nav({
       <button>
         <AddPhoto />
       </button>
-      <Popover>
+      {/* <Popover>
         <PopoverTrigger asChild>
           <button>
             <BoxIcon className="w-6 h-6" />
@@ -60,7 +58,7 @@ export default function Nav({
             </div>
           </div>
         </PopoverContent>
-      </Popover>
+      </Popover> */}
       <button
         onClick={() => updateInfos()}
         className="bg-white ml-4 text-black px-5 py-2 rounded-lg font-medium"

@@ -1,4 +1,4 @@
-import { Inter } from "next/font/google";
+import { Inter, Work_Sans } from "next/font/google";
 import Link from "next/link";
 import * as React from "react";
 import { cn } from "@/lib/utils";
@@ -10,8 +10,10 @@ import DashboardFeature from "@/components/home/DashboardFeatures";
 import Head from "next/head";
 import { DataContext } from "@/utlis/userContext";
 import DonationsSection from "@/components/home/DonationsSection";
+import { Faq } from "@/components/home/Faq/Faq";
 
 const inter = Inter({ subsets: ["latin"] });
+const work_sans = Work_Sans({ subsets: ["latin"] });
 
 export default function Home() {
   const { data } = React.useContext(DataContext);
@@ -33,7 +35,9 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="fixed h-screen w-full bg-gradient-to-br from-indigo-50 via-white to-cyan-100" />
-      <div className={`min-h-screen relative px-5 lg:px-10 ${inter.className}`}>
+      <div
+        className={`min-h-screen relative px-5 lg:px-10 ${work_sans.className}`}
+      >
         <Header />
         <section className="space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-32">
           <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center">
@@ -72,6 +76,7 @@ export default function Home() {
         <DemoProfile />
         <DashboardFeature />
         <DonationsSection />
+        <Faq />
 
         {/* <Pricing /> */}
         {/* <Testimonials /> */}

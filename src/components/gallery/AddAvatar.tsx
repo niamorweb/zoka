@@ -8,7 +8,7 @@ import { toast } from "@/components/ui/use-toast";
 import { v4 as uuidv4 } from "uuid";
 import Image from "next/image";
 
-export function AddAvatar({ avatar, userInfos }: any) {
+export function AddAvatar({ avatar }: any) {
   const { reloadData } = React.useContext(DataContext);
   const { data } = React.useContext(DataContext);
   const hiddenFileInput = React.useRef<HTMLInputElement>(null);
@@ -88,24 +88,16 @@ export function AddAvatar({ avatar, userInfos }: any) {
       {avatar && avatar.name ? (
         <Image
           onClick={() => {
-            if (data.username === userInfos.username) {
-              handleClick;
-            }
+            handleClick;
           }}
-          className={`w-24 lg:w-44 cursor-pointer  duration-150  h-24 lg:h-44 mb-4 object-cover rounded-full border-black border-2 ${
-            data.username === userInfos.username && "hover:border-4"
-          }`}
-          src={`https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${userInfos.id}/avatar/${avatar.name}`}
+          className="w-24 lg:w-44 cursor-pointer  duration-150  h-24 lg:h-44 mb-4 object-cover rounded-full border-black border-2 hover:border-4"
+          src={`https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${data.id}/avatar/${avatar.name}`}
           width={200}
           height={200}
           alt=""
         />
       ) : (
-        <div
-          className={`w-24 lg:w-44 cursor-pointer  duration-150  h-24 lg:h-44 mb-4 object-cover rounded-full bg-neutral-200 border-black border-2 ${
-            data.username === userInfos.username && "hover:border-4"
-          }`}
-        ></div>
+        <div className="w-24 lg:w-44 cursor-pointer  duration-150  h-24 lg:h-44 mb-4 object-cover rounded-full bg-neutral-200 border-black border-2 hover:border-4"></div>
       )}
     </>
   );

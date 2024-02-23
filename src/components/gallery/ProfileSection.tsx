@@ -19,14 +19,9 @@ import { AddBackground } from "./AddBackground";
 
 export default function ProfileSection({
   photosUrl,
-  background,
-  avatar,
   data,
-  userTheme,
   inputUsername,
   setInputUsername,
-  userInfos,
-  username,
   inputName,
   setInputDescription,
   inputDescription,
@@ -42,7 +37,7 @@ export default function ProfileSection({
       {photosUrl && photosUrl.background && photosUrl.background[0] ? (
         <Image
           className="absolute h-full w-full top-0 left-0 right-0 bottom-0 object-cover -z-20"
-          src={`https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${userInfos.id}/background/${photosUrl.background[0].name}`}
+          src={`https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${data.id}/background/${photosUrl.background[0].name}`}
           width={1600}
           height={1000}
           alt=""
@@ -52,7 +47,10 @@ export default function ProfileSection({
       )}
 
       <div className="flex flex-col gap-3">
-        <AddAvatar userInfos={userInfos} avatar={photosUrl.avatar[0]} />
+        <AddAvatar
+          data={data}
+          avatar={photosUrl && photosUrl.avatar && photosUrl.avatar[0]}
+        />
 
         <Input
           value={inputUsername}
@@ -72,10 +70,10 @@ export default function ProfileSection({
           className={`max-w-[500px] mb-2 bg-transparent w-full overflow-hidden h-32 `}
         />
 
-        {userInfos.links && (
+        {data.links && (
           <div className="flex gap-4 items-center mt-4">
-            {userInfos.links &&
-              userInfos.links.map((link: any, index: any) => (
+            {data.links &&
+              data.links.map((link: any, index: any) => (
                 <div
                   key={index}
                   className="inline-flex uppercase font-medium h-10 items-center rounded-full bg-black bg-opacity-20 px-4 backdrop-blur-md transition duration-700 ease-in-out hover:bg-white hover:text-black hover:duration-300"
