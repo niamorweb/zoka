@@ -107,10 +107,6 @@ export default function Home({}: any) {
         <Section>
           <Faq />
         </Section>
-
-        {/* <Pricing /> */}
-        {/* <Testimonials /> */}
-
         <Footer />
       </div>
     </>

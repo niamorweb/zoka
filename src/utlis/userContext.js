@@ -14,8 +14,9 @@ export function DataProvider({ children }) {
         error,
       } = await supabase.auth.getUser();
       if (user) {
-        fetchUserData(user.id);
-        fetchPhotos(user.id);
+        const userData = await fetchUserData(user.id);
+        const photoData = await fetchPhotos(user.id);
+        setData({ userData, photoData });
       }
     };
 
@@ -28,7 +29,7 @@ export function DataProvider({ children }) {
       .select("*")
       .eq("id", userId);
 
-    data && setData(data[0]);
+    return data[0];
   };
 
   const reloadData = () => {
@@ -36,23 +37,34 @@ export function DataProvider({ children }) {
   };
 
   const fetchPhotos = async (userId) => {
-    const { data, error } = await supabase.storage
+    const { data: galleryPhotos, error: galleryError } = await supabase.storage
       .from("users_photos")
-      .list(`${userId}`);
-    if (error) {
-      return;
+      .list(`${userId}/gallery`);
+
+    const { data: avatarPhotos, error: avatarError } = await supabase.storage
+      .from("users_photos")
+      .list(`${userId}/avatar`);
+
+    const { data: backgroundPhotos, error: backgroundError } =
+      await supabase.storage.from("users_photos").list(`${userId}/background`);
+
+    if (galleryError) {
+      return [];
     }
 
-    const urlsPromises = data.map(async (file) => {
-      const url = await supabase.storage
-        .from("users_photos")
-        .getPublicUrl(`${userId}/${file.name}`);
-      return { name: file.name, url: url.data.publicUrl };
+    const photoArrayUrl = [];
+    galleryPhotos.map((photo, index) => {
+      photoArrayUrl.push(
+        `https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${userId}/gallery/${photo.name}`
+      );
     });
+    const photoData = {
+      gallery: photoArrayUrl || null,
+      avatar: avatarPhotos || null,
+      background: backgroundPhotos || null,
+    };
 
-    const urls = await Promise.all(urlsPromises);
-
-    setData((prevData) => ({ ...prevData, photos: urls }));
+    return photoData;
   };
 
   return (

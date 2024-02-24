@@ -16,6 +16,7 @@ export default function Nav({
   updateInfos,
   inputLinks,
   setInputLinks,
+  photosUrl,
 }: any) {
   const handleCopyPage = () => {
     navigator.clipboard.writeText("kuta.vercel.app/" + data.username);
@@ -66,7 +67,7 @@ export default function Nav({
         Update
       </button>
       <Link
-        href={`/${data.username}`}
+        href={`/${data.userData && data.userData.username}`}
         target="_blank"
         className="bg-white text-black px-5 py-2 rounded-lg font-medium"
       >

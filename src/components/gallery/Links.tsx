@@ -115,7 +115,6 @@ export default function Links({ inputLinks, setInputLinks, updateInfos }: any) {
             ))}
           <button
             type="button"
-            disabled={!isFormValid()}
             className="mt-2 w-fit bg-transparent border border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-800 py-1 px-3 rounded inline-flex items-center"
             onClick={handleAddUrl}
           >

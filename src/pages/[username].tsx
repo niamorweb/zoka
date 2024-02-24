@@ -149,19 +149,19 @@ const Gallery = ({ userInfos, photosUrl }: any) => {
                     )}
                   </div>
                 </div>
-                <div className="columns-1 bg-slate-50 p-4 gap-4 sm:columns-2 xl:columns-3 2xl:columns-4">
+                <div className="columns-1 bg-slate-50 p-4 gap-2 sm:columns-2 xl:columns-3 2xl:columns-4">
                   {photosUrl.gallery &&
                     photosUrl.gallery.length > 0 &&
                     photosUrl.gallery.map((photo: string, index: number) => (
                       <div
                         key={index}
-                        className="after:content group relative mb-5 block w-full after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight"
+                        className="after:content group relative mb-2 block w-full after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight"
                       >
                         <Image
                           placeholder="blur"
                           blurDataURL={`/_next/image?url=${photo}&w=16&q=1`}
                           alt="Next.js Conf photo"
-                          className="transform rounded-lg brightness-90 transition will-change-auto group-hover:brightness-110"
+                          className="transform brightness-90 transition will-change-auto group-hover:brightness-110"
                           style={{ transform: "translate3d(0, 0, 0)" }}
                           src={photo + "?width=500&height=600"}
                           width={720}

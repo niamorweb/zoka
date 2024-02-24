@@ -32,7 +32,7 @@ export default function ImageDisplay({ photo, index, deletePhoto }: any) {
     <div key={index}>
       <div
         key={index}
-        className="after:content group relative mb-5 block w-full after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight"
+        className="after:content group relative mb-2 block w-full after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight"
       >
         <AlertDialog>
           <AlertDialogTrigger asChild>
@@ -62,11 +62,11 @@ export default function ImageDisplay({ photo, index, deletePhoto }: any) {
           placeholder="blur"
           blurDataURL={`/_next/image?url=${photo}&w=16&q=1`}
           alt="Next.js Conf photo"
-          className="transform rounded-lg brightness-90 transition will-change-auto group-hover:brightness-110"
+          className="transform w-full h-full object-cover brightness-90 transition will-change-auto group-hover:brightness-110"
           style={{ transform: "translate3d(0, 0, 0)" }}
-          src={photo + "?width=500&height=600"}
-          width={720}
-          height={480}
+          src={photo + "?width=300&height=300"}
+          width={300}
+          height={300}
           quality={50}
           sizes="(max-width: 640px) 100vw,
                   (max-width: 1280px) 50vw,

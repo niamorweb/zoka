@@ -21,17 +21,7 @@ import {
 import { Toaster } from "@/components/ui/toaster";
 import { toast } from "@/components/ui/use-toast";
 import Link from "next/link";
-
-interface link {
-  name: String;
-  url: String;
-}
-
-interface photosUrl {
-  gallery: Array<String> | null;
-  avatar: Array<any> | null;
-  background: Array<any> | null;
-}
+import ImageUpload from "@/components/gallery/AddPhotoSection";
 
 const Gallery = () => {
   const router = useRouter();
@@ -43,53 +33,17 @@ const Gallery = () => {
   const [inputDescription, setInputDescription] = useState<string>("");
   const [inputTheme, setInputTheme] = useState<string>("dark");
   const [inputLinks, setInputLinks] = useState([{ url: "", name: "" }]);
-  const [userInfos, setUserInfos] = useState([]);
-  const [photosUrl, setPhotosUrl] = useState<photosUrl>({
-    gallery: null,
-    avatar: null,
-    background: null,
-  });
 
   useEffect(() => {
-    fetchPhotos();
-    setUserTheme(data.theme);
-    setInputName(data.full_name);
-    setInputDescription(data.bio);
-    setInputUsername(data.username);
-    setInputTheme(data.theme);
-    setInputLinks(data.links);
-  }, [data]);
-
-  const fetchPhotos = async () => {
-    const { data: galleryPhotos, error: galleryError } = await supabase.storage
-      .from("users_photos")
-      .list(`${data.id}/gallery`);
-
-    const { data: avatarPhotos, error: avatarError } = await supabase.storage
-      .from("users_photos")
-      .list(`${data.id}/avatar`);
-
-    const { data: backgroundPhotos, error: backgroundError } =
-      await supabase.storage.from("users_photos").list(`${data.id}/background`);
-
-    if (galleryError) {
-      return [];
+    if (data.userData) {
+      setUserTheme(data.userData.theme);
+      setInputName(data.userData.full_name);
+      setInputDescription(data.userData.bio);
+      setInputUsername(data.userData.username);
+      setInputTheme(data.userData.theme);
+      setInputLinks(data.userData.links);
     }
-
-    const photoArrayUrl: Array<String> = [];
-    galleryPhotos.map((photo, index) => {
-      photoArrayUrl.push(
-        `https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${data.id}/gallery/${photo.name}`
-      );
-    });
-    const photoData = {
-      gallery: photoArrayUrl || null,
-      avatar: avatarPhotos || null,
-      background: backgroundPhotos || null,
-    };
-
-    setPhotosUrl(photoData);
-  };
+  }, [data]);
 
   const deletePhoto = async (photoName: string) => {
     const regex = /\/([^/]+\.jpg)$/i;
@@ -99,7 +53,7 @@ const Gallery = () => {
 
       const { data: userData, error } = await supabase.storage
         .from("users_photos")
-        .remove([`${data.id}/gallery/${fileName}`]);
+        .remove([`${data.userData.id}/gallery/${fileName}`]);
       reloadData();
     }
   };
@@ -123,7 +77,7 @@ const Gallery = () => {
         theme: inputTheme,
         links: inputLinks,
       })
-      .eq("id", data.id);
+      .eq("id", data.userData.id);
 
     if (error) {
       if (error.code === "23505") {
@@ -142,16 +96,18 @@ const Gallery = () => {
       toast({
         description: "Profile updated !",
       });
-      if (inputUsername !== data.username) {
+      if (inputUsername !== data.userData.username) {
         router.push(`/edit/${inputUsername}`);
       }
       reloadData();
     }
   }
 
+  console.log(data.photoData && data.photoData.gallery);
+
   return (
     <>
-      {data.username === data.username ? (
+      {username === (data.userData && data.userData.username) ? (
         <>
           <Toaster />
           <>
@@ -191,28 +147,28 @@ const Gallery = () => {
                 className={`mx-auto grid gap-5 w-full min-h-screen max-w-[1960px]`}
               >
                 <ProfileSection
-                  data={data}
                   inputUsername={inputUsername}
                   setInputUsername={setInputUsername}
-                  userInfos={userInfos}
                   inputName={inputName}
                   setInputDescription={setInputDescription}
                   inputDescription={inputDescription}
                   setInputName={setInputName}
-                  photosUrl={photosUrl}
                 />
-                <div className="columns-1 p-4  gap-4 sm:columns-2 xl:columns-3 2xl:columns-4">
-                  {photosUrl &&
-                    photosUrl.gallery &&
-                    photosUrl.gallery.length > 0 &&
-                    photosUrl.gallery.map((photo: String, index: number) => (
-                      <ImageDisplay
-                        key={index}
-                        photo={photo}
-                        index={index}
-                        deletePhoto={deletePhoto}
-                      />
-                    ))}
+                <div className="columns-1 p-4 gap-2 sm:columns-2 xl:columns-3 2xl:columns-4">
+                  {data &&
+                    data.photoData &&
+                    data.photoData.gallery &&
+                    data.photoData.gallery.length > 0 &&
+                    data.photoData.gallery.map(
+                      (photo: String, index: number) => (
+                        <ImageDisplay
+                          key={index}
+                          photo={photo}
+                          index={index}
+                          deletePhoto={deletePhoto}
+                        />
+                      )
+                    )}
                 </div>
               </main>
             )}

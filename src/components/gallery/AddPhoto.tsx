@@ -7,26 +7,30 @@ import imageCompression from "browser-image-compression";
 import { toast } from "@/components/ui/use-toast";
 import { v4 as uuidv4 } from "uuid";
 import { useRouter } from "next/router";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "../ui/button";
+import { DialogFooter, DialogHeader } from "../ui/dialog";
+import ImageUpload from "./AddPhotoSection";
 
 export function AddPhoto() {
-  const { reloadData } = React.useContext(DataContext);
-  const { data } = React.useContext(DataContext);
-  const hiddenFileInput = React.useRef<HTMLInputElement>(null);
-  const router = useRouter();
+  const [filesToUpload, setFilesToUpload] = React.useState<File[]>([]);
+  const { data, reloadData } = React.useContext(DataContext);
+  const [isDisabled, setIsDisabled] = React.useState(false);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
-      const files = Array.from(event.target.files);
-      files.forEach((file) => uploadPhoto(file));
-    }
-  };
-
-  const handleClick = () => {
-    hiddenFileInput.current && hiddenFileInput.current.click();
+  const handleUploadAllPhotos = () => {
+    filesToUpload.map((file) => uploadPhoto(file));
+    reloadData();
+    setFilesToUpload([]);
   };
 
   const uploadPhoto = async (image: File) => {
-    if (!data.id) {
+    if (!data.userData.id) {
       return;
     }
 
@@ -36,7 +40,7 @@ export function AddPhoto() {
 
     const { data: photos, error } = await supabase.storage
       .from("users_photos")
-      .list(`${data.id}/gallery`);
+      .list(`${data.userData.id}/gallery`);
 
     if (photos && photos.length >= 15) {
       toast({
@@ -65,44 +69,65 @@ export function AddPhoto() {
             };
             const compressedFile = await imageCompression(image, options);
             const { data: uploadData, error } = await supabase.storage
-              .from(`users_photos/${data.id}/gallery`)
+              .from(`users_photos/${data.userData.id}/gallery`)
               .upload(`${uuidv4()}.${fileExtension}`, compressedFile);
 
-            if (error) {
-              return null;
-            } else {
-              reloadData();
-            }
+            reloadData();
           } catch (error) {}
         } else {
           const { data: uploadData, error } = await supabase.storage
-            .from(`users_photos/${data.id}/gallery`)
+            .from(`users_photos/${data.userData.id}/gallery`)
             .upload(
-              `${data.id}_${Date.now()}_${uniq_id}.${fileExtension}`,
+              `${data.userData.id}_${Date.now()}_${uniq_id}.${fileExtension}`,
               image
             );
 
-          if (error) {
-            return null;
-          } else {
-            reloadData();
-          }
+          reloadData();
         }
       }
     }
   };
   return (
     <>
-      <input
-        type="file"
-        ref={hiddenFileInput}
-        onChange={handleChange}
-        accept="image/*"
-        style={{ display: "none" }}
-        multiple
-      />
-
-      <ImageIcon onClick={handleClick} className="w-6 h-6" />
+      <Dialog>
+        <DialogTrigger asChild>
+          <ImageIcon className="w-6 h-6" />
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>
+              Upload images ({" "}
+              {15 -
+                (data &&
+                  data.photoData &&
+                  data.photoData.gallery &&
+                  data.photoData.gallery.length + filesToUpload.length)}{" "}
+              / 15 place for new image available){" "}
+            </DialogTitle>
+            <DialogDescription>
+              {isDisabled && (
+                <p className="text-red-600 ">
+                  Error : Limit of 15 images exceeded
+                </p>
+              )}
+            </DialogDescription>
+          </DialogHeader>
+          <ImageUpload
+            filesToUpload={filesToUpload}
+            setFilesToUpload={setFilesToUpload}
+            setIsDisabled={setIsDisabled}
+          />
+          <DialogFooter>
+            <Button
+              onClick={handleUploadAllPhotos}
+              disabled={isDisabled}
+              type="submit"
+            >
+              Upload
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

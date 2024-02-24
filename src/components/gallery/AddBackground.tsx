@@ -16,8 +16,7 @@ export function AddBackground({ background }: any) {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
-      const files = Array.from(event.target.files);
-      files.forEach((file) => uploadPhoto(file));
+      uploadPhoto(event.target.files[0]);
     }
   };
 
@@ -26,26 +25,29 @@ export function AddBackground({ background }: any) {
   };
 
   const uploadPhoto = async (image: File) => {
-    if (!data.id) {
+    if (!data.userData.id) {
       return;
     }
 
-    // Supprimer background existant s'il y en a un
     const { data: existingBackground, error: existingError } =
-      await supabase.storage.from("users_photos").list(`${data.id}/background`);
+      await supabase.storage
+        .from("users_photos")
+        .list(`${data.userData.id}/background`);
 
     if (existingBackground && existingBackground.length >= 1) {
       const existingBackgroundId = existingBackground[0].name;
 
       await supabase.storage
         .from(`users_photos`)
-        .remove([`${data.id}/background/${existingBackgroundId}`]); // Utiliser l'ID pour supprimer le fichier
+        .remove([`${data.userData.id}/background/${existingBackgroundId}`]); // Utiliser l'ID pour supprimer le fichier
     }
 
     const fileName = image?.name;
     const re = /(?:\.([^.]+))?$/;
 
     if (fileName) {
+      console.log(fileName);
+
       const match = re.exec(fileName);
       const fileExtension: string | null = match && match[1];
       const uniq_id: string = uid();
@@ -58,22 +60,22 @@ export function AddBackground({ background }: any) {
           };
           const compressedFile = await imageCompression(image, options);
           await supabase.storage
-            .from(`users_photos/${data.id}/background`)
+            .from(`users_photos/${data.userData.id}/background`)
             .upload(`${uuidv4()}.${fileExtension}`, compressedFile);
         } else {
           await supabase.storage
-            .from(`users_photos/${data.id}/background`)
+            .from(`users_photos/${data.userData.id}/background`)
             .upload(
-              `${data.id}_${Date.now()}_${uniq_id}.${fileExtension}`,
+              `${data.userData.id}_${Date.now()}_${uniq_id}.${fileExtension}`,
               image
             );
         }
         reloadData();
       } catch (error) {
-        console.error(
-          "Erreur lors du téléchargement de la photo background :",
-          error
-        );
+        // console.error(
+        //   "Erreur lors du téléchargement de la photo background :",
+        //   error
+        // );
       }
     }
   };

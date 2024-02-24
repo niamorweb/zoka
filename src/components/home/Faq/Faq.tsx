@@ -15,6 +15,12 @@ export function Faq() {
         "Kuta is a platform designed for creators to showcase their photography, artwork, and images in a beautifully curated manner. It serves as an alternative to traditional link-sharing platforms, offering a focused space for sharing visual content.",
     },
     {
+      question:
+        'What is the difference between Kuta and other "link in bio" website?',
+      answer:
+        'Kuta sets itself apart from other "link in bio" websites like Linktree by its focus on image sharing, particularly for art and photography. It enables both amateurs and professionals to showcase their projects effectively.',
+    },
+    {
       question: "How can I use Kuta to showcase my work?",
       answer:
         "Signing up for Kuta allows you to create a personalized profile where you can upload and organize your photos, artwork, and images into collections. You can then share your unique Kuta link with your audience, providing them with a centralized hub to explore and appreciate your creations.",
@@ -44,7 +50,9 @@ export function Faq() {
           <Accordion type="single" collapsible className="w-full max-w-[600px]">
             {faqData.map((item, index) => (
               <AccordionItem key={index} value={`item-${index + 1}`}>
-                <AccordionTrigger>{item.question}</AccordionTrigger>
+                <AccordionTrigger className="text-left">
+                  {item.question}
+                </AccordionTrigger>
                 <AccordionContent>{item.answer} </AccordionContent>
               </AccordionItem>
             ))}
