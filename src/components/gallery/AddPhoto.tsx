@@ -18,15 +18,14 @@ import { Button } from "../ui/button";
 import { DialogFooter, DialogHeader } from "../ui/dialog";
 import ImageUpload from "./AddPhotoSection";
 
-export function AddPhoto() {
+export function AddPhoto({ updateInfos }: any) {
   const [filesToUpload, setFilesToUpload] = React.useState<File[]>([]);
   const { data, reloadData } = React.useContext(DataContext);
   const [isDisabled, setIsDisabled] = React.useState(false);
 
   const handleUploadAllPhotos = () => {
     filesToUpload.map((file) => uploadPhoto(file));
-    reloadData();
-    setFilesToUpload([]);
+    updateInfos();
   };
 
   const uploadPhoto = async (image: File) => {
@@ -71,8 +70,7 @@ export function AddPhoto() {
             const { data: uploadData, error } = await supabase.storage
               .from(`users_photos/${data.userData.id}/gallery`)
               .upload(`${uuidv4()}.${fileExtension}`, compressedFile);
-
-            reloadData();
+            updateInfos();
           } catch (error) {}
         } else {
           const { data: uploadData, error } = await supabase.storage
@@ -81,10 +79,10 @@ export function AddPhoto() {
               `${data.userData.id}_${Date.now()}_${uniq_id}.${fileExtension}`,
               image
             );
-
-          reloadData();
+          updateInfos();
         }
       }
+      updateInfos();
     }
   };
   return (

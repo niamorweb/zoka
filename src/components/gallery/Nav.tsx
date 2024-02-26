@@ -39,7 +39,7 @@ export default function Nav({
         setInputLinks={setInputLinks}
       />
       <button>
-        <AddPhoto />
+        <AddPhoto updateInfos={updateInfos} />
       </button>
       {/* <Popover>
         <PopoverTrigger asChild>

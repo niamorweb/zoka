@@ -26,8 +26,6 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 
 export default function ImageDisplay({ photo, index, deletePhoto }: any) {
-  const [activePhoto, setActivePhoto] = useState<string>("");
-
   return (
     <div key={index}>
       <div
@@ -64,10 +62,10 @@ export default function ImageDisplay({ photo, index, deletePhoto }: any) {
           alt="Next.js Conf photo"
           className="transform w-full h-full object-cover brightness-90 transition will-change-auto group-hover:brightness-110"
           style={{ transform: "translate3d(0, 0, 0)" }}
-          src={photo + "?width=300&height=300"}
-          width={300}
-          height={300}
-          quality={50}
+          src={photo + "?width=100&height=100"}
+          width={200}
+          height={200}
+          quality={20}
           sizes="(max-width: 640px) 100vw,
                   (max-width: 1280px) 50vw,
                   (max-width: 1536px) 33vw,

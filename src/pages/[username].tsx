@@ -60,11 +60,9 @@ const fetchPhotos = async (userId: string) => {
 
   const photoArrayUrl: Array<string> = [];
   galleryPhotos.map((photo, index) => {
-    if (index !== 0) {
-      photoArrayUrl.push(
-        `https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${userId}/gallery/${photo.name}`
-      );
-    }
+    photoArrayUrl.push(
+      `https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${userId}/gallery/${photo.name}`
+    );
   });
   return {
     gallery: photoArrayUrl || [],
