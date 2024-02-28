@@ -5,7 +5,7 @@ import Link from "next/link";
 const Footer = () => {
   return (
     <>
-      <footer className="py-10 relative z-10 pt-16 dark:bg-gray-dark md:pt-20 lg:pt-24">
+      <footer className="py-10 border-t-[1px] border-greenLight">
         <p> Copyright© niamorweb - 2024</p>
       </footer>
     </>

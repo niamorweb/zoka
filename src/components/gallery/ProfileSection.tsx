@@ -35,13 +35,10 @@ export default function ProfileSection({
       <div className="absolute -z-10 left-0 top-0 h-full w-full bg-black/30 lg:bg-transparent lg:bg-gradient-to-r lg:from-[#00000094] lg:to-[#0000000d]"></div>
 
       <AddBackground />
-      {data &&
-      data.photoData &&
-      data.photoData.background &&
-      data.photoData.background[0] ? (
+      {data && data.userData && data.userData.background ? (
         <Image
           className="absolute h-full w-full top-0 left-0 right-0 bottom-0 object-cover -z-20"
-          src={`https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${data.userData.id}/background/${data.photoData.background[0].name}`}
+          src={`https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${data.userData.id}/background/${data.userData.background}`}
           width={600}
           height={600}
           alt=""
@@ -62,7 +59,7 @@ export default function ProfileSection({
         <Input
           value={inputName}
           onChange={(e) => setInputName(e.target.value)}
-          className="max-w-[300px] text-base bg-transparent font-bold uppercase tracking-widest"
+          className="max-w-[300px] text-base bg-transparent font-bold tracking-widest"
         />
 
         <Textarea

@@ -52,7 +52,7 @@ export default function Links({ inputLinks, setInputLinks, updateInfos }: any) {
     <Dialog>
       <DialogTrigger asChild>
         <button>
-          <Link1Icon className="w-6 h-6" />
+          <Link1Icon className="cursor-pointer w-8 h-8" />
         </button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">

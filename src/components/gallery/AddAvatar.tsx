@@ -56,24 +56,38 @@ export function AddAvatar() {
             useWebWorker: true,
           };
           const compressedFile = await imageCompression(image, options);
-          await supabase.storage
+          const { data: avatarUpload, error } = await supabase.storage
             .from(`users_photos/${data.userData.id}/avatar`)
             .upload(`${uuidv4()}.${fileExtension}`, compressedFile);
+
+          if (avatarUpload && avatarUpload.path) {
+            updateUserAvatar(avatarUpload.path);
+          }
         } else {
-          await supabase.storage
+          const { data: avatarUpload, error } = await supabase.storage
             .from(`users_photos/${data.userData.id}/avatar`)
             .upload(
               `${data.userData.id}_${Date.now()}_${uniq_id}.${fileExtension}`,
               image
             );
+          if (avatarUpload && avatarUpload.path) {
+            updateUserAvatar(avatarUpload.path);
+          }
         }
+
         reloadData();
-      } catch (error) {
-        console.error(
-          "Erreur lors du téléchargement de la photo d'avatar :",
-          error
-        );
-      }
+      } catch (error) {}
+    }
+  };
+
+  const updateUserAvatar = async (imageUrl: string) => {
+    const { data: updatedUser, error } = await supabase
+      .from("users")
+      .update({ avatar: imageUrl })
+      .eq("id", data.userData.id);
+
+    if (error) {
+      return;
     }
   };
 
@@ -86,11 +100,11 @@ export function AddAvatar() {
         accept="image/*"
         style={{ display: "none" }}
       />
-      {data.photoData && data.photoData.avatar && data.photoData.avatar[0] ? (
+      {data && data.userData && data.userData.avatar ? (
         <Image
           onClick={() => handleClick()}
           className="w-24 lg:w-44 cursor-pointer  duration-150  h-24 lg:h-44 mb-4 object-cover rounded-full border-black border-2 hover:border-4"
-          src={`https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${data.userData.id}/avatar/${data.photoData.avatar[0].name}`}
+          src={`https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${data.userData.id}/avatar/${data.userData.avatar}`}
           width={100}
           height={100}
           alt=""

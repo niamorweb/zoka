@@ -1,13 +1,12 @@
 import Link from "next/link";
-import { Separator } from "../ui/separator";
 
 export default function footer() {
   return (
-    <div className="bg-slate-50 py-14 lg:py-24 gap-6 text-black">
+    <div className="pb-10 lg:pb-8 pt-10 lg:pt-20 gap-6">
       <p className="text-center">
-        Built by niamorweb -
+        Kuta -
         <Link target="_blank" className="underline underline-offset-2" href="/">
-          Create your own page here
+          Create your own page free here
         </Link>
       </p>
     </div>

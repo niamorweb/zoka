@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from "uuid";
 import { useRouter } from "next/router";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogTitle,
@@ -16,20 +17,24 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "../ui/button";
 import { DialogFooter, DialogHeader } from "../ui/dialog";
-import ImageUpload from "./AddPhotoSection";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 
 export function AddPhoto({ updateInfos }: any) {
-  const [filesToUpload, setFilesToUpload] = React.useState<File[]>([]);
+  const [fileToUpload, setFileToUpload] = React.useState<File | null>(null);
+  const [title, setTitle] = React.useState<string>("");
   const { data, reloadData } = React.useContext(DataContext);
   const [isDisabled, setIsDisabled] = React.useState(false);
 
-  const handleUploadAllPhotos = () => {
-    filesToUpload.map((file) => uploadPhoto(file));
-    updateInfos();
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      setFileToUpload(files[0]);
+    }
   };
 
-  const uploadPhoto = async (image: File) => {
-    if (!data.userData.id) {
+  const handleUploadPhoto = async () => {
+    if (!data.userData.id || !fileToUpload) {
       return;
     }
 
@@ -49,59 +54,93 @@ export function AddPhoto({ updateInfos }: any) {
       return;
     }
 
-    const fileName = image?.name;
+    const fileName = fileToUpload?.name;
 
     const re = /(?:\.([^.]+))?$/;
 
     if (fileName) {
       const match = re.exec(fileName);
-      const fileExtension: String | null = match && match[1];
+      const fileExtension: string | null = match && match[1];
 
       const uniq_id: string = uid();
 
-      if (image) {
-        if (image.size > 2 * 1024 * 1024) {
+      if (fileToUpload) {
+        if (fileToUpload.size > 2 * 1024 * 1024) {
           try {
             const options = {
               maxSizeMB: 2,
               useWebWorker: true,
             };
-            const compressedFile = await imageCompression(image, options);
+            const compressedFile = await imageCompression(
+              fileToUpload,
+              options
+            );
             const { data: uploadData, error } = await supabase.storage
               .from(`users_photos/${data.userData.id}/gallery`)
               .upload(`${uuidv4()}.${fileExtension}`, compressedFile);
-            updateInfos();
-          } catch (error) {}
+            if (uploadData && uploadData.path) {
+              await createItem(uploadData.path);
+              toast({
+                title: "Image uploaded !",
+              });
+              setFileToUpload(null);
+              setTitle("");
+            } else {
+              console.error("Error uploading image:", error);
+            }
+          } catch (error) {
+            console.error("Error uploading compressed image:", error);
+          }
         } else {
           const { data: uploadData, error } = await supabase.storage
             .from(`users_photos/${data.userData.id}/gallery`)
             .upload(
               `${data.userData.id}_${Date.now()}_${uniq_id}.${fileExtension}`,
-              image
+              fileToUpload
             );
-          updateInfos();
+
+          if (uploadData && uploadData.path) {
+            await createItem(uploadData.path);
+            toast({
+              title: "Image uploaded !",
+            });
+            setFileToUpload(null);
+            setTitle("");
+          } else {
+            console.error("Error uploading image:", error);
+          }
         }
       }
-      updateInfos();
     }
+    updateInfos();
   };
+
+  const createItem = async (imageUrl: string) => {
+    const { data: newItem, error } = await supabase.from("items").insert([
+      {
+        user_id: data.userData.id,
+        title,
+        image_url: imageUrl,
+      },
+    ]);
+
+    if (error) {
+      console.error("Error creating item:", error.message);
+      return;
+    }
+
+    console.log("New item created:", newItem);
+  };
+
   return (
     <>
       <Dialog>
         <DialogTrigger asChild>
-          <ImageIcon className="w-6 h-6" />
+          <ImageIcon className="cursor-pointer w-8 h-8" />
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>
-              Upload images ({" "}
-              {15 -
-                (data &&
-                  data.photoData &&
-                  data.photoData.gallery &&
-                  data.photoData.gallery.length + filesToUpload.length)}{" "}
-              / 15 place for new image available){" "}
-            </DialogTitle>
+            <DialogTitle>Upload image</DialogTitle>
             <DialogDescription>
               {isDisabled && (
                 <p className="text-red-600 ">
@@ -110,15 +149,28 @@ export function AddPhoto({ updateInfos }: any) {
               )}
             </DialogDescription>
           </DialogHeader>
-          <ImageUpload
-            filesToUpload={filesToUpload}
-            setFilesToUpload={setFilesToUpload}
-            setIsDisabled={setIsDisabled}
-          />
+          <div className="flex flex-col gap-3">
+            <Label htmlFor="title">Title ( will be hidden if empty )</Label>
+            <Input
+              name="title"
+              placeholder="Enter title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </div>
+          <div className="flex flex-col gap-3">
+            <Label htmlFor="file">Choose File</Label>
+            <Input
+              type="file"
+              accept="image/*"
+              id="file"
+              onChange={handleFileChange}
+            />
+          </div>
           <DialogFooter>
             <Button
-              onClick={handleUploadAllPhotos}
-              disabled={isDisabled}
+              onClick={handleUploadPhoto}
+              disabled={!fileToUpload || isDisabled}
               type="submit"
             >
               Upload

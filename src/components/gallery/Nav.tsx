@@ -10,6 +10,7 @@ import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
 import { toast } from "../ui/use-toast";
 import Link from "next/link";
+import Appearance from "./Appearance";
 
 export default function Nav({
   data,
@@ -26,21 +27,25 @@ export default function Nav({
   };
 
   return (
-    <nav className="fixed z-40 left-1/2 bg-slate-800 bg-opacity-25 backdrop-blur-xl text-white rounded-xl -translate-x-1/2 bottom-10 flex items-center gap-4 p-2">
-      <button
+    <nav className="fixed z-40 left-1/2 rounded-[40px] bg-greenDark text-greenLight -translate-x-1/2 bottom-10 flex items-center gap-6 px-6 py-4">
+      {/* <button
         onClick={() => handleCopyPage()}
-        className="bg-blue-500 hidden md:flex mr-4 px-5 py-2 rounded-lg font-medium"
+        className="bg-greenLight border-2 border-greenLight text-greenDark px-5 py-2 rounded-3xl duration-150 hover:scale-105"
       >
         Share my page
+      </button> */}
+      <button
+        onClick={() => updateInfos()}
+        className="bg-greenLight border-2 border-greenLight text-greenDark px-5 py-2 rounded-3xl duration-150 hover:scale-105"
+      >
+        Update
       </button>
       <Links
         updateInfos={updateInfos}
         inputLinks={inputLinks}
         setInputLinks={setInputLinks}
       />
-      <button>
-        <AddPhoto updateInfos={updateInfos} />
-      </button>
+      <AddPhoto updateInfos={updateInfos} />
       {/* <Popover>
         <PopoverTrigger asChild>
           <button>
@@ -60,16 +65,10 @@ export default function Nav({
           </div>
         </PopoverContent>
       </Popover> */}
-      <button
-        onClick={() => updateInfos()}
-        className="bg-white ml-4 text-black px-5 py-2 rounded-lg font-medium"
-      >
-        Update
-      </button>
       <Link
         href={`/${data.userData && data.userData.username}`}
         target="_blank"
-        className="bg-white text-black px-5 py-2 rounded-lg font-medium"
+        className="border-2 border-greenLight px-5 py-2 rounded-3xl duration-150 hover:scale-105"
       >
         Preview
       </Link>

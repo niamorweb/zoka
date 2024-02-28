@@ -110,35 +110,7 @@ export default function Home({}: any) {
       <div
         className={`min-h-screen bg-[url('/images/home/noise.png')]  bg-greenDark text-greenLight relative pt-5 px-5 lg:px-10 ${work_sans.className}`}
       >
-        <header className="max-w-[1400px] w-full rounded-[40px] bg-greenLight text-greenDark mx-auto py-3 px-6 flex items-center justify-between">
-          <h2 className="text-3xl font-semibold">Kuta</h2>
-          <nav className="flex items-center gap-3 lg:gap-7">
-            <ul className="hidden md:flex items-center gap-7 ">
-              <li>
-                <Link href="#features">Features</Link>{" "}
-              </li>
-              <li>
-                <Link href="#testimonials">Testimonials</Link>
-              </li>
-              <li>
-                <Link href="#support">Support Me</Link>
-              </li>
-            </ul>
-            <button className="border-2 border-greenDark px-5 py-2 rounded-3xl duration-150 hover:scale-105">
-              Contact me
-            </button>
-            <Link
-              href={
-                data && data.userData
-                  ? `/${data.userData.username}`
-                  : "/s/signin"
-              }
-              className="bg-greenDark border-2 border-greenDark text-greenLight px-5 py-2 rounded-3xl duration-150 hover:scale-105"
-            >
-              {data && data.userData ? `Dashboard` : "Login"}
-            </Link>
-          </nav>
-        </header>
+        <Header />
         <Section>
           <section className="max-w-[1400px] mx-auto flex flex-col-reverse lg:flex-row items-center gap-3 lg:gap-10 py-16">
             <div className="lg:w-1/2 flex flex-col gap-4 items-start">
@@ -269,9 +241,7 @@ export default function Home({}: any) {
         </Section>
 
         <Section>
-          <footer className="py-10 border-t-[1px] border-greenLight">
-            <p>Built by niamorweb</p>
-          </footer>
+          <Footer />
         </Section>
       </div>
     </>

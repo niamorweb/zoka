@@ -22,6 +22,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { toast } from "@/components/ui/use-toast";
 import Link from "next/link";
 import ImageUpload from "@/components/gallery/AddPhotoSection";
+import Image from "next/image";
 
 const Gallery = () => {
   const router = useRouter();
@@ -33,6 +34,7 @@ const Gallery = () => {
   const [inputDescription, setInputDescription] = useState<string>("");
   const [inputTheme, setInputTheme] = useState<string>("dark");
   const [inputLinks, setInputLinks] = useState([{ url: "", name: "" }]);
+  const [items, setItems] = useState<Array<any>>([]);
 
   useEffect(() => {
     if (data.userData) {
@@ -42,20 +44,22 @@ const Gallery = () => {
       setInputUsername(data.userData.username);
       setInputTheme(data.userData.theme);
       setInputLinks(data.userData.links);
+      fetchItems();
     }
   }, [data]);
 
   const deletePhoto = async (photoName: string) => {
-    const regex = /\/([^/]+\.jpg)$/i;
-    const match = photoName.match(regex);
-    if (match) {
-      const fileName = match[1];
+    console.log("ddd = ", photoName);
 
-      const { data: userData, error } = await supabase.storage
-        .from("users_photos")
-        .remove([`${data.userData.id}/gallery/${fileName}`]);
-      reloadData();
-    }
+    const { data: userData, error } = await supabase.storage
+      .from("users_photos")
+      .remove([`${data.userData.id}/gallery/${photoName}`]);
+    const { error: deleteError } = await supabase
+      .from("items")
+      .delete()
+      .eq("image_url", photoName);
+
+    reloadData();
   };
 
   const logout = async () => {
@@ -103,7 +107,18 @@ const Gallery = () => {
     }
   }
 
-  console.log(data.photoData && data.photoData.gallery);
+  async function fetchItems() {
+    try {
+      const { data: dataItems, error } = await supabase
+        .from("items")
+        .select("*")
+        .eq("user_id", data.userData.id);
+
+      if (dataItems) setItems(dataItems);
+    } catch (error) {
+      return null;
+    }
+  }
 
   return (
     <>
@@ -154,21 +169,17 @@ const Gallery = () => {
                   inputDescription={inputDescription}
                   setInputName={setInputName}
                 />
-                <div className="columns-1 p-4 gap-2 sm:columns-2 xl:columns-3 2xl:columns-4">
-                  {data &&
-                    data.photoData &&
-                    data.photoData.gallery &&
-                    data.photoData.gallery.length > 0 &&
-                    data.photoData.gallery.map(
-                      (photo: String, index: number) => (
-                        <ImageDisplay
-                          key={index}
-                          photo={photo}
-                          index={index}
-                          deletePhoto={deletePhoto}
-                        />
-                      )
-                    )}
+                <div className="columns-1 p-2 gap-2 sm:columns-2 xl:columns-3 2xl:columns-4">
+                  {items &&
+                    items.map((photo: String, index: number) => (
+                      <ImageDisplay
+                        key={index}
+                        data={data}
+                        photo={photo}
+                        index={index}
+                        deletePhoto={deletePhoto}
+                      />
+                    ))}
                 </div>
               </main>
             )}

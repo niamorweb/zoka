@@ -59,16 +59,22 @@ export function AddBackground({ background }: any) {
             useWebWorker: true,
           };
           const compressedFile = await imageCompression(image, options);
-          await supabase.storage
+          const { data: backgroundUpload, error } = await supabase.storage
             .from(`users_photos/${data.userData.id}/background`)
             .upload(`${uuidv4()}.${fileExtension}`, compressedFile);
+
+          if (backgroundUpload && backgroundUpload.path)
+            updateUserBackground(backgroundUpload.path);
         } else {
-          await supabase.storage
+          const { data: backgroundUpload, error } = await supabase.storage
             .from(`users_photos/${data.userData.id}/background`)
             .upload(
               `${data.userData.id}_${Date.now()}_${uniq_id}.${fileExtension}`,
               image
             );
+
+          if (backgroundUpload && backgroundUpload.path)
+            updateUserBackground(backgroundUpload.path);
         }
         reloadData();
       } catch (error) {
@@ -77,6 +83,17 @@ export function AddBackground({ background }: any) {
         //   error
         // );
       }
+    }
+  };
+
+  const updateUserBackground = async (imageUrl: string) => {
+    const { data: updatedUser, error } = await supabase
+      .from("users")
+      .update({ background: imageUrl })
+      .eq("id", data.userData.id);
+
+    if (error) {
+      return;
     }
   };
 

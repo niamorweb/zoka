@@ -23,6 +23,7 @@ import Image from "next/image";
 import { Textarea } from "@/components/ui/textarea";
 import { Work_Sans } from "next/font/google";
 import Head from "next/head";
+import Link from "next/link";
 
 interface link {
   name: String;
@@ -43,36 +44,19 @@ interface userInfos {
 const work_sans = Work_Sans({ subsets: ["latin"] });
 
 const fetchPhotos = async (userId: string) => {
-  const { data: galleryPhotos, error: galleryError } = await supabase.storage
-    .from("users_photos")
-    .list(`${userId}/gallery`);
+  const { data: dataItems, error } = await supabase
+    .from("items")
+    .select("*")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false });
 
-  const { data: avatarPhotos, error: avatarError } = await supabase.storage
-    .from("users_photos")
-    .list(`${userId}/avatar`);
-
-  const { data: backgroundPhotos, error: backgroundError } =
-    await supabase.storage.from("users_photos").list(`${userId}/background`);
-
-  if (galleryError) {
-    return [];
-  }
-
-  const photoArrayUrl: Array<string> = [];
-  galleryPhotos.map((photo, index) => {
-    photoArrayUrl.push(
-      `https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${userId}/gallery/${photo.name}`
-    );
-  });
-  return {
-    gallery: photoArrayUrl || [],
-    avatar: avatarPhotos || [],
-    background: backgroundPhotos || [],
-  };
+  return dataItems;
 };
 
-const Gallery = ({ userInfos, photosUrl }: any) => {
+const Gallery = ({ userInfos, photos }: any) => {
   if (userInfos) {
+    console.log(userInfos);
+
     return (
       <>
         <Head>
@@ -80,6 +64,19 @@ const Gallery = ({ userInfos, photosUrl }: any) => {
           <meta name="description" content={userInfos.description} />
         </Head>
         <div className={work_sans.className}>
+          <Link
+            className="hidden absolute gap-2 top-3 right-3  items-center bg-greenDark text-greenLight px-4 py-2 rounded-lg"
+            href="/"
+          >
+            <Image
+              src="/logo32.jpg"
+              className="rounded-full"
+              width={20}
+              height={20}
+              alt=""
+            />
+            <span>Created via Kuta</span>
+          </Link>
           <div className={`min-w-screen min-h-screen`}>
             {userInfos && (
               <main
@@ -89,12 +86,10 @@ const Gallery = ({ userInfos, photosUrl }: any) => {
                   className={` max-h-[900px] text-white overflow-hidden flex flex-col gap-2 relative px-4 lg:px-24 pt-16 pb-10 lg:pt-24 lg:pb-32 shadow-highlight after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight`}
                 >
                   <div className="absolute -z-10 left-0 top-0 h-full w-full bg-black/30 lg:bg-transparent lg:bg-gradient-to-r lg:from-[#00000094] lg:to-[#0000000d]"></div>
-                  {photosUrl &&
-                  photosUrl.background &&
-                  photosUrl.background[0] ? (
+                  {userInfos.background ? (
                     <Image
-                      className="fixed object-center max-h-[1000px] h-[200vh] lg:h-screen  w-screen top-0 left-0 right-0 bottom-0 object-cover -z-20"
-                      src={`https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${userInfos.id}/background/${photosUrl.background[0].name}`}
+                      className="absolute object-center max-h-[1000px] h-full w-screen top-0 left-0 right-0 bottom-0 object-cover -z-20"
+                      src={`https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${userInfos.id}/background/${userInfos.background}`}
                       width={1600}
                       height={1000}
                       alt=""
@@ -104,10 +99,10 @@ const Gallery = ({ userInfos, photosUrl }: any) => {
                   )}
 
                   <div className="flex flex-col gap-3">
-                    {photosUrl && photosUrl.avatar && photosUrl.avatar[0] ? (
+                    {userInfos.avatar ? (
                       <Image
                         className={`w-24 lg:w-44 cursor-pointer  duration-150  h-24 lg:h-44 mb-4 object-cover rounded-full border-black border-2`}
-                        src={`https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${userInfos.id}/avatar/${photosUrl.avatar[0].name}`}
+                        src={`https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${userInfos.id}/avatar/${userInfos.avatar}`}
                         width={200}
                         height={200}
                         alt=""
@@ -147,21 +142,26 @@ const Gallery = ({ userInfos, photosUrl }: any) => {
                     )}
                   </div>
                 </div>
-                <div className="columns-1 bg-slate-50 p-4 gap-2 sm:columns-2 xl:columns-3 2xl:columns-4">
-                  {photosUrl.gallery &&
-                    photosUrl.gallery.length > 0 &&
-                    photosUrl.gallery.map((photo: string, index: number) => (
+                <div className="columns-1 p-2 gap-2 sm:columns-2 xl:columns-3 2xl:columns-4">
+                  {photos &&
+                    photos.map((photo: any, index: number) => (
                       <div
                         key={index}
                         className="after:content group relative mb-2 block w-full after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight"
                       >
                         <Image
                           placeholder="blur"
-                          blurDataURL={`/_next/image?url=${photo}&w=16&q=1`}
+                          blurDataURL={`/_next/image?url=https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${userInfos.id}/gallery/${photo.image_url}?width=100&height=100/&w=16&q=1`}
                           alt="Next.js Conf photo"
-                          className="transform brightness-90 transition will-change-auto group-hover:brightness-110"
+                          className="transform transition will-change-auto"
                           style={{ transform: "translate3d(0, 0, 0)" }}
-                          src={photo + "?width=500&height=600"}
+                          src={
+                            "https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/" +
+                            userInfos.id +
+                            "/gallery/" +
+                            photo.image_url +
+                            "?width=500&height=600"
+                          }
                           width={720}
                           height={480}
                           quality={50}
@@ -170,6 +170,11 @@ const Gallery = ({ userInfos, photosUrl }: any) => {
                   (max-width: 1536px) 33vw,
                   25vw"
                         />
+                        {photo.title !== "" && photo.title !== null && (
+                          <p className="absolute bottom-3 right-2 bg-white text-black font-semibold px-4 py-2 rounded-lg">
+                            {photo.title}
+                          </p>
+                        )}
                       </div>
                     ))}
                 </div>
@@ -196,9 +201,9 @@ Gallery.getInitialProps = async ({ query }: any) => {
     return { userInfos: null, photosUrl: [] };
   }
 
-  const photosUrl = data ? await fetchPhotos(data.id) : [];
+  const photos = data ? await fetchPhotos(data.id) : [];
 
-  return { userInfos: data, photosUrl };
+  return { userInfos: data, photos };
 };
 
 export default Gallery;

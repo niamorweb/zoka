@@ -37,34 +37,13 @@ export function DataProvider({ children }) {
   };
 
   const fetchPhotos = async (userId) => {
-    const { data: galleryPhotos, error: galleryError } = await supabase.storage
-      .from("users_photos")
-      .list(`${userId}/gallery`);
+    const { data: dataItems, error } = await supabase
+      .from("items")
+      .select("*")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false });
 
-    const { data: avatarPhotos, error: avatarError } = await supabase.storage
-      .from("users_photos")
-      .list(`${userId}/avatar`);
-
-    const { data: backgroundPhotos, error: backgroundError } =
-      await supabase.storage.from("users_photos").list(`${userId}/background`);
-
-    if (galleryError) {
-      return [];
-    }
-
-    const photoArrayUrl = [];
-    galleryPhotos.map((photo, index) => {
-      photoArrayUrl.push(
-        `https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${userId}/gallery/${photo.name}`
-      );
-    });
-    const photoData = {
-      gallery: photoArrayUrl || null,
-      avatar: avatarPhotos || null,
-      background: backgroundPhotos || null,
-    };
-
-    return photoData;
+    return dataItems;
   };
 
   return (
