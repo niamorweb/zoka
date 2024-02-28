@@ -131,7 +131,7 @@ export default function Home({}: any) {
             </div>
             <div className="lg:w-1/2 grid grid-cols-2 gap-3 grid-rows-2 h-[300px] lg:h-[600px]">
               <Image
-                className="translate-y-[40px] row-span-2 col-span-1 h-full w-full object-cover"
+                className="lg:translate-y-[40px] row-span-2 col-span-1 h-full w-full object-cover"
                 width={400}
                 height={600}
                 src="https://cdn.pixabay.com/photo/2023/08/03/22/25/mountain-8168060_1280.jpg"
