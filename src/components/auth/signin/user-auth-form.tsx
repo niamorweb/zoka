@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import { DataContext } from "@/utlis/userContext";
+import { toast } from "@/components/ui/use-toast";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -45,6 +46,18 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
     if (error) {
       setIsLoading(false);
+
+      if (error.message === "Invalid login credentials") {
+        toast({
+          title: "Email or password incorrect !",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "An error has occured !",
+          variant: "destructive",
+        });
+      }
     } else {
       reloadData();
       router.push(`/`);

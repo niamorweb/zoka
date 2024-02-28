@@ -56,19 +56,19 @@ export default function Home({}: any) {
       title: "Photography",
       paragraph:
         "Explore a platform dedicated to showcasing your visual creations. Share your finest photographs with a passionate community and discover inspiration with every captured moment.",
-      img: "https://images.pexels.com/photos/5091121/pexels-photo-5091121.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      img: "/images/home/section_2_photo.jpg",
     },
     {
       title: "Art",
       paragraph:
         "Unleash your creativity without bounds. Our platform provides a space to exhibit your unique artworks, whether they're paintings, drawings, or any other form of artistic expression.",
-      img: "/images/auth/illustration.jpg",
+      img: "/images/home/section_2_art.jpg",
     },
     {
       title: "Socials Network",
       paragraph:
         "Connect with artists from around the globe. Our art and photography-focused social network allows you to build connections, exchange ideas, and collaborate with other people.",
-      img: "https://images.pexels.com/photos/1624255/pexels-photo-1624255.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      img: "/images/home/section_2_socialmedia.jpg",
     },
   ];
 
@@ -134,21 +134,21 @@ export default function Home({}: any) {
                 className="lg:translate-y-[40px] row-span-2 col-span-1 h-full w-full object-cover"
                 width={400}
                 height={600}
-                src="https://cdn.pixabay.com/photo/2023/08/03/22/25/mountain-8168060_1280.jpg"
+                src="/images/home/intro_photo1.jpg"
                 alt=""
               />{" "}
               <Image
                 className="row-span-1 col-span-1 h-full w-full object-cover"
                 width={400}
                 height={400}
-                src="https://cdn.pixabay.com/photo/2024/01/25/12/30/forest-8531787_1280.jpg"
+                src="/images/home/intro_photo2.jpg"
                 alt=""
               />
               <Image
                 className="row-span-1 col-span-1 h-full w-full object-cover"
                 width={400}
                 height={400}
-                src="https://cdn.pixabay.com/photo/2024/01/25/12/30/forest-8531787_1280.jpg"
+                src="/images/home/intro_photo3.jpg"
                 alt=""
               />
             </div>
@@ -176,12 +176,12 @@ export default function Home({}: any) {
               {dataFeatures.map((feature, index) => (
                 <div
                   key={index}
-                  className="flex flex-col gap-2 h-[500px] lg:w-1/3 lg:hover:w-2/3 duration-500"
+                  className="flex flex-col gap-2 h-fit lg:w-1/3 lg:hover:w-2/3 duration-500"
                 >
                   <Image
                     className="w-full h-[300px] object-cover rounded-2xl duration-150"
-                    width={700}
-                    height={700}
+                    width={400}
+                    height={400}
                     src={feature.img}
                     alt=""
                   />

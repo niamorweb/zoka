@@ -110,10 +110,14 @@ export function AddAvatar() {
           alt=""
         />
       ) : (
-        <div
+        <Image
           onClick={() => handleClick()}
           className="w-24 lg:w-44 cursor-pointer  duration-150  h-24 lg:h-44 mb-4 object-cover rounded-full bg-neutral-200 border-black border-2 hover:border-4"
-        ></div>
+          src="/logo-large.jpg"
+          width={200}
+          height={200}
+          alt=""
+        />
       )}
     </>
   );

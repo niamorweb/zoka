@@ -44,7 +44,7 @@ export default function ProfileSection({
           alt=""
         />
       ) : (
-        <div className="absolute bg-neutral-900 h-full w-full top-0 left-0 right-0 bottom-0 object-cover -z-10"></div>
+        <div className="absolute bg-[url('/images/home/noise.png')] bg-greenDark h-full w-full top-0 left-0 right-0 bottom-0 object-cover -z-10"></div>
       )}
 
       <div className="flex flex-col gap-3">

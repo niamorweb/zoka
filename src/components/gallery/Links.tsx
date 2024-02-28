@@ -74,6 +74,7 @@ export default function Links({ inputLinks, setInputLinks, updateInfos }: any) {
                     </p>
                     <div>
                       <Input
+                        placeholder="https://instagram.com/username"
                         className="w-full"
                         name="url"
                         value={url.url}
@@ -93,6 +94,7 @@ export default function Links({ inputLinks, setInputLinks, updateInfos }: any) {
                     </p>
                     <div>
                       <Input
+                        placeholder="My Instagram"
                         className="w-full"
                         name="name"
                         value={url.name}

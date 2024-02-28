@@ -105,22 +105,26 @@ const Gallery = ({ userInfos, photos }: any) => {
                       alt=""
                     />
                   ) : (
-                    <div className="absolute bg-neutral-900 h-full w-full top-0 left-0 right-0 bottom-0 object-cover -z-10"></div>
+                    <div className="absolute bg-[url('/images/home/noise.png')] bg-greenDark  h-full w-full top-0 left-0 right-0 bottom-0 object-cover -z-10"></div>
                   )}
 
                   <div className="flex flex-col gap-3">
                     {userInfos.avatar ? (
                       <Image
-                        className={`w-24 lg:w-44 cursor-pointer  duration-150  h-24 lg:h-44 mb-4 object-cover rounded-full border-black border-2`}
+                        className={`w-24 lg:w-44 duration-150 h-24 lg:h-44 mb-4 object-cover rounded-full border-greenDark border-2`}
                         src={`https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${userInfos.id}/avatar/${userInfos.avatar}`}
                         width={200}
                         height={200}
                         alt=""
                       />
                     ) : (
-                      <div
-                        className={`w-24 lg:w-44 cursor-pointer bg-neutral-200 duration-150  h-24 lg:h-44 mb-4 object-cover rounded-full border-black border-2`}
-                      ></div>
+                      <Image
+                        className={`w-24 lg:w-44 cursor-pointer  duration-150  h-24 lg:h-44 mb-4 object-cover rounded-full border-greenDark border-2`}
+                        src="/logo-large.jpg"
+                        width={200}
+                        height={200}
+                        alt=""
+                      />
                     )}
                     <h1 className="max-w-[600px] text-lg md:text-2xl lg:text-6xl font-extrabold tracking-widest">
                       {userInfos.full_name}

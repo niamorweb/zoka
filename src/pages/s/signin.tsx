@@ -34,28 +34,17 @@ export default function AuthenticationPage() {
       </Head>
       <Toaster />
 
-      <div className=" container relative min-h-screen flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+      <div
+        className={`min-h-screen bg-[url('/images/home/noise.png')] flex items-center justify-center bg-greenDark relative pt-5 px-5 lg:px-10 `}
+      >
         <Link
           href="/s/signup"
-          className={cn(
-            buttonVariants({ variant: "ghost" }),
-            "absolute right-4 top-4 md:right-8 md:top-8"
-          )}
+          className="absolute bg-greenLight text-greenDark px-6 py-2 rounded-lg right-4 top-4 md:right-8 md:top-8"
         >
           Sign up
         </Link>
-        <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
-          <Image
-            className="absolute left-0 object-cover top-0 right-0 bottom-0"
-            src="/images/auth/illustration.jpg"
-            width={1024}
-            height={1024}
-            alt=""
-          />
-          <span className="z-20 text-xl font-medium">Kuta</span>
-        </div>
-        <div className="lg:p-8">
-          <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+        <div className="p-8 bg-white rounded-lg">
+          <div className="mx-auto flex w-full flex-col justify-center space-y-6 ">
             <div className="flex flex-col space-y-2 text-center">
               <h1 className="text-2xl font-semibold tracking-tight">
                 Login to your account
@@ -65,23 +54,6 @@ export default function AuthenticationPage() {
               </p>
             </div>
             <UserAuthForm />
-            <p className="px-8 text-center text-sm text-muted-foreground">
-              By clicking continue, you agree to our{" "}
-              <Link
-                href="#"
-                className="underline underline-offset-4 hover:text-primary"
-              >
-                Terms of Service
-              </Link>{" "}
-              and{" "}
-              <Link
-                href="#"
-                className="underline underline-offset-4 hover:text-primary"
-              >
-                Privacy Policy
-              </Link>
-              .
-            </p>
           </div>
         </div>
       </div>

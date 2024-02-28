@@ -98,7 +98,7 @@ export function AddBackground({ background }: any) {
   };
 
   return (
-    <>
+    <div className="absolute top-6 right-6 z-10 flex items-center gap-3">
       <input
         type="file"
         ref={hiddenFileInput}
@@ -106,12 +106,9 @@ export function AddBackground({ background }: any) {
         accept="image/*"
         style={{ display: "none" }}
       />
-      <Button
-        onClick={() => handleClick()}
-        className="absolute top-6 right-6 z-10"
-      >
+      <Button onClick={() => handleClick()} className="">
         <ImageIcon className="w-6 h-6" />
       </Button>
-    </>
+    </div>
   );
 }
