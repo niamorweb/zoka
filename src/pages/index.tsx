@@ -93,10 +93,12 @@ export default function Home({}: any) {
   return (
     <>
       <Head>
-        <title>KUTA - Share your photos</title>
+        <title>
+          KUTA - The link in bio platform to share your photos and links.
+        </title>
         <meta
           name="description"
-          content="A website for sharing your photos and links with the world."
+          content="Kuta: Your hub for visual expression. Showcase your photography and artistry with a personalized page and unique link. Explore captivating visuals from fellow creators, including photography and artwork. Whether you're a seasoned photographer or emerging artist, Kuta provides the perfect platform to share your vision. Join us and let your creativity shine."
         />
         <meta
           name="keywords"
@@ -115,7 +117,7 @@ export default function Home({}: any) {
           <section className="max-w-[1400px] mx-auto flex flex-col-reverse lg:flex-row items-center gap-3 lg:gap-10 py-16">
             <div className="lg:w-1/2 flex flex-col gap-4 items-start">
               <h1 className="text-3xl lg:text-7xl font-bold">
-                The platform for sharing your photos and links.
+                The link in bio platform to share your photos and links.
               </h1>
               <p>
                 Welcome to Kuta, where artists and photographers converge to
@@ -127,13 +129,29 @@ export default function Home({}: any) {
                 Sign up
               </button>
             </div>
-            <Image
-              className="lg:w-1/2 h-[200px] lg:h-[600px] object-cover rounded-3xl"
-              width={2000}
-              height={2000}
-              src="https://cdn.pixabay.com/photo/2024/01/25/12/30/forest-8531787_1280.jpg"
-              alt=""
-            />
+            <div className="lg:w-1/2 grid grid-cols-2 gap-3 grid-rows-2 h-[300px] lg:h-[600px]">
+              <Image
+                className="translate-y-[40px] row-span-2 col-span-1 h-full w-full object-cover"
+                width={400}
+                height={600}
+                src="https://cdn.pixabay.com/photo/2023/08/03/22/25/mountain-8168060_1280.jpg"
+                alt=""
+              />{" "}
+              <Image
+                className="row-span-1 col-span-1 h-full w-full object-cover"
+                width={400}
+                height={400}
+                src="https://cdn.pixabay.com/photo/2024/01/25/12/30/forest-8531787_1280.jpg"
+                alt=""
+              />
+              <Image
+                className="row-span-1 col-span-1 h-full w-full object-cover"
+                width={400}
+                height={400}
+                src="https://cdn.pixabay.com/photo/2024/01/25/12/30/forest-8531787_1280.jpg"
+                alt=""
+              />
+            </div>
           </section>
         </Section>
 

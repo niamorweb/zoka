@@ -62,6 +62,16 @@ const Gallery = ({ userInfos, photos }: any) => {
         <Head>
           <title>{userInfos.full_name}</title>
           <meta name="description" content={userInfos.description} />
+          <meta
+            name="keywords"
+            content="photos, sharing, links, social network, media, website"
+          />
+          <meta name="author" content="niamorweb" />
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+          />
+          <link rel="icon" href="/favicon.ico" />
         </Head>
         <div className={work_sans.className}>
           <Link

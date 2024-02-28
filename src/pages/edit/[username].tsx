@@ -23,6 +23,7 @@ import { toast } from "@/components/ui/use-toast";
 import Link from "next/link";
 import ImageUpload from "@/components/gallery/AddPhotoSection";
 import Image from "next/image";
+import Head from "next/head";
 
 const Gallery = () => {
   const router = useRouter();
@@ -122,6 +123,17 @@ const Gallery = () => {
 
   return (
     <>
+      <Head>
+        <title>Kuta - Dashboard</title>
+        <meta name="description" content="Edit your kuta page." />
+        <meta
+          name="keywords"
+          content="photos, sharing, links, social network, media, website"
+        />
+        <meta name="author" content="niamorweb" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       {username === (data.userData && data.userData.username) ? (
         <>
           <Toaster />
