@@ -6,7 +6,7 @@ import { Work_Sans } from "next/font/google";
 import Head from "next/head";
 import Link from "next/link";
 import { motion, AnimatePresence, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface link {
   name: String;
@@ -74,6 +74,8 @@ function AnimOpacity({ children }: any) {
 }
 
 const Gallery = ({ userInfos, photos }: any) => {
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
+
   if (userInfos) {
     console.log(userInfos);
 
@@ -92,6 +94,14 @@ const Gallery = ({ userInfos, photos }: any) => {
             content="width=device-width, initial-scale=1.0"
           />
           <link rel="icon" href="/favicon.ico" />
+          {photos.map((photo: any) => (
+            <link
+              key={photo.id}
+              rel="preload"
+              href={`https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${userInfos.id}/gallery/${photo.image_url}`}
+              as="image"
+            />
+          ))}
         </Head>
         <div className={work_sans.className}>
           <Link
@@ -187,44 +197,77 @@ const Gallery = ({ userInfos, photos }: any) => {
                 <div className="columns-1 p-2 gap-2 sm:columns-2 xl:columns-3 2xl:columns-4">
                   {photos &&
                     photos.map((photo: any, index: number) => (
-                      <AnimTranslate>
-                        <div
-                          key={index}
-                          className="after:content group relative mb-2 block w-full after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight"
-                        >
-                          <Image
-                            placeholder="blur"
-                            blurDataURL={`/_next/image?url=https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${userInfos.id}/gallery/${photo.image_url}?width=100&height=100/&w=16&q=1`}
-                            alt="Next.js Conf photo"
-                            className="transform transition will-change-auto"
-                            style={{ transform: "translate3d(0, 0, 0)" }}
-                            src={
-                              "https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/" +
-                              userInfos.id +
-                              "/gallery/" +
-                              photo.image_url +
-                              "?width=500&height=600"
-                            }
-                            width={720}
-                            height={480}
-                            quality={50}
-                            sizes="(max-width: 640px) 100vw,
+                      <motion.div
+                        key={index}
+                        layoutId={photo.url}
+                        className="after:content group relative mb-2 block w-full after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight"
+                        onClick={() => setSelectedPhoto(photo.image_url)}
+                      >
+                        <Image
+                          placeholder="blur"
+                          blurDataURL={`/_next/image?url=https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${userInfos.id}/gallery/${photo.image_url}?width=100&height=100/&w=16&q=1`}
+                          alt="Next.js Conf photo"
+                          className="transform transition will-change-auto"
+                          style={{ transform: "translate3d(0, 0, 0)" }}
+                          src={
+                            "https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/" +
+                            userInfos.id +
+                            "/gallery/" +
+                            photo.image_url +
+                            "?width=500&height=600"
+                          }
+                          width={720}
+                          height={480}
+                          quality={50}
+                          sizes="(max-width: 640px) 100vw,
                   (max-width: 1280px) 50vw,
                   (max-width: 1536px) 33vw,
                   25vw"
-                          />
-                          {photo.title !== "" && photo.title !== null && (
-                            <p className="absolute bottom-3 right-2 bg-white text-black font-semibold px-4 py-2 rounded-lg">
-                              {photo.title}
-                            </p>
-                          )}
-                        </div>
-                      </AnimTranslate>
+                        />
+                        {photo.title !== "" && photo.title !== null && (
+                          <motion.p className="absolute bottom-3 right-2 bg-white text-black font-semibold px-4 py-2 rounded-lg">
+                            {photo.title}
+                          </motion.p>
+                        )}
+                      </motion.div>
                     ))}
                 </div>
               </main>
             )}
           </div>
+          <AnimatePresence>
+            {selectedPhoto && (
+              <motion.div
+                className="fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black backdrop-blur-sm bg-opacity-15 p-4 z-40"
+                initial={false}
+                layoutId={selectedPhoto}
+                onClick={(event) => {
+                  if (event.target === event.currentTarget) {
+                    setSelectedPhoto(null); // Ne ferme que si le clic est sur le backdrop
+                  }
+                }}
+              >
+                <Image
+                  placeholder="blur"
+                  blurDataURL={`/_next/image?url=https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${userInfos.id}/gallery/${selectedPhoto}?width=100&height=100/&w=16&q=1`}
+                  alt="Next.js Conf photo"
+                  className="transform w-fit h-fit max-h-full max-w-full transition will-change-auto object-contain"
+                  src={
+                    "https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/" +
+                    userInfos.id +
+                    "/gallery/" +
+                    selectedPhoto
+                  }
+                  width={1000}
+                  height={1000}
+                  quality={100}
+                />
+                {/* <motion.button onClick={() => setSelectedPhoto(null)}>
+                  X
+                </motion.button> */}
+              </motion.div>
+            )}
+          </AnimatePresence>
           <Footer />
         </div>
       </>
