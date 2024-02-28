@@ -4,9 +4,7 @@ import { uid } from "uid";
 import { CircleEllipsisIcon, ImageIcon } from "lucide-react";
 import { DataContext } from "@/utlis/userContext";
 import imageCompression from "browser-image-compression";
-import { toast } from "@/components/ui/use-toast";
 import { v4 as uuidv4 } from "uuid";
-import Image from "next/image";
 import { Button } from "../ui/button";
 
 export function AddBackground({ background }: any) {

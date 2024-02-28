@@ -6,7 +6,6 @@ import { DataContext } from "@/utlis/userContext";
 import imageCompression from "browser-image-compression";
 import { toast } from "@/components/ui/use-toast";
 import { v4 as uuidv4 } from "uuid";
-import { useRouter } from "next/router";
 import {
   Dialog,
   DialogClose,

@@ -1,19 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
-
-import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
 import { UserAuthForm } from "@/components/auth/signup/user-auth-form";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
 import Head from "next/head";
 import { Toaster } from "@/components/ui/toaster";
-
-// export const metadata: Metadata = {
-//   title: "Authentication",
-//   description: "Authentication forms built using the components.",
-// };
 
 export default function AuthenticationPage() {
   return (

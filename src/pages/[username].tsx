@@ -1,26 +1,7 @@
-import { useContext, useEffect, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { useRouter } from "next/router";
-import { Button } from "@/components/ui/button";
-import { ChevronRight, LogOut, Trash, User } from "lucide-react";
-import { DataContext } from "@/utlis/userContext";
-// import { toast } from "@/components/ui/use-toast";
-import Nav from "@/components/gallery/Nav";
-import ProfileSection from "@/components/gallery/ProfileSection";
+import { ChevronRight } from "lucide-react";
 import Footer from "@/components/gallery/Footer";
-import ImageDisplay from "@/components/gallery/ImageDisplay";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Toaster } from "@/components/ui/toaster";
 import Image from "next/image";
-import { Textarea } from "@/components/ui/textarea";
 import { Work_Sans } from "next/font/google";
 import Head from "next/head";
 import Link from "next/link";

@@ -1,17 +1,6 @@
 import { ChevronRight, ImageIcon } from "lucide-react";
-import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Separator } from "@radix-ui/react-separator";
 import Image from "next/image";
 import { useContext, useEffect, useState } from "react";
 import { AddAvatar } from "./AddAvatar";

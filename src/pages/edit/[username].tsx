@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import { Button } from "@/components/ui/button";
 import { LogOut, Trash, User } from "lucide-react";
 import { DataContext } from "@/utlis/userContext";
-// import { toast } from "@/components/ui/use-toast";
 import Nav from "@/components/gallery/Nav";
 import ProfileSection from "@/components/gallery/ProfileSection";
 import Footer from "@/components/gallery/Footer";
@@ -21,8 +20,6 @@ import {
 import { Toaster } from "@/components/ui/toaster";
 import { toast } from "@/components/ui/use-toast";
 import Link from "next/link";
-import ImageUpload from "@/components/gallery/AddPhotoSection";
-import Image from "next/image";
 import Head from "next/head";
 
 const Gallery = () => {

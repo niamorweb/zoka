@@ -2,16 +2,10 @@ import { motion, AnimatePresence, useInView } from "framer-motion";
 import { Inter, Work_Sans } from "next/font/google";
 import Link from "next/link";
 import * as React from "react";
-import { cn } from "@/lib/utils";
-import { Button, buttonVariants } from "@/components/ui/button";
 import Header from "@/components/Layout/Header";
 import Footer from "@/components/Layout/Footer";
-import DemoProfile from "@/components/home/DemoProfile";
-import DashboardFeature from "@/components/home/DashboardFeatures";
 import Head from "next/head";
 import { DataContext } from "@/utlis/userContext";
-import DonationsSection from "@/components/home/DonationsSection";
-import { Faq } from "@/components/home/Faq/Faq";
 import Image from "next/image";
 
 const inter = Inter({ subsets: ["latin"] });
