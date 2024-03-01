@@ -11,8 +11,11 @@ import { Link1Icon } from "@radix-ui/react-icons";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import * as React from "react";
 
 export default function Links({ inputLinks, setInputLinks, updateInfos }: any) {
+  const [open, setOpen] = React.useState(false);
+
   const handleChange = (index: any, e: any) => {
     const { name, value } = e.target;
     const newUrls = [...inputLinks];
@@ -49,11 +52,9 @@ export default function Links({ inputLinks, setInputLinks, updateInfos }: any) {
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button>
-          <Link1Icon className="cursor-pointer w-8 h-8" />
-        </button>
+        <Link1Icon className="cursor-pointer duration-150 hover:scale-105 w-8 h-8" />
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
@@ -127,7 +128,10 @@ export default function Links({ inputLinks, setInputLinks, updateInfos }: any) {
         <DialogFooter>
           <Button
             type="submit"
-            onClick={() => updateInfos()}
+            onClick={() => {
+              updateInfos();
+              setOpen(false);
+            }}
             disabled={!isFormValid()}
           >
             Save changes

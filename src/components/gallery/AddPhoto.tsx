@@ -25,6 +25,7 @@ export function AddPhoto({ updateInfos }: any) {
   const [title, setTitle] = React.useState<string>("");
   const { data, reloadData } = React.useContext(DataContext);
   const [isDisabled, setIsDisabled] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -73,7 +74,6 @@ export function AddPhoto({ updateInfos }: any) {
           "https://api.cloudinary.com/v1_1/dfez6bupb/image/upload",
           formData
         );
-        console.log(response.data);
 
         const secure_url = response.data.secure_url;
         if (secure_url) {
@@ -83,13 +83,10 @@ export function AddPhoto({ updateInfos }: any) {
           });
           setFileToUpload(null);
           setTitle("");
+          setOpen(false);
         }
-      } catch (error) {
-        console.error(error);
-      }
-    } catch (error) {
-      console.error("Image compression or upload error:", error);
-    }
+      } catch (error) {}
+    } catch (error) {}
     updateInfos();
   };
 
@@ -103,18 +100,15 @@ export function AddPhoto({ updateInfos }: any) {
     ]);
 
     if (error) {
-      console.error("Error creating item:", error.message);
       return;
     }
-
-    console.log("New item created:", newItem);
   };
 
   return (
     <>
-      <Dialog>
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <ImageIcon className="cursor-pointer w-8 h-8" />
+          <ImageIcon className="cursor-pointer duration-150 hover:scale-105 w-8 h-8" />
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>

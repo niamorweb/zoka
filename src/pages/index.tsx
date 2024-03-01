@@ -36,6 +36,8 @@ export default function Home({}: any) {
     React.useState(0);
 
   React.useEffect(() => {
+    console.log(process.env.CLOUDINARY_CLOUD_NAME);
+
     const interval = setInterval(() => {
       setCurrentIndexTestimonial((prevIndex: any) =>
         prevIndex === dataTestimonials.length - 1 ? 0 : prevIndex + 1
