@@ -167,8 +167,9 @@ const Gallery = ({ userInfos, photos }: any) => {
                 <div className="columns-1 p-2 gap-2 sm:columns-2 xl:columns-3 2xl:columns-4">
                   {photos &&
                     photos.map((photo: any, index: number) => (
-                      // <AnimTranslate key={index}>
+                      /// <AnimTranslate key={index}>
                       <motion.div
+                        key={index}
                         layoutId={photo.url}
                         className="after:content cursor-zoom-in overflow-hidden group relative mb-2 block w-full after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight"
                         onClick={() => setSelectedPhoto(photo.image_url)}
