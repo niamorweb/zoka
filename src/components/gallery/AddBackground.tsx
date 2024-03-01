@@ -6,93 +6,83 @@ import { DataContext } from "@/utlis/userContext";
 import imageCompression from "browser-image-compression";
 import { v4 as uuidv4 } from "uuid";
 import { Button } from "../ui/button";
+import axios from "axios";
 
 export function AddBackground({ background }: any) {
   const { reloadData } = React.useContext(DataContext);
   const { data } = React.useContext(DataContext);
   const hiddenFileInput = React.useRef<HTMLInputElement>(null);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
-      uploadPhoto(event.target.files[0]);
+      const files = event.target.files;
+      if (files && files.length > 0) {
+        const file = files[0];
+
+        const options = {
+          maxSizeMB: 0.7,
+          maxWidthOrHeight: 2000,
+          useWebWorker: true,
+        };
+
+        try {
+          const compressedFile = await imageCompression(file, options);
+
+          const compressedFileAsFile = new File([compressedFile], file.name, {
+            type: compressedFile.type,
+          });
+
+          if (data.userData.background) {
+            await deletePreviousPhoto();
+          }
+
+          const formData = new FormData();
+          formData.append("file", compressedFileAsFile);
+          formData.append("upload_preset", "wul4xihj");
+          formData.append(
+            "folder",
+            `kota/users_photos/${data.userData.id}/background`
+          );
+
+          try {
+            const response = await axios.post(
+              "https://api.cloudinary.com/v1_1/dfez6bupb/image/upload",
+              formData
+            );
+
+            const secure_url = response.data.secure_url;
+            if (secure_url) {
+              await supabase
+                .from("users")
+                .update({ background: secure_url })
+                .eq("id", data.userData.id);
+            }
+          } catch (error) {}
+        } catch (error) {}
+        reloadData();
+      }
+    }
+  };
+
+  const deletePreviousPhoto = async () => {
+    const regex = /\/kota\/users_photos\/[^\/]+\/background\/[^\/]+/;
+    const match = data.userData.background.match(regex);
+
+    if (match) {
+      const extractedPart = match[0];
+      const cheminSansExtension = extractedPart.replace(/^\/(.+)\..+$/, "$1");
+
+      try {
+        const publicId = cheminSansExtension;
+        const response = await axios.delete("/api/destroy-image", {
+          data: { publicId },
+        });
+      } catch (error) {}
     }
   };
 
   const handleClick = () => {
     hiddenFileInput.current && hiddenFileInput.current.click();
-  };
-
-  const uploadPhoto = async (image: File) => {
-    if (!data.userData.id) {
-      return;
-    }
-
-    const { data: existingBackground, error: existingError } =
-      await supabase.storage
-        .from("users_photos")
-        .list(`${data.userData.id}/background`);
-
-    if (existingBackground && existingBackground.length >= 1) {
-      const existingBackgroundId = existingBackground[0].name;
-
-      await supabase.storage
-        .from(`users_photos`)
-        .remove([`${data.userData.id}/background/${existingBackgroundId}`]); // Utiliser l'ID pour supprimer le fichier
-    }
-
-    const fileName = image?.name;
-    const re = /(?:\.([^.]+))?$/;
-
-    if (fileName) {
-      console.log(fileName);
-
-      const match = re.exec(fileName);
-      const fileExtension: string | null = match && match[1];
-      const uniq_id: string = uid();
-
-      try {
-        if (image.size > 0.9 * 1024 * 1024) {
-          const options = {
-            maxSizeMB: 0.9,
-            useWebWorker: true,
-          };
-          const compressedFile = await imageCompression(image, options);
-          const { data: backgroundUpload, error } = await supabase.storage
-            .from(`users_photos/${data.userData.id}/background`)
-            .upload(`${uuidv4()}.${fileExtension}`, compressedFile);
-
-          if (backgroundUpload && backgroundUpload.path)
-            updateUserBackground(backgroundUpload.path);
-        } else {
-          const { data: backgroundUpload, error } = await supabase.storage
-            .from(`users_photos/${data.userData.id}/background`)
-            .upload(
-              `${data.userData.id}_${Date.now()}_${uniq_id}.${fileExtension}`,
-              image
-            );
-
-          if (backgroundUpload && backgroundUpload.path)
-            updateUserBackground(backgroundUpload.path);
-        }
-        reloadData();
-      } catch (error) {
-        // console.error(
-        //   "Erreur lors du téléchargement de la photo background :",
-        //   error
-        // );
-      }
-    }
-  };
-
-  const updateUserBackground = async (imageUrl: string) => {
-    const { data: updatedUser, error } = await supabase
-      .from("users")
-      .update({ background: imageUrl })
-      .eq("id", data.userData.id);
-
-    if (error) {
-      return;
-    }
   };
 
   return (

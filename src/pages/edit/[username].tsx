@@ -21,6 +21,14 @@ import { Toaster } from "@/components/ui/toaster";
 import { toast } from "@/components/ui/use-toast";
 import Link from "next/link";
 import Head from "next/head";
+import axios from "axios";
+import cloudinary from "cloudinary";
+
+// cloudinary.config({
+//   cloud_name: process.env.REACT_APP_CLOUD_NAME,
+//   api_key: "739952797731475",
+//   api_secret: process.env.REACT_APP_API_SECRET,
+// });
 
 const Gallery = () => {
   const router = useRouter();
@@ -46,18 +54,38 @@ const Gallery = () => {
     }
   }, [data]);
 
-  const deletePhoto = async (photoName: string) => {
-    console.log("ddd = ", photoName);
+  const deletePhoto = async (url: any) => {
+    const regex = /\/kota\/users_photos\/[^\/]+\/gallery\/[^\/]+/;
+    const match = url.match(regex);
 
-    const { data: userData, error } = await supabase.storage
-      .from("users_photos")
-      .remove([`${data.userData.id}/gallery/${photoName}`]);
-    const { error: deleteError } = await supabase
-      .from("items")
-      .delete()
-      .eq("image_url", photoName);
+    if (match) {
+      const extractedPart = match[0];
+      const cheminSansExtension = extractedPart.replace(/^\/(.+)\..+$/, "$1");
 
-    reloadData();
+      try {
+        const publicId = cheminSansExtension;
+        const response = await axios.delete("/api/destroy-image", {
+          data: { publicId },
+        });
+        if (response.data.success === true) {
+          const { error: deleteError } = await supabase
+            .from("items")
+            .delete()
+            .eq("image_url", url);
+
+          reloadData();
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Error deleting image",
+          });
+        }
+      } catch (error) {
+        console.error("Erreur lors de la suppression de l'image :", error);
+      }
+    } else {
+      console.log("Aucune correspondance trouvée.");
+    }
   };
 
   const logout = async () => {
@@ -177,6 +205,7 @@ const Gallery = () => {
                   setInputDescription={setInputDescription}
                   inputDescription={inputDescription}
                   setInputName={setInputName}
+                  updateInfos={updateInfos}
                 />
                 <div className="columns-1 p-2 gap-2 sm:columns-2 xl:columns-3 2xl:columns-4">
                   {items &&

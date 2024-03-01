@@ -7,6 +7,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import useDeviceType from "@/hooks/useDeviceType";
 
 interface link {
   name: String;
@@ -36,43 +37,25 @@ const fetchPhotos = async (userId: string) => {
   return dataItems;
 };
 
-function AnimTranslate({ children }: any) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
-
-  return (
-    <motion.section
-      ref={ref}
-      initial={{ x: -200 }} // Valeur initiale à 0
-      animate={{ x: isInView ? 0 : -200 }} // Passe à 1 si isInView est vrai, sinon passe à 0
-      transition={{ duration: 0.4, ease: "easeInOut" }} // Durée de l'animation et type d'animation
-    >
-      {children}
-    </motion.section>
-  );
-}
-
-function AnimOpacity({ children }: any) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
-
-  return (
-    <section ref={ref}>
-      <div
-        style={{
-          opacity: isInView ? 1 : 0,
-          transition: "all 0.2s cubic-bezier(0.17, 0.55, 0.55, 1) 0.2s",
-        }}
-      >
-        {children}
-      </div>
-    </section>
-  );
-}
-
 const Gallery = ({ userInfos, photos }: any) => {
   const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const deviceType = useDeviceType();
 
+  // function AnimTranslate({ children }: any) {
+  //   const ref = useRef(null);
+  //   const isInView = useInView(ref, { once: true });
+
+  //   return (
+  //     <motion.section
+  //       ref={ref}
+  //       initial={deviceType === "mobile" ? { x: -200 } : { x: 0 }} // Valeur initiale à 0
+  //       animate={{ x: isInView && 0 }} // Passe à 1 si isInView est vrai, sinon passe à 0
+  //       transition={{ duration: 0.4, ease: "easeInOut" }} // Durée de l'animation et type d'animation
+  //     >
+  //       {children}
+  //     </motion.section>
+  //   );
+  // }
   if (userInfos) {
     return (
       <>
@@ -93,7 +76,7 @@ const Gallery = ({ userInfos, photos }: any) => {
             <link
               key={photo.id}
               rel="preload"
-              href={`https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${userInfos.id}/gallery/${photo.image_url}`}
+              href={photo.image_url}
               as="image"
             />
           ))}
@@ -124,9 +107,9 @@ const Gallery = ({ userInfos, photos }: any) => {
                   {userInfos.background ? (
                     <Image
                       className="absolute object-center max-h-[1000px] h-full w-screen top-0 left-0 right-0 bottom-0 object-cover -z-20"
-                      src={`https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${userInfos.id}/background/${userInfos.background}`}
-                      width={1600}
-                      height={1000}
+                      src={userInfos.background}
+                      width={deviceType === "mobile" ? 800 : 1600}
+                      height={deviceType === "mobile" ? 600 : 1000}
                       alt=""
                     />
                   ) : (
@@ -137,17 +120,17 @@ const Gallery = ({ userInfos, photos }: any) => {
                     {userInfos.avatar ? (
                       <Image
                         className={`w-24 lg:w-44 duration-150 h-24 lg:h-44 mb-4 object-cover rounded-full border-greenDark border-2`}
-                        src={`https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${userInfos.id}/avatar/${userInfos.avatar}`}
-                        width={200}
-                        height={200}
+                        src={userInfos.avatar}
+                        width={deviceType === "mobile" ? 100 : 200}
+                        height={deviceType === "mobile" ? 100 : 200}
                         alt=""
                       />
                     ) : (
                       <Image
                         className={`w-24 lg:w-44 cursor-pointer  duration-150  h-24 lg:h-44 mb-4 object-cover rounded-full border-greenDark border-2`}
                         src="/logo-large.jpg"
-                        width={200}
-                        height={200}
+                        width={deviceType === "mobile" ? 100 : 200}
+                        height={deviceType === "mobile" ? 100 : 200}
                         alt=""
                       />
                     )}
@@ -184,42 +167,33 @@ const Gallery = ({ userInfos, photos }: any) => {
                 <div className="columns-1 p-2 gap-2 sm:columns-2 xl:columns-3 2xl:columns-4">
                   {photos &&
                     photos.map((photo: any, index: number) => (
-                      <AnimTranslate
-                          key={index}
+                      // <AnimTranslate key={index}>
+                      <motion.div
+                        layoutId={photo.url}
+                        className="after:content cursor-zoom-in overflow-hidden group relative mb-2 block w-full after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight"
+                        onClick={() => setSelectedPhoto(photo.image_url)}
                       >
-                        <motion.div
-                          layoutId={photo.url}
-                          className="after:content overflow-hidden group relative mb-2 block w-full after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight"
-                          onClick={() => setSelectedPhoto(photo.image_url)}
-                        >
-                          <Image
-                            placeholder="blur"
-                            blurDataURL={`/_next/image?url=https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${userInfos.id}/gallery/${photo.image_url}?width=100&height=100/&w=16&q=1`}
-                            alt="Next.js Conf photo"
-                            className="transform transition will-change-auto"
-                            style={{ transform: "translate3d(0, 0, 0)" }}
-                            src={
-                              "https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/" +
-                              userInfos.id +
-                              "/gallery/" +
-                              photo.image_url +
-                              "?width=500&height=600"
-                            }
-                            width={720}
-                            height={480}
-                            quality={50}
-                            sizes="(max-width: 640px) 100vw,
+                        <Image
+                          placeholder="blur"
+                          blurDataURL={`/_next/image?url=${photo.image_url}?width=100&height=100/&w=16&q=1`}
+                          alt="Next.js Conf photo"
+                          className="transform transition will-change-auto"
+                          style={{ transform: "translate3d(0, 0, 0)" }}
+                          src={photo.image_url}
+                          width={deviceType === "mobile" ? 500 : 700}
+                          height={deviceType === "mobile" ? 700 : 1000}
+                          sizes="(max-width: 640px) 100vw,
                   (max-width: 1280px) 50vw,
                   (max-width: 1536px) 33vw,
                   25vw"
-                          />
-                          {photo.title !== "" && photo.title !== null && (
-                            <motion.p className="absolute bottom-3 right-2 bg-white text-black font-semibold px-4 py-2 rounded-lg">
-                              {photo.title}
-                            </motion.p>
-                          )}
-                        </motion.div>
-                      </AnimTranslate>
+                        />
+                        {photo.title !== "" && photo.title !== null && (
+                          <motion.p className="absolute bottom-3 right-2 bg-white text-black font-semibold px-4 py-2 rounded-lg">
+                            {photo.title}
+                          </motion.p>
+                        )}
+                      </motion.div>
+                      // </AnimTranslate>
                     ))}
                 </div>
               </main>
@@ -239,17 +213,12 @@ const Gallery = ({ userInfos, photos }: any) => {
               >
                 <Image
                   placeholder="blur"
-                  blurDataURL={`/_next/image?url=https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${userInfos.id}/gallery/${selectedPhoto}?width=100&height=100/&w=16&q=1`}
+                  blurDataURL={`/_next/image?url=${selectedPhoto}?width=100&height=100/&w=16&q=1`}
                   alt="Next.js Conf photo"
                   className="transform w-fit h-fit max-h-full max-w-full transition will-change-auto object-contain"
-                  src={
-                    "https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/" +
-                    userInfos.id +
-                    "/gallery/" +
-                    selectedPhoto
-                  }
-                  width={1000}
-                  height={1000}
+                  src={selectedPhoto}
+                  width={deviceType === "mobile" ? 700 : 1000}
+                  height={deviceType === "mobile" ? 700 : 1000}
                   quality={100}
                 />
                 {/* <motion.button onClick={() => setSelectedPhoto(null)}>

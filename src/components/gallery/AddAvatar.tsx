@@ -5,15 +5,78 @@ import { DataContext } from "@/utlis/userContext";
 import imageCompression from "browser-image-compression";
 import { v4 as uuidv4 } from "uuid";
 import Image from "next/image";
+import axios from "axios";
 
-export function AddAvatar() {
+export function AddAvatar({}) {
   const { data, reloadData } = React.useContext(DataContext);
+
   const hiddenFileInput = React.useRef<HTMLInputElement>(null);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
-      const files = Array.from(event.target.files);
-      files.forEach((file) => uploadPhoto(file));
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+
+      const options = {
+        maxSizeMB: 0.1,
+        maxWidthOrHeight: 200,
+        useWebWorker: true,
+      };
+
+      try {
+        const compressedFile = await imageCompression(file, options);
+
+        const compressedFileAsFile = new File([compressedFile], file.name, {
+          type: compressedFile.type,
+        });
+
+        if (data.userData.avatar) {
+          await deletePreviousPhoto();
+        }
+
+        const formData = new FormData();
+        formData.append("file", compressedFileAsFile);
+        formData.append("upload_preset", "wul4xihj");
+        formData.append(
+          "folder",
+          `kota/users_photos/${data.userData.id}/avatar`
+        );
+
+        try {
+          const response = await axios.post(
+            "https://api.cloudinary.com/v1_1/dfez6bupb/image/upload",
+            formData
+          );
+
+          const secure_url = response.data.secure_url;
+          if (secure_url) {
+            await supabase
+              .from("users")
+              .update({ avatar: secure_url })
+              .eq("id", data.userData.id);
+          }
+        } catch (error) {}
+      } catch (error) {}
+      reloadData();
+    }
+  };
+
+  const deletePreviousPhoto = async () => {
+    const regex = /\/kota\/users_photos\/[^\/]+\/avatar\/[^\/]+/;
+    const match = data.userData.avatar.match(regex);
+
+    if (match) {
+      const extractedPart = match[0];
+      const cheminSansExtension = extractedPart.replace(/^\/(.+)\..+$/, "$1");
+
+      try {
+        const publicId = cheminSansExtension;
+        const response = await axios.delete("/api/destroy-image", {
+          data: { publicId },
+        });
+      } catch (error) {}
     }
   };
 
@@ -21,80 +84,12 @@ export function AddAvatar() {
     hiddenFileInput.current && hiddenFileInput.current.click();
   };
 
-  const uploadPhoto = async (image: File) => {
-    if (!data.userData.id) {
-      return;
-    }
-
-    const { data: existingAvatar, error: existingError } =
-      await supabase.storage
-        .from("users_photos")
-        .list(`${data.userData.id}/avatar`);
-
-    if (existingAvatar && existingAvatar.length >= 1) {
-      const existingAvatarId = existingAvatar[0].name;
-
-      await supabase.storage
-        .from(`users_photos`)
-        .remove([`${data.userData.id}/avatar/${existingAvatarId}`]); // Utiliser l'ID pour supprimer le fichier
-    }
-
-    const fileName = image?.name;
-    const re = /(?:\.([^.]+))?$/;
-
-    if (fileName) {
-      const match = re.exec(fileName);
-      const fileExtension: string | null = match && match[1];
-      const uniq_id: string = uid();
-
-      try {
-        if (image.size > 0.9 * 1024 * 1024) {
-          const options = {
-            maxSizeMB: 0.9,
-            useWebWorker: true,
-          };
-          const compressedFile = await imageCompression(image, options);
-          const { data: avatarUpload, error } = await supabase.storage
-            .from(`users_photos/${data.userData.id}/avatar`)
-            .upload(`${uuidv4()}.${fileExtension}`, compressedFile);
-
-          if (avatarUpload && avatarUpload.path) {
-            updateUserAvatar(avatarUpload.path);
-          }
-        } else {
-          const { data: avatarUpload, error } = await supabase.storage
-            .from(`users_photos/${data.userData.id}/avatar`)
-            .upload(
-              `${data.userData.id}_${Date.now()}_${uniq_id}.${fileExtension}`,
-              image
-            );
-          if (avatarUpload && avatarUpload.path) {
-            updateUserAvatar(avatarUpload.path);
-          }
-        }
-
-        reloadData();
-      } catch (error) {}
-    }
-  };
-
-  const updateUserAvatar = async (imageUrl: string) => {
-    const { data: updatedUser, error } = await supabase
-      .from("users")
-      .update({ avatar: imageUrl })
-      .eq("id", data.userData.id);
-
-    if (error) {
-      return;
-    }
-  };
-
   return (
     <>
       <input
         type="file"
         ref={hiddenFileInput}
-        onChange={handleChange}
+        onChange={handleFileChange}
         accept="image/*"
         style={{ display: "none" }}
       />
@@ -102,7 +97,7 @@ export function AddAvatar() {
         <Image
           onClick={() => handleClick()}
           className="w-24 lg:w-44 cursor-pointer  duration-150  h-24 lg:h-44 mb-4 object-cover rounded-full border-black border-2 hover:border-4"
-          src={`https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${data.userData.id}/avatar/${data.userData.avatar}`}
+          src={data.userData.avatar}
           width={100}
           height={100}
           alt=""

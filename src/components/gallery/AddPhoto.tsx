@@ -18,6 +18,7 @@ import { Button } from "../ui/button";
 import { DialogFooter, DialogHeader } from "../ui/dialog";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import axios from "axios";
 
 export function AddPhoto({ updateInfos }: any) {
   const [fileToUpload, setFileToUpload] = React.useState<File | null>(null);
@@ -41,75 +42,53 @@ export function AddPhoto({ updateInfos }: any) {
       title: "Uploading",
     });
 
-    const { data: photos, error } = await supabase.storage
-      .from("users_photos")
-      .list(`${data.userData.id}/gallery`);
+    const options = {
+      maxSizeMB: 0.4, // maximum size of the compressed image, in MB
+      maxWidthOrHeight: 1000, // maximum width or height of the compressed image
+      useWebWorker: true, // use web worker for parallel compression
+    };
 
-    if (photos && photos.length >= 15) {
-      toast({
-        variant: "destructive",
-        title: "The maximum image limit has been reached (15 images).",
-      });
-      return;
-    }
+    try {
+      const compressedFile = await imageCompression(fileToUpload, options);
 
-    const fileName = fileToUpload?.name;
-
-    const re = /(?:\.([^.]+))?$/;
-
-    if (fileName) {
-      const match = re.exec(fileName);
-      const fileExtension: string | null = match && match[1];
-
-      const uniq_id: string = uid();
-
-      if (fileToUpload) {
-        if (fileToUpload.size > 2 * 1024 * 1024) {
-          try {
-            const options = {
-              maxSizeMB: 2,
-              useWebWorker: true,
-            };
-            const compressedFile = await imageCompression(
-              fileToUpload,
-              options
-            );
-            const { data: uploadData, error } = await supabase.storage
-              .from(`users_photos/${data.userData.id}/gallery`)
-              .upload(`${uuidv4()}.${fileExtension}`, compressedFile);
-            if (uploadData && uploadData.path) {
-              await createItem(uploadData.path);
-              toast({
-                title: "Image uploaded !",
-              });
-              setFileToUpload(null);
-              setTitle("");
-            } else {
-              console.error("Error uploading image:", error);
-            }
-          } catch (error) {
-            console.error("Error uploading compressed image:", error);
-          }
-        } else {
-          const { data: uploadData, error } = await supabase.storage
-            .from(`users_photos/${data.userData.id}/gallery`)
-            .upload(
-              `${data.userData.id}_${Date.now()}_${uniq_id}.${fileExtension}`,
-              fileToUpload
-            );
-
-          if (uploadData && uploadData.path) {
-            await createItem(uploadData.path);
-            toast({
-              title: "Image uploaded !",
-            });
-            setFileToUpload(null);
-            setTitle("");
-          } else {
-            console.error("Error uploading image:", error);
-          }
+      // Créer un nouvel objet File à partir du blob compressé
+      const compressedFileAsFile = new File(
+        [compressedFile],
+        fileToUpload.name,
+        {
+          type: compressedFile.type,
         }
+      );
+
+      const formData = new FormData();
+      formData.append("file", compressedFileAsFile);
+      formData.append("upload_preset", "wul4xihj");
+      formData.append(
+        "folder",
+        `kota/users_photos/${data.userData.id}/gallery`
+      ); // Spécifiez le dossier et le sous-dossier ici
+
+      try {
+        const response = await axios.post(
+          "https://api.cloudinary.com/v1_1/dfez6bupb/image/upload",
+          formData
+        );
+        console.log(response.data);
+
+        const secure_url = response.data.secure_url;
+        if (secure_url) {
+          await createItem(secure_url);
+          toast({
+            title: "Image uploaded !",
+          });
+          setFileToUpload(null);
+          setTitle("");
+        }
+      } catch (error) {
+        console.error(error);
       }
+    } catch (error) {
+      console.error("Image compression or upload error:", error);
     }
     updateInfos();
   };

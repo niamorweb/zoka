@@ -83,20 +83,13 @@ export default function ImageDisplay({ data, photo, index, deletePhoto }: any) {
         </Dialog>
         <Image
           placeholder="blur"
-          blurDataURL={`/_next/image?url=https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${data.userData.id}/gallery/${photo.image_url}?width=100&height=100/&w=16&q=1`}
+          blurDataURL={`/_next/image?url=${photo.image_url}?width=100&height=100/&w=16&q=1`}
           alt="Next.js Conf photo"
           className="transform w-full h-full object-cover transition will-change-auto"
           style={{ transform: "translate3d(0, 0, 0)" }}
-          src={
-            "https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/" +
-            data.userData.id +
-            "/gallery/" +
-            photo.image_url +
-            "?width=100&height=100"
-          }
-          width={200}
-          height={200}
-          quality={20}
+          src={photo.image_url}
+          width={1000}
+          height={1000}
           sizes="(max-width: 640px) 100vw,
                   (max-width: 1280px) 50vw,
                   (max-width: 1536px) 33vw,

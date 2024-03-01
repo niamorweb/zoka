@@ -14,6 +14,7 @@ export default function ProfileSection({
   setInputDescription,
   inputDescription,
   setInputName,
+  updateInfos,
 }: any) {
   const { data, reloadData } = useContext(DataContext);
 
@@ -27,9 +28,9 @@ export default function ProfileSection({
       {data && data.userData && data.userData.background ? (
         <Image
           className="absolute h-full w-full top-0 left-0 right-0 bottom-0 object-cover -z-20"
-          src={`https://izcvdmliijbnyeskngqj.supabase.co/storage/v1/object/public/users_photos/${data.userData.id}/background/${data.userData.background}`}
-          width={600}
-          height={600}
+          src={data.userData.background}
+          width={2000}
+          height={1400}
           alt=""
         />
       ) : (

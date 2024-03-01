@@ -107,6 +107,7 @@ export default function Home({}: any) {
         className={`min-h-screen bg-[url('/images/home/noise.png')]  bg-greenDark text-greenLight relative pt-5 px-5 lg:px-10 ${work_sans.className}`}
       >
         <Header />
+
         <Section>
           <section className="max-w-[1400px] mx-auto flex flex-col-reverse lg:flex-row items-center gap-3 lg:gap-10 py-16">
             <div className="lg:w-1/2 flex flex-col gap-4 items-start">
