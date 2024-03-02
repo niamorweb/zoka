@@ -27,6 +27,11 @@ export function AddPhoto({ updateInfos }: any) {
   const [isDisabled, setIsDisabled] = React.useState(false);
   const [open, setOpen] = React.useState(false);
 
+  React.useEffect(() => {
+    console.log(data.photoData);
+    console.log(data.photoData.length);
+  }, []);
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
@@ -39,6 +44,10 @@ export function AddPhoto({ updateInfos }: any) {
       return;
     }
 
+    if (data.photoData.length >= 15) {
+      toast({ variant: "destructive", title: "Maximum 15 images" });
+      return;
+    }
     toast({
       title: "Uploading",
     });
@@ -112,15 +121,14 @@ export function AddPhoto({ updateInfos }: any) {
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Upload image</DialogTitle>
-            <DialogDescription>
-              {isDisabled && (
-                <p className="text-red-600 ">
-                  Error : Limit of 15 images exceeded
-                </p>
-              )}
-            </DialogDescription>
+            <DialogTitle>Upload image ( Maximum 15 photos )</DialogTitle>
+            {data.photoData.length >= 15 && (
+              <DialogDescription>
+                <p className="text-red-500">Limit of images uploaded reached</p>
+              </DialogDescription>
+            )}
           </DialogHeader>
+
           <div className="flex flex-col gap-3">
             <Label htmlFor="title">Title ( will be hidden if empty )</Label>
             <Input
@@ -142,7 +150,9 @@ export function AddPhoto({ updateInfos }: any) {
           <DialogFooter>
             <Button
               onClick={handleUploadPhoto}
-              disabled={!fileToUpload || isDisabled}
+              disabled={
+                !fileToUpload || isDisabled || data.photoData.length >= 15
+              }
               type="submit"
             >
               Upload

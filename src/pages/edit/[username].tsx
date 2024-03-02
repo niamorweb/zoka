@@ -80,11 +80,8 @@ const Gallery = () => {
             title: "Error deleting image",
           });
         }
-      } catch (error) {
-        console.error("Erreur lors de la suppression de l'image :", error);
-      }
+      } catch (error) {}
     } else {
-      console.log("Aucune correspondance trouvée.");
     }
   };
 

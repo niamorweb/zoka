@@ -5,6 +5,8 @@ import { wrap } from "popmotion";
 import Image from "next/image";
 import useDeviceType from "@/hooks/useDeviceType";
 import { useLockBody } from "@/hooks/use-lock-body";
+import { Button } from "../ui/button";
+import { Cross1Icon } from "@radix-ui/react-icons";
 
 const swipeConfidenceThreshold = 10000;
 const swipePower = (offset: number, velocity: number) => {
@@ -30,7 +32,7 @@ export default function Carousel({
   return (
     <>
       <div className="flex fixed z-50 left-1/2 -translate-x-1/2 bottom-4 gap-3">
-        {photos.map((photo: any, index: number) => (
+        {/* {photos.map((photo: any, index: number) => (
           <Image
             key={index}
             onClick={() => setSelectedPhoto(index)}
@@ -43,8 +45,15 @@ export default function Carousel({
             height={50}
             alt=""
           />
-        ))}
+        ))} */}
       </div>
+      <Button
+        onClick={() => setSelectedPhoto(null)}
+        variant="outline"
+        className="fixed top-6 right-2 z-50"
+      >
+        <Cross1Icon />
+      </Button>
       <AnimatePresence initial={false}>
         <motion.div
           className="fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black backdrop-blur-sm bg-opacity-35 p-2 lg:p-4 z-40"
@@ -66,18 +75,6 @@ export default function Carousel({
             transition={{
               x: { type: "spring", stiffness: 300, damping: 30 },
               opacity: { duration: 0.2 },
-            }}
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={1}
-            onDragEnd={(e, { offset, velocity }) => {
-              const swipe = swipePower(offset.x, velocity.x);
-
-              if (swipe < -swipeConfidenceThreshold) {
-                paginate(1);
-              } else if (swipe > swipeConfidenceThreshold) {
-                paginate(-1);
-              }
             }}
           ></motion.img>
         </motion.div>

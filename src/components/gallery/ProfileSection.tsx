@@ -59,7 +59,7 @@ export default function ProfileSection({
         />
 
         {data && data.userData && data.userData.links && (
-          <div className="flex gap-4 items-center mt-4">
+          <div className="flex flex-col items-start md:flex-row md:flex-wrap gap-4 md:items-centers mt-4">
             {data.userData.links.map((link: any, index: any) => (
               <div
                 key={index}

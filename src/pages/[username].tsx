@@ -8,7 +8,7 @@ import Link from "next/link";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import useDeviceType from "@/hooks/useDeviceType";
-import Carousel from "@/components/gallery/Carousel";
+import CarouselSection from "@/components/gallery/Carousel";
 
 interface link {
   name: String;
@@ -204,7 +204,7 @@ const Gallery = ({ userInfos, photos }: any) => {
           </div>
           <AnimatePresence>
             {selectedPhoto !== null && (
-              <Carousel
+              <CarouselSection
                 photos={photos}
                 selectedPhoto={selectedPhoto}
                 setSelectedPhoto={setSelectedPhoto}
