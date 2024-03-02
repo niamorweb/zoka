@@ -31,11 +31,7 @@ export default function ImageDisplay({ data, photo, index, deletePhoto }: any) {
         .from("items")
         .update({ title })
         .eq("id", photo.id);
-
-      console.log("Item updated successfully:", updatedItem);
-    } catch (error) {
-      console.error("Error updating item:", error);
-    }
+    } catch (error) {}
   };
 
   return (
@@ -54,10 +50,7 @@ export default function ImageDisplay({ data, photo, index, deletePhoto }: any) {
             <DialogHeader>
               <DialogTitle>Edit image</DialogTitle>
             </DialogHeader>
-            <div
-              onClick={() => console.log(photo.title)}
-              className="flex flex-col gap-3"
-            >
+            <div className="flex flex-col gap-3">
               <Label htmlFor="title">Title ( will be hidden if empty )</Label>
               <Input
                 name="title"

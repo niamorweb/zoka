@@ -74,9 +74,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         router.push(`/`);
       } else {
         reloadData();
-        console.error(
-          "L'inscription a réussi, mais aucune session n'a été renvoyée."
-        );
       }
     }
   }

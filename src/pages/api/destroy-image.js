@@ -9,7 +9,6 @@ cloudinary.config({
 
 export default async function handler(req, res) {
   const { publicId } = req.body;
-  console.log("public id ", publicId);
 
   try {
     // Utilisation de l'API Cloudinary pour détruire l'image
@@ -20,7 +19,6 @@ export default async function handler(req, res) {
       response,
     });
   } catch (error) {
-    console.error("Error destroying image:", error);
     res.status(500).json({
       success: false,
       message: "Error destroying image",

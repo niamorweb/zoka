@@ -36,7 +36,6 @@ export default function Home({}: any) {
     React.useState(0);
 
   React.useEffect(() => {
-
     const interval = setInterval(() => {
       setCurrentIndexTestimonial((prevIndex: any) =>
         prevIndex === dataTestimonials.length - 1 ? 0 : prevIndex + 1
@@ -244,6 +243,12 @@ export default function Home({}: any) {
           >
             <h3 className="uppercase">Support</h3>
             <h2 className="text-4xl font-semibold">Support me here</h2>
+            <p>
+              Kuta is totally free, I like to give the best experience possible
+              to every users. <br />
+              But if you really enjoy Kuta, you can still donate to me, it could
+              help me improve Kuta
+            </p>
             <a
               href="https://www.buymeacoffee.com/niamorweb"
               target="_blank"

@@ -8,6 +8,7 @@ import Link from "next/link";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import useDeviceType from "@/hooks/useDeviceType";
+import Carousel from "@/components/gallery/Carousel";
 
 interface link {
   name: String;
@@ -38,7 +39,7 @@ const fetchPhotos = async (userId: string) => {
 };
 
 const Gallery = ({ userInfos, photos }: any) => {
-  const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const [selectedPhoto, setSelectedPhoto] = useState<Number | null>(null);
   const deviceType = useDeviceType();
 
   // function AnimTranslate({ children }: any) {
@@ -60,13 +61,13 @@ const Gallery = ({ userInfos, photos }: any) => {
     return (
       <>
         <Head>
-          <title>{userInfos.full_name}</title>
+          <title>{userInfos.full_name} - Votre titre ici</title>
           <meta name="description" content={userInfos.description} />
+          <meta name="author" content="Niamorweb" />
           <meta
             name="keywords"
             content="photos, sharing, links, social network, media, website"
           />
-          <meta name="author" content="niamorweb" />
           <meta
             name="viewport"
             content="width=device-width, initial-scale=1.0"
@@ -81,6 +82,7 @@ const Gallery = ({ userInfos, photos }: any) => {
             />
           ))}
         </Head>
+
         <div className={work_sans.className}>
           <Link
             className="hidden absolute gap-2 top-3 right-3  items-center bg-greenDark text-greenLight px-4 py-2 rounded-lg"
@@ -172,7 +174,7 @@ const Gallery = ({ userInfos, photos }: any) => {
                         key={index}
                         layoutId={photo.url}
                         className="after:content cursor-zoom-in overflow-hidden group relative mb-2 block w-full after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight"
-                        onClick={() => setSelectedPhoto(photo.image_url)}
+                        onClick={() => setSelectedPhoto(index)}
                       >
                         <Image
                           placeholder="blur"
@@ -201,31 +203,36 @@ const Gallery = ({ userInfos, photos }: any) => {
             )}
           </div>
           <AnimatePresence>
-            {selectedPhoto && (
-              <motion.div
-                className="fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black backdrop-blur-sm bg-opacity-35 p-2 lg:p-4 z-40"
-                initial={false}
-                layoutId={selectedPhoto}
-                onClick={(event) => {
-                  if (event.target === event.currentTarget) {
-                    setSelectedPhoto(null); // Ne ferme que si le clic est sur le backdrop
-                  }
-                }}
-              >
-                <Image
-                  placeholder="blur"
-                  blurDataURL={`/_next/image?url=${selectedPhoto}?width=100&height=100/&w=16&q=1`}
-                  alt="Next.js Conf photo"
-                  className="transform w-fit h-fit max-h-full max-w-full transition will-change-auto object-contain"
-                  src={selectedPhoto}
-                  width={deviceType === "mobile" ? 700 : 1000}
-                  height={deviceType === "mobile" ? 700 : 1000}
-                  quality={100}
-                />
-                {/* <motion.button onClick={() => setSelectedPhoto(null)}>
-                  X
-                </motion.button> */}
-              </motion.div>
+            {selectedPhoto !== null && (
+              <Carousel
+                photos={photos}
+                selectedPhoto={selectedPhoto}
+                setSelectedPhoto={setSelectedPhoto}
+              />
+              // <motion.div
+              //   className="fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black backdrop-blur-sm bg-opacity-35 p-2 lg:p-4 z-40"
+              //   initial={false}
+              //   layoutId={selectedPhoto}
+              //   onClick={(event) => {
+              //     if (event.target === event.currentTarget) {
+              //       setSelectedPhoto(null); // Ne ferme que si le clic est sur le backdrop
+              //     }
+              //   }}
+              // >
+              //   <Image
+              //     placeholder="blur"
+              //     blurDataURL={`/_next/image?url=${selectedPhoto}?width=100&height=100/&w=16&q=1`}
+              //     alt="Next.js Conf photo"
+              //     className="transform w-fit h-fit max-h-full max-w-full transition will-change-auto object-contain"
+              //     src={selectedPhoto}
+              //     width={deviceType === "mobile" ? 700 : 1000}
+              //     height={deviceType === "mobile" ? 700 : 1000}
+              //     quality={100}
+              //   />
+              //   {/* <motion.button onClick={() => setSelectedPhoto(null)}>
+              //     X
+              //   </motion.button> */}
+              // </motion.div>
             )}
           </AnimatePresence>
           <Footer />
@@ -244,7 +251,6 @@ Gallery.getInitialProps = async ({ query }: any) => {
     .single();
 
   if (error) {
-    console.error("Error fetching user data:", error.message);
     return { userInfos: null, photosUrl: [] };
   }
 
