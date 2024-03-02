@@ -27,11 +27,6 @@ export function AddPhoto({ updateInfos }: any) {
   const [isDisabled, setIsDisabled] = React.useState(false);
   const [open, setOpen] = React.useState(false);
 
-  React.useEffect(() => {
-    console.log(data.photoData);
-    console.log(data.photoData.length);
-  }, []);
-
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
@@ -122,7 +117,7 @@ export function AddPhoto({ updateInfos }: any) {
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Upload image ( Maximum 15 photos )</DialogTitle>
-            {data.photoData.length >= 15 && (
+            {data && data.photoData && data.photoData.length >= 15 && (
               <DialogDescription>
                 <p className="text-red-500">Limit of images uploaded reached</p>
               </DialogDescription>
@@ -151,7 +146,9 @@ export function AddPhoto({ updateInfos }: any) {
             <Button
               onClick={handleUploadPhoto}
               disabled={
-                !fileToUpload || isDisabled || data.photoData.length >= 15
+                !fileToUpload ||
+                isDisabled ||
+                (data && data.photoData && data.photoData.length >= 15)
               }
               type="submit"
             >
