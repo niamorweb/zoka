@@ -144,7 +144,7 @@ const Gallery = ({ userInfos, photos }: any) => {
                           userInfos.links.map((link: any, index: any) => (
                             <a
                               key={index}
-                              href="https://www.youtube.com"
+                              href={link.url}
                               target="_blank"
                               className="inline-flex uppercase font-medium h-10 items-center rounded-full bg-black bg-opacity-20 px-4 backdrop-blur-md transition duration-700 ease-in-out hover:bg-white hover:text-black hover:duration-300"
                             >
