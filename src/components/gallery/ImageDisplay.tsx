@@ -18,6 +18,7 @@ import { supabase } from "@/lib/supabase";
 
 export default function ImageDisplay({ data, photo, index, deletePhoto }: any) {
   const [title, setTitle] = useState("");
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (photo.title) {
@@ -31,6 +32,7 @@ export default function ImageDisplay({ data, photo, index, deletePhoto }: any) {
         .from("items")
         .update({ title })
         .eq("id", photo.id);
+      setOpen(false);
     } catch (error) {}
   };
 
@@ -40,7 +42,7 @@ export default function ImageDisplay({ data, photo, index, deletePhoto }: any) {
         key={index}
         className="after:content group relative mb-2 block w-full after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:shadow-highlight"
       >
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button variant="outline" className="absolute top-3 right-3 z-30">
               <DotsVerticalIcon />
@@ -62,7 +64,10 @@ export default function ImageDisplay({ data, photo, index, deletePhoto }: any) {
             <Button
               variant="destructive"
               className="flex items-center gap-3 font-medium"
-              onClick={() => deletePhoto(photo.image_url)}
+              onClick={() => {
+                deletePhoto(photo.image_url);
+                setOpen(false);
+              }}
             >
               <Trash />
               <span>Delete</span>

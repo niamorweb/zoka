@@ -55,15 +55,15 @@ const Gallery = () => {
   }, [data]);
 
   const deletePhoto = async (url: any) => {
-    const regex = /\/kota\/users_photos\/[^\/]+\/gallery\/[^\/]+/;
+    const regex = /\/kuta\/users_photos\/[^\/]+\/gallery\/[^\/]+/;
     const match = url.match(regex);
-
     if (match) {
       const extractedPart = match[0];
       const cheminSansExtension = extractedPart.replace(/^\/(.+)\..+$/, "$1");
 
       try {
         const publicId = cheminSansExtension;
+
         const response = await axios.delete("/api/destroy-image", {
           data: { publicId },
         });
@@ -80,7 +80,9 @@ const Gallery = () => {
             title: "Error deleting image",
           });
         }
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     } else {
     }
   };

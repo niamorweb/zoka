@@ -41,7 +41,7 @@ export function AddBackground({ background }: any) {
           formData.append("upload_preset", "wul4xihj");
           formData.append(
             "folder",
-            `kota/users_photos/${data.userData.id}/background`
+            `kuta/users_photos/${data.userData.id}/background`
           );
 
           try {
@@ -65,7 +65,7 @@ export function AddBackground({ background }: any) {
   };
 
   const deletePreviousPhoto = async () => {
-    const regex = /\/kota\/users_photos\/[^\/]+\/background\/[^\/]+/;
+    const regex = /\/kuta\/users_photos\/[^\/]+\/background\/[^\/]+/;
     const match = data.userData.background.match(regex);
 
     if (match) {

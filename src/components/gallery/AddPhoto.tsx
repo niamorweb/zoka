@@ -70,7 +70,7 @@ export function AddPhoto({ updateInfos }: any) {
       formData.append("upload_preset", "wul4xihj");
       formData.append(
         "folder",
-        `kota/users_photos/${data.userData.id}/gallery`
+        `kuta/users_photos/${data.userData.id}/gallery`
       ); // Spécifiez le dossier et le sous-dossier ici
 
       try {

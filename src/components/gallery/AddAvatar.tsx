@@ -41,7 +41,7 @@ export function AddAvatar({}) {
         formData.append("upload_preset", "wul4xihj");
         formData.append(
           "folder",
-          `kota/users_photos/${data.userData.id}/avatar`
+          `kuta/users_photos/${data.userData.id}/avatar`
         );
 
         try {
@@ -64,7 +64,7 @@ export function AddAvatar({}) {
   };
 
   const deletePreviousPhoto = async () => {
-    const regex = /\/kota\/users_photos\/[^\/]+\/avatar\/[^\/]+/;
+    const regex = /\/kuta\/users_photos\/[^\/]+\/avatar\/[^\/]+/;
     const match = data.userData.avatar.match(regex);
 
     if (match) {
