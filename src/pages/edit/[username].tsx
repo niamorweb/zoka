@@ -165,7 +165,7 @@ const Gallery = () => {
             <Dialog>
               <DialogTrigger asChild>
                 <Button
-                  className="fixed z-40 left-10 rounded-xl top-10 md:top-auto md:bottom-10 "
+                  className="md:fixed z-40 md:left-10 md:right-auto rounded-lg md:top-auto absolute top-6 right-28 md:bottom-10 "
                   variant="outline"
                 >
                   <User />
