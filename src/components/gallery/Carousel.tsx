@@ -23,11 +23,22 @@ export default function Carousel({
   const paginate = (newDirection: number) => {
     const imageLength = photos.length;
 
-    if (selectedPhoto >= imageLength - 1 && newDirection === 1) return;
-    if (selectedPhoto <= 0 && newDirection === -1) return;
+    if (selectedPhoto >= imageLength - 1 && newDirection === 1) {
+      setSelectedPhoto(0);
+      return;
+    }
+
+    if (selectedPhoto <= 0 && newDirection === -1) {
+      setSelectedPhoto(imageLength - 1);
+      return;
+    }
 
     setSelectedPhoto(selectedPhoto + newDirection);
   };
+
+  React.useEffect(() => {
+    console.log(selectedPhoto);
+  }, [selectedPhoto]);
 
   return (
     <>

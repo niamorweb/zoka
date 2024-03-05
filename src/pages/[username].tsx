@@ -57,13 +57,22 @@ const Gallery = ({ userInfos, photos }: any) => {
   //     </motion.section>
   //   );
   // }
-  if (userInfos) {
+  if (!userInfos) {
+    return (
+      <div className="h-screen w-screen flex flex-col gap-2 justify-center items-center">
+        <p>User unknown</p>
+        <Link href="/" className="underline underline-offset-2">
+          Go to home page
+        </Link>
+      </div>
+    );
+  } else {
     return (
       <>
         <Head>
-          <title>{userInfos.full_name} - Votre titre ici</title>
+          <title>{userInfos.full_name}</title>
           <meta name="description" content={userInfos.description} />
-          <meta name="author" content="Niamorweb" />
+          <meta name="author" content="niamorweb" />
           <meta
             name="keywords"
             content="photos, sharing, links, social network, media, website"
