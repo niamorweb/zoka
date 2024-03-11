@@ -70,7 +70,11 @@ export default function Links({ inputLinks, setInputLinks, updateInfos }: any) {
                 <div className="w-3/5">
                   <div>
                     <Label className={index !== 0 ? "sr-only" : ""}>URL</Label>
-                    <p className={index !== 0 ? "sr-only" : ""}>
+                    <p
+                      className={` hidden lg:block ${
+                        index !== 0 ? "sr-only" : ""
+                      }`}
+                    >
                       Add links to your page
                     </p>
                     <div>
@@ -90,7 +94,11 @@ export default function Links({ inputLinks, setInputLinks, updateInfos }: any) {
                 <div className="w-2/5">
                   <div>
                     <Label className={index !== 0 ? "sr-only" : ""}>Name</Label>
-                    <p className={index !== 0 ? "sr-only" : ""}>
+                    <p
+                      className={` hidden lg:block ${
+                        index !== 0 ? "sr-only" : ""
+                      }`}
+                    >
                       Add a name for the URL.
                     </p>
                     <div>
@@ -103,7 +111,7 @@ export default function Links({ inputLinks, setInputLinks, updateInfos }: any) {
                       />
                     </div>
                     {url.name.trim() === "" && (
-                      <p className="text-red-500">Name cannot be empty</p>
+                      <p className="text-red-500">Can't be empty</p>
                     )}
                   </div>
                 </div>

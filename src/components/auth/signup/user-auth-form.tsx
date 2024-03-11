@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
-import { DataContext } from "@/utlis/userContext";
+import { DataContext } from "@/utils/userContext";
 import { toast } from "@/components/ui/use-toast";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -42,11 +42,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     const { data: userData, error } = await supabase.auth.signUp({
       email: formData.email,
       password: formData.password,
-      options: {
-        data: {
-          username: "John",
-        },
-      },
     });
     if (error) {
       setIsLoading(false);

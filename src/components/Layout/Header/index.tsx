@@ -8,7 +8,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/router";
 import { supabase } from "@/lib/supabase";
-import { DataContext } from "@/utlis/userContext";
+import { DataContext } from "@/utils/userContext";
 
 const Header = () => {
   const router = useRouter();

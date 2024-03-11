@@ -1,7 +1,7 @@
 import { supabase } from "@/lib/supabase";
 import * as React from "react";
 import { uid } from "uid";
-import { DataContext } from "@/utlis/userContext";
+import { DataContext } from "@/utils/userContext";
 import imageCompression from "browser-image-compression";
 import { v4 as uuidv4 } from "uuid";
 import Image from "next/image";

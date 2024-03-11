@@ -5,7 +5,7 @@ import * as React from "react";
 import Header from "@/components/Layout/Header";
 import Footer from "@/components/Layout/Footer";
 import Head from "next/head";
-import { DataContext } from "@/utlis/userContext";
+import { DataContext } from "@/utils/userContext";
 import Image from "next/image";
 
 const inter = Inter({ subsets: ["latin"] });

@@ -20,9 +20,9 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "src/utlis/userContext.js",
-    "src/utlis/AuthProvider.js",
-    "src/utlis/compressImageUrl.js"
+    "src/utils/userContext.js",
+    "src/utils/AuthProvider.js",
+    "src/utils/compressImageUrl.js"
   ],
   "exclude": ["node_modules"]
 }

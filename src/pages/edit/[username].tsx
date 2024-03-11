@@ -3,7 +3,7 @@ import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/router";
 import { Button } from "@/components/ui/button";
 import { LogOut, Trash, User } from "lucide-react";
-import { DataContext } from "@/utlis/userContext";
+import { DataContext } from "@/utils/userContext";
 import Nav from "@/components/gallery/Nav";
 import ProfileSection from "@/components/gallery/ProfileSection";
 import Footer from "@/components/gallery/Footer";
@@ -23,6 +23,7 @@ import Link from "next/link";
 import Head from "next/head";
 import axios from "axios";
 import cloudinary from "cloudinary";
+import { Input } from "@/components/ui/input";
 
 // cloudinary.config({
 //   cloud_name: process.env.REACT_APP_CLOUD_NAME,
@@ -41,6 +42,8 @@ const Gallery = () => {
   const [inputTheme, setInputTheme] = useState<string>("dark");
   const [inputLinks, setInputLinks] = useState([{ url: "", name: "" }]);
   const [items, setItems] = useState<Array<any>>([]);
+  const [introTitle, setIntroTitle] = useState<string>("");
+  const [introDescription, setIntroDescription] = useState<string>("");
 
   useEffect(() => {
     if (data.userData) {
@@ -50,6 +53,8 @@ const Gallery = () => {
       setInputUsername(data.userData.username);
       setInputTheme(data.userData.theme);
       setInputLinks(data.userData.links);
+      setIntroTitle(data.userData.intro_title);
+      setIntroDescription(data.userData.intro_description);
       fetchItems();
     }
   }, [data]);
@@ -105,6 +110,8 @@ const Gallery = () => {
         bio: inputDescription,
         theme: inputTheme,
         links: inputLinks,
+        intro_title: introTitle,
+        intro_description: introDescription,
       })
       .eq("id", data.userData.id);
 
@@ -206,17 +213,41 @@ const Gallery = () => {
                   setInputName={setInputName}
                   updateInfos={updateInfos}
                 />
-                <div className="columns-1 p-2 gap-2 sm:columns-2 xl:columns-3 2xl:columns-4">
-                  {items &&
-                    items.map((photo: String, index: number) => (
-                      <ImageDisplay
-                        key={index}
-                        data={data}
-                        photo={photo}
-                        index={index}
-                        deletePhoto={deletePhoto}
+                <div className="grid gap-4 mt-20 mb-5 px-8">
+                  {data && data.userData && data.userData.is_text_section && (
+                    <div className="grid gap-4">
+                      <input
+                        onChange={(e) => {
+                          setIntroTitle(e.target.value);
+                        }}
+                        value={introTitle}
+                        className="text-7xl font-bold py-3 px-4 focus:outline-none"
+                        placeholder="Intro title"
                       />
-                    ))}
+                      <textarea
+                        onChange={(e) => {
+                          setIntroDescription(e.target.value);
+                        }}
+                        value={introDescription}
+                        className="py-3 px-4 focus:outline-none h-[200px]"
+                        placeholder="Intro description"
+                      />
+                    </div>
+                  )}
+
+                  <div className="px-4 lg:px-24 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 p-2 gap-4 sm:columns-2 xl:columns-3 2xl:columns-4">
+                    {items &&
+                      items.map((photo: String, index: number) => (
+                        <ImageDisplay
+                          key={index}
+                          data={data}
+                          photo={photo}
+                          index={index}
+                          deletePhoto={deletePhoto}
+                          updateInfos={updateInfos}
+                        />
+                      ))}
+                  </div>
                 </div>
               </main>
             )}

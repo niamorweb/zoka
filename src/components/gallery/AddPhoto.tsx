@@ -2,7 +2,7 @@ import { supabase } from "@/lib/supabase";
 import * as React from "react";
 import { uid } from "uid";
 import { CircleEllipsisIcon, ImageIcon } from "lucide-react";
-import { DataContext } from "@/utlis/userContext";
+import { DataContext } from "@/utils/userContext";
 import imageCompression from "browser-image-compression";
 import { toast } from "@/components/ui/use-toast";
 import { v4 as uuidv4 } from "uuid";
@@ -19,6 +19,7 @@ import { DialogFooter, DialogHeader } from "../ui/dialog";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import axios from "axios";
+import { Checkbox } from "../ui/checkbox";
 
 export function AddPhoto({ updateInfos }: any) {
   const [fileToUpload, setFileToUpload] = React.useState<File | null>(null);
@@ -48,8 +49,6 @@ export function AddPhoto({ updateInfos }: any) {
     });
 
     const options = {
-      maxSizeMB: 0.4, // maximum size of the compressed image, in MB
-      maxWidthOrHeight: 1000, // maximum width or height of the compressed image
       useWebWorker: true, // use web worker for parallel compression
     };
 

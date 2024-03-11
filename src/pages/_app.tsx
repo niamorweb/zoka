@@ -1,7 +1,7 @@
 import "@/styles/globals.css";
-import { DataProvider } from "@/utlis/userContext";
+import { DataProvider } from "@/utils/userContext";
 import type { AppProps } from "next/app";
-import AuthProvider from "@/utlis/AuthContext";
+import AuthProvider from "@/utils/AuthContext";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (

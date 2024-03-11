@@ -5,12 +5,19 @@ import {
 } from "@/components/ui/popover";
 import Links from "@/components/gallery/Links";
 import { AddPhoto } from "./AddPhoto";
-import { BoxIcon } from "lucide-react";
+import { ALargeSmall, BoxIcon } from "lucide-react";
 import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
 import { toast } from "../ui/use-toast";
 import Link from "next/link";
 import Appearance from "./Appearance";
+import { useState } from "react";
+import { supabase } from "@/lib/supabase";
+
+interface category {
+  title: string;
+  description: string;
+}
 
 export default function Nav({
   data,
@@ -19,11 +26,23 @@ export default function Nav({
   setInputLinks,
   photosUrl,
 }: any) {
+  const [listCategories, setListCategories] = useState<category[]>([]);
   const handleCopyPage = () => {
     navigator.clipboard.writeText("kuta.vercel.app/" + data.username);
     toast({
       title: "Link copied !",
     });
+  };
+
+  const handleUpdateTextSection = async (value: boolean) => {
+    const { data: userData, error } = await supabase
+      .from("users")
+      .update({
+        is_text_section: value,
+      })
+      .eq("id", data.userData.id);
+
+    updateInfos();
   };
 
   return (
@@ -65,6 +84,17 @@ export default function Nav({
           </div>
         </PopoverContent>
       </Popover> */}
+      {data && data.userData && data.userData.is_text_section ? (
+        <ALargeSmall
+          className="border-b-2 border-greenLight hover:scale-105 duration-150 cursor-pointer "
+          onClick={() => handleUpdateTextSection(false)}
+        />
+      ) : (
+        <ALargeSmall
+          className=" hover:scale-105 duration-150 cursor-pointer"
+          onClick={() => handleUpdateTextSection(true)}
+        />
+      )}
       <Link
         href={`/${data.userData && data.userData.username}`}
         target="_blank"

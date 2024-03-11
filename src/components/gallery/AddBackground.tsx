@@ -2,7 +2,7 @@ import { supabase } from "@/lib/supabase";
 import * as React from "react";
 import { uid } from "uid";
 import { CircleEllipsisIcon, ImageIcon } from "lucide-react";
-import { DataContext } from "@/utlis/userContext";
+import { DataContext } from "@/utils/userContext";
 import imageCompression from "browser-image-compression";
 import { v4 as uuidv4 } from "uuid";
 import { Button } from "../ui/button";
@@ -20,8 +20,6 @@ export function AddBackground({ background }: any) {
         const file = files[0];
 
         const options = {
-          maxSizeMB: 0.7,
-          maxWidthOrHeight: 2000,
           useWebWorker: true,
         };
 

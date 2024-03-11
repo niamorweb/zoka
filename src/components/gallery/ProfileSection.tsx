@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useContext, useEffect, useState } from "react";
 import { AddAvatar } from "./AddAvatar";
 import { AddBackground } from "./AddBackground";
-import { DataContext } from "@/utlis/userContext";
+import { DataContext } from "@/utils/userContext";
 
 export default function ProfileSection({
   inputUsername,
@@ -40,22 +40,25 @@ export default function ProfileSection({
       <div className="flex flex-col gap-3">
         <AddAvatar />
 
-        <Input
+        <input
+          placeholder="Your username"
           value={inputUsername}
           onChange={(e) => setInputUsername(e.target.value)}
-          className="max-w-[300px] mt-2 bg-transparent text-xs font-bold lowercase tracking-widest"
+          className="max-w-[300px] mt-2 bg-transparent text-xs font-bold lowercase tracking-widest focus:outline-none"
         />
 
-        <Input
+        <input
+          placeholder="Full name"
           value={inputName}
           onChange={(e) => setInputName(e.target.value)}
-          className="max-w-[300px] text-base bg-transparent font-bold tracking-widest"
+          className="max-w-[500px] text-lg md:text-2xl lg:text-6xl font-extrabold tracking-widest py-2 bg-transparent focus:outline-none"
         />
 
-        <Textarea
+        <textarea
+          placeholder="Short biography"
           onChange={(e) => setInputDescription(e.target.value)}
           value={inputDescription}
-          className={`max-w-[500px] mb-2 bg-transparent w-full overflow-hidden h-32 `}
+          className={`max-w-[500px] mb-2 bg-transparent w-full overflow-hidden h-32 focus:outline-none `}
         />
 
         {data && data.userData && data.userData.links && (
