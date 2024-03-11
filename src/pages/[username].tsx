@@ -41,7 +41,7 @@ const fetchPhotos = async (userId: string) => {
 const Gallery = ({ userInfos, photos }: any) => {
   const [selectedPhoto, setSelectedPhoto] = useState<Number | null>(null);
   const deviceType = useDeviceType();
-  const backgroundRef = useRef<HTMLDivElement | null>(null); // Référence pour l'élément du fond
+  const backgroundRef = useRef<any>(null); // Référence pour l'élément du fond
 
   // Fonction pour gérer le défilement et ajuster la position du fond
   const handleScroll = () => {
